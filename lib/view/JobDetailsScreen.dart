@@ -139,8 +139,7 @@ class _JobDetailsScreenState extends State<JobDetailsScreen> {
                               prefixIcon: Padding(
                                 padding: const EdgeInsets.all(8.0),
                                 child: SvgPicture.asset(moneyTextFiledIcon),
-                              ),
-
+                              ), suffix: Text("\$/hr")
                             ),
                           ),
                           SizedBox(
