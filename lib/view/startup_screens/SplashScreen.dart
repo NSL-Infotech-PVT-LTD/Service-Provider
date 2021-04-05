@@ -9,6 +9,7 @@ import 'package:misson_tasker/utils/ScreenConfig.dart';
 import 'package:misson_tasker/utils/StringsPath.dart';
 import 'package:misson_tasker/view/HomePage.dart';
 import 'package:misson_tasker/view/JobDetailsScreen.dart';
+import 'package:misson_tasker/view/startup_screens/LoginPage.dart';
 import 'package:misson_tasker/view/startup_screens/LoginScreen.dart';
 
 class SplashScreen extends StatefulWidget {
@@ -24,7 +25,7 @@ class _SplashScreenState extends State<SplashScreen> {
     Timer.periodic(Duration(seconds: 3), (timer) {
       print(timer.toString() + "!!!!");
 
-      NavMe().NavPushReplaceFadeIn(JobDetailsScreen());
+      NavMe().NavPushReplaceFadeIn(LoginPage());
       // Get.off(JobDetailsScreen(),
       //     transition: Transition.zoom, duration: Duration(milliseconds: 1000));
       timer.cancel();

@@ -8,6 +8,12 @@ class ScreenConfig {
   static double widgetPaddingMedium;
   static double widgetPaddingSmall;
   static double widgetPaddingXSmall;
+  static double fontSizeXlarge;
+  static double fontSizeXXlarge;
+  static double fontSizelarge;
+  static double fontSizeMedium;
+  static double fontSizeSmall;
+  static double fontSizeXSmall;
 
   void init(BuildContext context) {
     screenHeight = MediaQuery.of(context).size.height;
@@ -17,5 +23,11 @@ class ScreenConfig {
     widgetPaddingMedium = 10;
     widgetPaddingSmall = 5;
     widgetPaddingXSmall = 2.5;
+    fontSizeXXlarge = 24.0;
+    fontSizeXlarge = 18.0;
+    fontSizelarge = 16.0;
+    fontSizeMedium = 14.0;
+    fontSizeSmall = 12.0;
+    fontSizeXSmall = 10.0;
   }
 }
