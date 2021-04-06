@@ -2,6 +2,7 @@ import 'dart:io';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:misson_tasker/view/Dashboard.dart';
 
 import '../../utils/CColors.dart';
 import '../../utils/CColors.dart';
@@ -30,7 +31,9 @@ class _LoginPageState extends State<LoginPage> {
 
   @override
   Widget build(BuildContext context) {
-    void login() async {}
+    void login() async {
+      NavMe().NavPushReplaceFadeIn(Dashboard());
+    }
 
     return Form(
       key: _formKey,
@@ -63,10 +66,10 @@ class _LoginPageState extends State<LoginPage> {
                           Text(
                             "Login",
                             style: TextStyle(
-                              color: Colors.black,
-                              fontSize: ScreenConfig.fontSizeXXlarge,
-                              fontWeight: FontWeight.w500,
-                            ),
+                                color: Colors.black,
+                                fontSize: ScreenConfig.fontSizeXXlarge,
+                                // fontWeight: FontWeight.w500,
+                                fontFamily: "  Raleway-ExtraBoldItalic.ttf"),
                             textAlign: TextAlign.start,
                           ),
                           SizedBox(
@@ -214,13 +217,13 @@ class _LoginPageState extends State<LoginPage> {
                           Expanded(
                             child: InkWell(
                               onTap: () {
-                                if (_formKey.currentState.validate()) {
+                                // if (_formKey.currentState.validate()) {
                                   login();
                                   // ScaffoldMessenger.of(context)
                                   //     .showSnackBar(SnackBar(content: Text('Processing Data 1')));
-                                } else {
+                                // } else {
                                   // ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Processing Data 2')));
-                                }
+                                // }
                               },
                               child: Container(
                                 width: ScreenConfig.screenWidth / 2,

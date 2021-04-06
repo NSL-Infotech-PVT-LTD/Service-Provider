@@ -34,7 +34,7 @@ class NavMe {
 
   NavPushReplaceFadeIn(dynamic page) {
     Get.off(page,
-        transition: Transition.fadeIn, duration: Duration(milliseconds: 500));
+        transition: Transition.fadeIn, duration: Duration(milliseconds: 1000));
   }
 
   NavPushZoom(dynamic page) {

@@ -7,10 +7,9 @@ import 'package:misson_tasker/utils/CColors.dart';
 import 'package:misson_tasker/utils/NavMe.dart';
 import 'package:misson_tasker/utils/ScreenConfig.dart';
 import 'package:misson_tasker/utils/StringsPath.dart';
-import 'package:misson_tasker/view/HomePage.dart';
+// import 'package:misson_tasker/view/HomePage.dart';
 import 'package:misson_tasker/view/JobDetailsScreen.dart';
 import 'package:misson_tasker/view/startup_screens/LoginPage.dart';
-import 'package:misson_tasker/view/startup_screens/LoginScreen.dart';
 
 class SplashScreen extends StatefulWidget {
   @override
