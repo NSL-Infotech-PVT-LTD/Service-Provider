@@ -136,341 +136,359 @@ class _SignUpState extends State<SignUp> {
                               // mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                               // mainAxisSize:MainAxisSize.max,
                               children: [
-                                SizedBox(height: 15),
-                                TextFormField(
-                                  validator: (value) {
-                                    if (value == null || value.isEmpty) {
-                                      _username = false;
-                                      setState(() {});
-                                      if (value.length < 5) {
+
+                                Padding(
+                                  padding: const EdgeInsets.symmetric(vertical:7.5),
+                                  child: TextFormField(
+                                    validator: (value) {
+                                      if (value == null || value.isEmpty) {
                                         _username = false;
                                         setState(() {});
+                                        if (value.length < 5) {
+                                          _username = false;
+                                          setState(() {});
+                                          return null;
+                                        }
+                                      } else {
                                         return null;
                                       }
-                                    } else {
                                       return null;
-                                    }
-                                    return null;
-                                  },
-                                  controller: _fullNameController,
-                                  decoration: InputDecoration(
-                                      border: UnderlineInputBorder(
-                                        borderSide: BorderSide(
-                                            color:
-                                                CColors.missonGreyBorderColor),
-                                      ),
-                                      enabledBorder: UnderlineInputBorder(
-                                        borderSide: BorderSide(
-                                            color:
-                                                CColors.missonGreyBorderColor),
-                                      ),
-                                      suffixIcon: _username
-                                          ? null
-                                          : Icon(
-                                              Icons.error_outlined,
-                                              color: Colors.red,
-                                            ),
-                                      hintStyle: _textStyle,
-                                      isDense: true,
-                                      hintText: "Full Name",
-                                      prefixIconConstraints: BoxConstraints(
-                                          minHeight:
-                                              ScreenConfig.screenHeight * 0.05,
-                                          minWidth:
-                                              ScreenConfig.screenWidth * 0.04),
-                                      prefixIcon: Padding(
-                                        padding: EdgeInsets.fromLTRB(
-                                          16.0,
-                                          8.0,
-                                          16.0,
-                                          15,
+                                    },
+                                    controller: _fullNameController,
+                                    decoration: InputDecoration(
+                                        border: UnderlineInputBorder(
+                                          borderSide: BorderSide(
+                                              color:
+                                                  CColors.missonGreyBorderColor),
                                         ),
-                                        child: SvgPicture.asset(
-                                          user3TextFiledIcon,
-                                          height: 18,
+                                        enabledBorder: UnderlineInputBorder(
+                                          borderSide: BorderSide(
+                                              color:
+                                                  CColors.missonGreyBorderColor),
                                         ),
-                                      )),
+                                        suffixIcon: _username
+                                            ? null
+                                            : Icon(
+                                                Icons.error_outlined,
+                                                color: Colors.red,
+                                              ),
+                                        hintStyle: _textStyle,
+                                        isDense: true,
+                                        hintText: "Full Name",
+                                        prefixIconConstraints: BoxConstraints(
+                                            minHeight:
+                                                ScreenConfig.screenHeight * 0.05,
+                                            minWidth:
+                                                ScreenConfig.screenWidth * 0.04),
+                                        prefixIcon: Padding(
+                                          padding: EdgeInsets.fromLTRB(
+                                            16.0,
+                                            8.0,
+                                            16.0,
+                                            15,
+                                          ),
+                                          child: SvgPicture.asset(
+                                            user3TextFiledIcon,
+                                            height: 18,
+                                          ),
+                                        )),
+                                  ),
                                 ),
-                                SizedBox(height: 15),
-                                TextFormField(
-                                  validator: (value) {
-                                    if (value == null || value.isEmpty) {
-                                      _mailer = false;
-                                      setState(() {});
-                                      if (value.length < 5) {
+
+                                Padding(
+                                  padding: const EdgeInsets.symmetric(vertical:7.5),
+                                  child: TextFormField(
+                                    validator: (value) {
+                                      if (value == null || value.isEmpty) {
                                         _mailer = false;
                                         setState(() {});
+                                        if (value.length < 5) {
+                                          _mailer = false;
+                                          setState(() {});
+                                          return null;
+                                        }
+                                      } else {
                                         return null;
                                       }
-                                    } else {
                                       return null;
-                                    }
-                                    return null;
-                                  },
-                                  controller: _emailAddressFieldController,
-                                  decoration: InputDecoration(
-                                      border: UnderlineInputBorder(
-                                        borderSide: BorderSide(
-                                            color:
-                                                CColors.missonGreyBorderColor),
-                                      ),
-                                      enabledBorder: UnderlineInputBorder(
-                                        borderSide: BorderSide(
-                                            color:
-                                                CColors.missonGreyBorderColor),
-                                      ),
-                                      suffixIcon: _mailer
-                                          ? null
-                                          : Icon(
-                                              Icons.error_outlined,
-                                              color: Colors.red,
-                                            ),
-                                      hintStyle: _textStyle,
-                                      isDense: true,
-                                      hintText: "Email Address",
-                                      prefixIconConstraints: BoxConstraints(
-                                          minHeight:
-                                              ScreenConfig.screenHeight * 0.05,
-                                          minWidth:
-                                              ScreenConfig.screenWidth * 0.04),
-                                      prefixIcon: Padding(
-                                        padding: EdgeInsets.fromLTRB(
-                                          16.0,
-                                          8.0,
-                                          16.0,
-                                          19,
+                                    },
+                                    controller: _emailAddressFieldController,
+                                    decoration: InputDecoration(
+                                        border: UnderlineInputBorder(
+                                          borderSide: BorderSide(
+                                              color:
+                                                  CColors.missonGreyBorderColor),
                                         ),
-                                        child: SvgPicture.asset(
-                                          emailTextFiledIcon,
-                                          height: 15,
+                                        enabledBorder: UnderlineInputBorder(
+                                          borderSide: BorderSide(
+                                              color:
+                                                  CColors.missonGreyBorderColor),
                                         ),
-                                      )),
+                                        suffixIcon: _mailer
+                                            ? null
+                                            : Icon(
+                                                Icons.error_outlined,
+                                                color: Colors.red,
+                                              ),
+                                        hintStyle: _textStyle,
+                                        isDense: true,
+                                        hintText: "Email Address",
+                                        prefixIconConstraints: BoxConstraints(
+                                            minHeight:
+                                                ScreenConfig.screenHeight * 0.05,
+                                            minWidth:
+                                                ScreenConfig.screenWidth * 0.04),
+                                        prefixIcon: Padding(
+                                          padding: EdgeInsets.fromLTRB(
+                                            16.0,
+                                            8.0,
+                                            16.0,
+                                            19,
+                                          ),
+                                          child: SvgPicture.asset(
+                                            emailTextFiledIcon,
+                                            height: 15,
+                                          ),
+                                        )),
+                                  ),
                                 ),
-                                SizedBox(height: 15),
-                                TextFormField(
-                                  validator: (value) {
-                                    if (value == null || value.isEmpty) {
-                                      _pass = false;
-                                      setState(() {});
-                                      if (value.length < 5) {
+
+                                Padding(
+                                  padding: const EdgeInsets.symmetric(vertical:7.5),
+                                  child: TextFormField(
+                                    validator: (value) {
+                                      if (value == null || value.isEmpty) {
                                         _pass = false;
                                         setState(() {});
+                                        if (value.length < 5) {
+                                          _pass = false;
+                                          setState(() {});
+                                          return null;
+                                        }
+                                      } else {
                                         return null;
                                       }
-                                    } else {
                                       return null;
-                                    }
-                                    return null;
-                                  },
-                                  controller: _passwordFieldController,
-                                  decoration: InputDecoration(
-                                      border: UnderlineInputBorder(
-                                        borderSide: BorderSide(
-                                            color:
-                                                CColors.missonGreyBorderColor),
-                                      ),
-                                      enabledBorder: UnderlineInputBorder(
-                                        borderSide: BorderSide(
-                                            color:
-                                                CColors.missonGreyBorderColor),
-                                      ),
-                                      suffixIcon: _pass
-                                          ? null
-                                          : Icon(
-                                              Icons.error_outlined,
-                                              color: Colors.red,
-                                            ),
-                                      hintStyle: _textStyle,
-                                      isDense: true,
-                                      hintText: "Password",
-                                      prefixIconConstraints: BoxConstraints(
-                                          minHeight:
-                                              ScreenConfig.screenHeight * 0.05,
-                                          minWidth:
-                                              ScreenConfig.screenWidth * 0.04),
-                                      prefixIcon: Padding(
-                                        padding: EdgeInsets.fromLTRB(
-                                          16.0,
-                                          8.0,
-                                          16.0,
-                                          15,
+                                    },
+                                    controller: _passwordFieldController,
+                                    decoration: InputDecoration(
+                                        border: UnderlineInputBorder(
+                                          borderSide: BorderSide(
+                                              color:
+                                                  CColors.missonGreyBorderColor),
                                         ),
-                                        child: SvgPicture.asset(
-                                          lockTextFiledIcon,
-                                          height: 15,
+                                        enabledBorder: UnderlineInputBorder(
+                                          borderSide: BorderSide(
+                                              color:
+                                                  CColors.missonGreyBorderColor),
                                         ),
-                                      )),
+                                        suffixIcon: _pass
+                                            ? null
+                                            : Icon(
+                                                Icons.error_outlined,
+                                                color: Colors.red,
+                                              ),
+                                        hintStyle: _textStyle,
+                                        isDense: true,
+                                        hintText: "Password",
+                                        prefixIconConstraints: BoxConstraints(
+                                            minHeight:
+                                                ScreenConfig.screenHeight * 0.05,
+                                            minWidth:
+                                                ScreenConfig.screenWidth * 0.04),
+                                        prefixIcon: Padding(
+                                          padding: EdgeInsets.fromLTRB(
+                                            16.0,
+                                            8.0,
+                                            16.0,
+                                            15,
+                                          ),
+                                          child: SvgPicture.asset(
+                                            lockTextFiledIcon,
+                                            height: 15,
+                                          ),
+                                        )),
+                                  ),
                                 ),
-                                SizedBox(height: 15),
-                                TextFormField(
-                                  validator: (value) {
-                                    if (value == null || value.isEmpty) {
-                                      _repass = false;
-                                      setState(() {});
-                                      if (value.length < 5) {
+
+                                Padding(
+                                  padding: const EdgeInsets.symmetric(vertical:7.5),
+                                  child: TextFormField(
+                                    validator: (value) {
+                                      if (value == null || value.isEmpty) {
                                         _repass = false;
                                         setState(() {});
+                                        if (value.length < 5) {
+                                          _repass = false;
+                                          setState(() {});
+                                          return null;
+                                        }
+                                      } else {
                                         return null;
                                       }
-                                    } else {
                                       return null;
-                                    }
-                                    return null;
-                                  },
-                                  controller: _reEnterPasswordFieldController,
-                                  decoration: InputDecoration(
-                                      border: UnderlineInputBorder(
-                                        borderSide: BorderSide(
-                                            color:
-                                                CColors.missonGreyBorderColor),
-                                      ),
-                                      enabledBorder: UnderlineInputBorder(
-                                        borderSide: BorderSide(
-                                            color:
-                                                CColors.missonGreyBorderColor),
-                                      ),
-                                      suffixIcon: _repass
-                                          ? null
-                                          : Icon(
-                                              Icons.error_outlined,
-                                              color: Colors.red,
-                                            ),
-                                      hintStyle: _textStyle,
-                                      isDense: true,
-                                      hintText: "Re-enter Password",
-                                      prefixIconConstraints: BoxConstraints(
-                                          minHeight:
-                                              ScreenConfig.screenHeight * 0.05,
-                                          minWidth:
-                                              ScreenConfig.screenWidth * 0.04),
-                                      prefixIcon: Padding(
-                                        padding: EdgeInsets.fromLTRB(
-                                          16.0,
-                                          8.0,
-                                          16.0,
-                                          15,
+                                    },
+                                    controller: _reEnterPasswordFieldController,
+                                    decoration: InputDecoration(
+                                        border: UnderlineInputBorder(
+                                          borderSide: BorderSide(
+                                              color:
+                                                  CColors.missonGreyBorderColor),
                                         ),
-                                        child: SvgPicture.asset(
-                                          lockTextFiledIcon,
-                                          height: 15,
+                                        enabledBorder: UnderlineInputBorder(
+                                          borderSide: BorderSide(
+                                              color:
+                                                  CColors.missonGreyBorderColor),
                                         ),
-                                      )),
+                                        suffixIcon: _repass
+                                            ? null
+                                            : Icon(
+                                                Icons.error_outlined,
+                                                color: Colors.red,
+                                              ),
+                                        hintStyle: _textStyle,
+                                        isDense: true,
+                                        hintText: "Re-enter Password",
+                                        prefixIconConstraints: BoxConstraints(
+                                            minHeight:
+                                                ScreenConfig.screenHeight * 0.05,
+                                            minWidth:
+                                                ScreenConfig.screenWidth * 0.04),
+                                        prefixIcon: Padding(
+                                          padding: EdgeInsets.fromLTRB(
+                                            16.0,
+                                            8.0,
+                                            16.0,
+                                            15,
+                                          ),
+                                          child: SvgPicture.asset(
+                                            lockTextFiledIcon,
+                                            height: 15,
+                                          ),
+                                        )),
+                                  ),
                                 ),
-                                SizedBox(height: 15),
-                                TextFormField(
-                                  controller: _phoneNumberController,
-                                  validator: (value) {
-                                    if (value == null || value.isEmpty) {
-                                      _phone = false;
-                                      setState(() {});
-                                      if (value.length < 5) {
+
+                                Padding(
+                                  padding: const EdgeInsets.symmetric(vertical:7.5),
+                                  child: TextFormField(
+                                    controller: _phoneNumberController,
+                                    validator: (value) {
+                                      if (value == null || value.isEmpty) {
                                         _phone = false;
                                         setState(() {});
+                                        if (value.length < 5) {
+                                          _phone = false;
+                                          setState(() {});
+                                          return null;
+                                        }
+                                      } else {
                                         return null;
                                       }
-                                    } else {
                                       return null;
-                                    }
-                                    return null;
-                                  },
-                                  decoration: InputDecoration(
-                                      border: UnderlineInputBorder(
-                                        borderSide: BorderSide(
-                                            color:
-                                                CColors.missonGreyBorderColor),
-                                      ),
-                                      enabledBorder: UnderlineInputBorder(
-                                        borderSide: BorderSide(
-                                            color:
-                                                CColors.missonGreyBorderColor),
-                                      ),
-                                      suffixIcon: _phone
-                                          ? null
-                                          : Icon(
-                                              Icons.error_outlined,
-                                              color: Colors.red,
-                                            ),
-                                      hintStyle: _textStyle,
-                                      isDense: true,
-                                      hintText: "Phone",
-                                      prefixIconConstraints: BoxConstraints(
-                                          minHeight:
-                                              ScreenConfig.screenHeight * 0.05,
-                                          minWidth:
-                                              ScreenConfig.screenWidth * 0.04),
-                                      prefixIcon: Padding(
-                                        padding: EdgeInsets.fromLTRB(
-                                          16.0,
-                                          8.0,
-                                          16.0,
-                                          15,
+                                    },
+                                    decoration: InputDecoration(
+                                        border: UnderlineInputBorder(
+                                          borderSide: BorderSide(
+                                              color:
+                                                  CColors.missonGreyBorderColor),
                                         ),
-                                        child: SvgPicture.asset(
-                                          phoneTextFiledIcon,
-                                          height: 15,
+                                        enabledBorder: UnderlineInputBorder(
+                                          borderSide: BorderSide(
+                                              color:
+                                                  CColors.missonGreyBorderColor),
                                         ),
-                                      )),
+                                        suffixIcon: _phone
+                                            ? null
+                                            : Icon(
+                                                Icons.error_outlined,
+                                                color: Colors.red,
+                                              ),
+                                        hintStyle: _textStyle,
+                                        isDense: true,
+                                        hintText: "Phone",
+                                        prefixIconConstraints: BoxConstraints(
+                                            minHeight:
+                                                ScreenConfig.screenHeight * 0.05,
+                                            minWidth:
+                                                ScreenConfig.screenWidth * 0.04),
+                                        prefixIcon: Padding(
+                                          padding: EdgeInsets.fromLTRB(
+                                            16.0,
+                                            8.0,
+                                            16.0,
+                                            15,
+                                          ),
+                                          child: SvgPicture.asset(
+                                            phoneTextFiledIcon,
+                                            height: 15,
+                                          ),
+                                        )),
+                                  ),
                                 ),
-                                SizedBox(height: 15),
-                                TextFormField(
-                                  validator: (value) {
-                                    if (value == null || value.isEmpty) {
-                                      _pass = false;
-                                      setState(() {});
-                                      if (value.length < 5) {
+
+                                Padding(
+                                  padding: const EdgeInsets.only(top:7.5),
+                                  child: TextFormField(
+                                    validator: (value) {
+                                      if (value == null || value.isEmpty) {
                                         _pass = false;
                                         setState(() {});
+                                        if (value.length < 5) {
+                                          _pass = false;
+                                          setState(() {});
+                                          return null;
+                                        }
+                                      } else {
                                         return null;
                                       }
-                                    } else {
                                       return null;
-                                    }
-                                    return null;
-                                  },
-                                  decoration: InputDecoration(
-                                      border: UnderlineInputBorder(
-                                        borderSide: BorderSide(
-                                            color:
-                                                CColors.missonGreyBorderColor),
-                                      ),
-                                      enabledBorder: UnderlineInputBorder(
-                                        borderSide: BorderSide(
-                                            color:
-                                                CColors.missonGreyBorderColor),
-                                      ),
-                                      suffixIcon: _repass
-                                          ? Padding(
-                                              padding: EdgeInsets.fromLTRB(
-                                                16.0,
-                                                8.0,
-                                                16.0,
-                                                15,
-                                              ),
-                                              child: SvgPicture.asset(
-                                                  myLocationIcon),
-                                            )
-                                          : Icon(
-                                              Icons.error_outlined,
-                                              color: Colors.red,
-                                            ),
-                                      hintStyle: _textStyle,
-                                      isDense: true,
-                                      hintText: "Location",
-                                      prefixIconConstraints: BoxConstraints(
-                                          minHeight:
-                                              ScreenConfig.screenHeight * 0.05,
-                                          minWidth:
-                                              ScreenConfig.screenWidth * 0.04),
-                                      prefixIcon: Padding(
-                                        padding: EdgeInsets.fromLTRB(
-                                          16.0,
-                                          8.0,
-                                          16.0,
-                                          15,
+                                    },
+                                    decoration: InputDecoration(
+                                        border: UnderlineInputBorder(
+                                          borderSide: BorderSide(
+                                              color:
+                                                  CColors.missonGreyBorderColor),
                                         ),
-                                        child: SvgPicture.asset(
-                                            compassTextFiledIcon),
-                                      )),
+                                        enabledBorder: UnderlineInputBorder(
+                                          borderSide: BorderSide(
+                                              color:
+                                                  CColors.missonGreyBorderColor),
+                                        ),
+                                        suffixIcon: _repass
+                                            ? Padding(
+                                                padding: EdgeInsets.fromLTRB(
+                                                  16.0,
+                                                  8.0,
+                                                  16.0,
+                                                  15,
+                                                ),
+                                                child: SvgPicture.asset(
+                                                    myLocationIcon),
+                                              )
+                                            : Icon(
+                                                Icons.error_outlined,
+                                                color: Colors.red,
+                                              ),
+                                        hintStyle: _textStyle,
+                                        isDense: true,
+                                        hintText: "Location",
+                                        prefixIconConstraints: BoxConstraints(
+                                            minHeight:
+                                                ScreenConfig.screenHeight * 0.05,
+                                            minWidth:
+                                                ScreenConfig.screenWidth * 0.04),
+                                        prefixIcon: Padding(
+                                          padding: EdgeInsets.fromLTRB(
+                                            16.0,
+                                            8.0,
+                                            16.0,
+                                            15,
+                                          ),
+                                          child: SvgPicture.asset(
+                                              compassTextFiledIcon),
+                                        )),
+                                  ),
                                 ),
                                 // SizedBox(height: 15),
                                 Container(

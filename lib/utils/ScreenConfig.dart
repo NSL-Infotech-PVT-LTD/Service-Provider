@@ -10,6 +10,9 @@ class ScreenConfig {
   static double widgetPaddingXSmall;
   static double fontSizeXlarge;
   static double fontSizeXXlarge;
+  static double fontSizeXXXlarge;
+  static double fontSize4Xlarge;
+  static double fontSize5Xlarge;
   static double fontSizelarge;
   static double fontSizeMedium;
   static double fontSizeSmall;
@@ -24,6 +27,9 @@ class ScreenConfig {
     widgetPaddingSmall = 5;
     widgetPaddingXSmall = 2.5;
     fontSizeXXlarge = 24.0;
+    fontSizeXXXlarge = 26.0;
+    fontSize4Xlarge = 28.0;
+    fontSize5Xlarge = 30.0;
     fontSizeXlarge = 18.0;
     fontSizelarge = 16.0;
     fontSizeMedium = 14.0;

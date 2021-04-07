@@ -2,6 +2,11 @@ import 'dart:io';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:get/get.dart';
+import 'package:get/get_navigation/src/routes/transitions_type.dart';
+import 'package:misson_tasker/model/ApiCaller.dart';
+import 'package:misson_tasker/model/api_models/LoginUserModel.dart';
+import 'package:misson_tasker/utils/local_data.dart';
 import 'package:misson_tasker/view/Dashboard.dart';
 
 import '../../utils/CColors.dart';
@@ -11,6 +16,7 @@ import '../../utils/ScreenConfig.dart';
 import '../../utils/ScreenConfig.dart';
 import '../../utils/StringsPath.dart';
 import 'SignUp.dart';
+import 'SplashScreen.dart';
 
 class LoginPage extends StatefulWidget {
   @override
@@ -28,11 +34,46 @@ class _LoginPageState extends State<LoginPage> {
   final _formKey = GlobalKey<FormState>();
   String deviceTok = 'iu';
   var height = AppBar().preferredSize.height;
+  LoginUserModel loginUserModel;
 
   @override
   Widget build(BuildContext context) {
     void login() async {
-      NavMe().NavPushReplaceFadeIn(Dashboard());
+      ApiCaller()
+          .loginUser(
+          email: _emailAddressFieldController.text,
+          password: _passwordFieldController.text,
+          deviceType: "android",
+          deviceToken: "asdfsdfgdsgds")
+          .then((value) => loginUserModel = value)
+          .whenComplete(() {
+        if (loginUserModel != null && loginUserModel.status == true) {
+          setString(sharedPref.userEmail, loginUserModel.data.user.email);
+
+          setString(sharedPref.userToken, loginUserModel.data.token);
+          setString(sharedPref.userLocation, loginUserModel.data.user.location);
+          setString(
+              sharedPref.userPhoneNumber, loginUserModel.data.user.mobile);
+
+          getString(sharedPref.userPhoneNumber)
+              .then((value) => print("123 $value"));
+
+          getString(sharedPref.userToken).then((value) => print("123 $value"));
+
+          getString(sharedPref.userEmail).then((value) => print("123 $value"));
+
+          getString(sharedPref.userLocation)
+              .then((value) => print("123 $value"));
+        }
+
+        print("1234 ${loginUserModel.toJson().toString()}");
+      }).whenComplete(() {
+
+
+
+
+        NavMe().NavPushReplaceFadeIn(Dashboard());
+      });
     }
 
     return Form(
@@ -93,7 +134,7 @@ class _LoginPageState extends State<LoginPage> {
                     decoration: BoxDecoration(
                       borderRadius: BorderRadius.all(
                           Radius.circular(8.0) //  <--- border radius here
-                          ),
+                      ),
                       border: Border.all(color: Colors.black),
                     ),
                     child: Column(
@@ -191,12 +232,12 @@ class _LoginPageState extends State<LoginPage> {
                                     15.0, 8.0, 8.0, 8.0),
                                 child: InkWell(
                                   onTap: () =>
-                                      {NavMe().NavPushReplaceFadeIn(SignUp())},
+                                  {NavMe().NavPushReplaceFadeIn(SignUp())},
                                   // navigatorPushReplacedFun(context, SignUp()),
                                   child: Column(
                                     mainAxisAlignment: MainAxisAlignment.start,
                                     crossAxisAlignment:
-                                        CrossAxisAlignment.start,
+                                    CrossAxisAlignment.start,
                                     children: [
                                       Spacer(),
                                       Text("Don’t have an account?",
@@ -217,13 +258,16 @@ class _LoginPageState extends State<LoginPage> {
                           Expanded(
                             child: InkWell(
                               onTap: () {
-                                // if (_formKey.currentState.validate()) {
+                                if (_formKey.currentState.validate()) {
                                   login();
-                                  // ScaffoldMessenger.of(context)
-                                  //     .showSnackBar(SnackBar(content: Text('Processing Data 1')));
-                                // } else {
-                                  // ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Processing Data 2')));
-                                // }
+                                  ScaffoldMessenger.of(context).showSnackBar(
+                                      SnackBar(
+                                          content: Text('Processing Data 1')));
+                                } else {
+                                  ScaffoldMessenger.of(context).showSnackBar(
+                                      SnackBar(
+                                          content: Text('Processing Data 2')));
+                                }
                               },
                               child: Container(
                                 width: ScreenConfig.screenWidth / 2,
@@ -233,7 +277,7 @@ class _LoginPageState extends State<LoginPage> {
                                     alignment: Alignment.center,
                                     child: Row(
                                       mainAxisAlignment:
-                                          MainAxisAlignment.center,
+                                      MainAxisAlignment.center,
                                       children: [
                                         Text("SIGN IN",
                                             style: TextStyle(
@@ -241,7 +285,7 @@ class _LoginPageState extends State<LoginPage> {
                                             )),
                                         SizedBox(
                                           width:
-                                              ScreenConfig.screenWidth * 0.04,
+                                          ScreenConfig.screenWidth * 0.04,
                                         ),
                                         RotatedBox(
                                             quarterTurns: 2,

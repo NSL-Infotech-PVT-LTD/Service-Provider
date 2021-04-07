@@ -23,6 +23,7 @@ final String navbarClockActive="assets/svg_assets/navbar_clock_active.svg";
 final String navbarClockDeactive="assets/svg_assets/navbar_clock_deactive.svg";
 final String navbarChatDeactive="assets/svg_assets/navbar_chat_deactive.svg";
 final String navbarChatActive="assets/svg_assets/navbar_chat_active.svg";
+final String postbox="assets/svg_assets/postbox.svg";
 
 
 //<=============================PNG IMAGES=========================>
