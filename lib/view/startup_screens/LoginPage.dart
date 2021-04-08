@@ -1,6 +1,7 @@
 import 'dart:io';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 import 'package:get/get_navigation/src/routes/transitions_type.dart';
@@ -15,6 +16,7 @@ import '../../utils/NavMe.dart';
 import '../../utils/ScreenConfig.dart';
 import '../../utils/ScreenConfig.dart';
 import '../../utils/StringsPath.dart';
+import 'ForgetPassword.dart';
 import 'SignUp.dart';
 import 'SplashScreen.dart';
 
@@ -35,19 +37,42 @@ class _LoginPageState extends State<LoginPage> {
   String deviceTok = 'iu';
   var height = AppBar().preferredSize.height;
   LoginUserModel loginUserModel;
+  var spinkit;
+  bool isLoading = false;
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    spinkit = SpinKitWave(
+      size: 40,
+      itemBuilder: (BuildContext context, int index) {
+        return DecoratedBox(
+          decoration: BoxDecoration(
+            color: index.isEven
+                ? CColors.missonPrimaryColor
+                : CColors.missonMediumGrey,
+          ),
+        );
+      },
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
     void login() async {
       ApiCaller()
           .loginUser(
-          email: _emailAddressFieldController.text,
-          password: _passwordFieldController.text,
-          deviceType: "android",
-          deviceToken: "asdfsdfgdsgds")
+              email: _emailAddressFieldController.text,
+              password: _passwordFieldController.text,
+              deviceType: "android",
+              deviceToken: "asdfsdfgdsgds")
           .then((value) => loginUserModel = value)
           .whenComplete(() {
-        if (loginUserModel != null && loginUserModel.status == true) {
+        if (loginUserModel != null &&
+            loginUserModel.status == true &&
+            loginUserModel.data != null &&
+            loginUserModel.data.user != null) {
           setString(sharedPref.userEmail, loginUserModel.data.user.email);
 
           setString(sharedPref.userToken, loginUserModel.data.token);
@@ -63,16 +88,40 @@ class _LoginPageState extends State<LoginPage> {
           getString(sharedPref.userEmail).then((value) => print("123 $value"));
 
           getString(sharedPref.userLocation)
-              .then((value) => print("123 $value"));
+              .then((value) => print("123 $value")).whenComplete(()  {
+          setState(() {
+          isLoading = false;
+          });
+          NavMe().NavPushReplaceFadeIn(Dashboard());
+
+          });
+        } else if (loginUserModel != null && loginUserModel.code == 422) {
+          setState(() {
+            isLoading = false;
+          });
+          showCupertinoDialog(
+            context: context,
+            builder: (BuildContext context) {
+              return CupertinoAlertDialog(
+                title: Text('Alert'),
+                content: Text('${loginUserModel.error}'),
+                actions: [
+                  CupertinoDialogAction(
+                    child: Text('OK'),
+                    onPressed: () {
+                      Navigator.pop(context);
+                    },
+                  ),
+                ],
+              );
+            },
+          );
         }
 
-        print("1234 ${loginUserModel.toJson().toString()}");
+        // print("1234 ${loginUserModel.toJson().toString()}");
       }).whenComplete(() {
 
 
-
-
-        NavMe().NavPushReplaceFadeIn(Dashboard());
       });
     }
 
@@ -134,7 +183,7 @@ class _LoginPageState extends State<LoginPage> {
                     decoration: BoxDecoration(
                       borderRadius: BorderRadius.all(
                           Radius.circular(8.0) //  <--- border radius here
-                      ),
+                          ),
                       border: Border.all(color: Colors.black),
                     ),
                     child: Column(
@@ -145,8 +194,14 @@ class _LoginPageState extends State<LoginPage> {
                         TextFormField(
                           controller: _emailAddressFieldController,
                           validator: (value) {
+                            Pattern pattern =
+                                r'^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$';
+                            RegExp regex = new RegExp(pattern);
                             if (value == null || value.isEmpty) {
-                              return 'Please enter some text';
+                              return 'Please enter email';
+                            }
+                            else if(!regex.hasMatch(value)){
+                              return 'Enter Valid Email';
                             }
                             return null;
                           },
@@ -171,8 +226,14 @@ class _LoginPageState extends State<LoginPage> {
                         TextFormField(
                           controller: _passwordFieldController,
                           validator: (value) {
+
+
+
                             if (value == null || value.isEmpty) {
-                              return 'Please enter some text';
+                              return 'Please enter password';
+                            }
+                            else if( value.length<5){
+                              return 'Please enter password more than 5 character';
                             }
                             return null;
                           },
@@ -203,15 +264,26 @@ class _LoginPageState extends State<LoginPage> {
                 Column(
                   children: [
                     InkWell(
-                      onTap: () => () {},
-                      child: Padding(
-                        padding: const EdgeInsets.only(right: 28),
-                        child: Align(
-                            alignment: Alignment.bottomCenter,
-                            child: Text(
-                              "Forgot password ?",
-                              style: TextStyle(color: CColors.missonGrey),
-                            )),
+                      onTap: () {
+                        print("PRINCE");
+                        // NavMe().NavPushLeftToRight(ForgotPassword);
+                        Get.to(ForgotPassword(),
+                            transition: Transition.rightToLeft,
+                            duration: Duration(milliseconds: 500));
+                        // Navigator.push(context, MaterialPageRoute(
+                        //   builder: (context)=>ForgotPassword()
+                        // ));
+                      },
+                      child: Container(
+                        child: Padding(
+                          padding: const EdgeInsets.only(right: 28),
+                          child: Align(
+                              alignment: Alignment.bottomCenter,
+                              child: Text(
+                                "Forgot password?",
+                                style: TextStyle(color: CColors.missonGrey),
+                              )),
+                        ),
                       ),
                     ),
                     SizedBox(
@@ -231,13 +303,13 @@ class _LoginPageState extends State<LoginPage> {
                                 padding: const EdgeInsets.fromLTRB(
                                     15.0, 8.0, 8.0, 8.0),
                                 child: InkWell(
-                                  onTap: () =>
-                                  {NavMe().NavPushReplaceFadeIn(SignUp())},
+                                  onTap: () =>isLoading==false?
+                                      NavMe().NavPushReplaceFadeIn(SignUp()):null,
                                   // navigatorPushReplacedFun(context, SignUp()),
                                   child: Column(
                                     mainAxisAlignment: MainAxisAlignment.start,
                                     crossAxisAlignment:
-                                    CrossAxisAlignment.start,
+                                        CrossAxisAlignment.start,
                                     children: [
                                       Spacer(),
                                       Text("Don’t have an account?",
@@ -257,42 +329,49 @@ class _LoginPageState extends State<LoginPage> {
                           ),
                           Expanded(
                             child: InkWell(
-                              onTap: () {
+                              onTap:isLoading == false ? (){
                                 if (_formKey.currentState.validate()) {
+                                  setState(() {
+                                    isLoading = true;
+                                  });
                                   login();
-                                  ScaffoldMessenger.of(context).showSnackBar(
-                                      SnackBar(
-                                          content: Text('Processing Data 1')));
+                                  // ScaffoldMessenger.of(context).showSnackBar(
+                                  //     SnackBar(
+                                  //         content: Text('Logging you back')));
                                 } else {
-                                  ScaffoldMessenger.of(context).showSnackBar(
-                                      SnackBar(
-                                          content: Text('Processing Data 2')));
+                                  // ScaffoldMessenger.of(context).showSnackBar(
+                                  //     SnackBar(
+                                  //         content: Text(
+                                  //             'Please fill required fields')));
                                 }
-                              },
+                              }:null,
                               child: Container(
                                 width: ScreenConfig.screenWidth / 2,
                                 color: CColors.missonButtonColor,
                                 //   height: ScreenConfig.screenHeight * 0.50,
                                 child: Align(
                                     alignment: Alignment.center,
-                                    child: Row(
-                                      mainAxisAlignment:
-                                      MainAxisAlignment.center,
-                                      children: [
-                                        Text("SIGN IN",
-                                            style: TextStyle(
-                                              color: Colors.white,
-                                            )),
-                                        SizedBox(
-                                          width:
-                                          ScreenConfig.screenWidth * 0.04,
-                                        ),
-                                        RotatedBox(
-                                            quarterTurns: 2,
-                                            child: SvgPicture.asset(
-                                                nextScreenArrow)),
-                                      ],
-                                    )),
+                                    child: isLoading == false
+                                        ? Row(
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.center,
+                                            children: [
+                                              Text("SIGN IN",
+                                                  style: TextStyle(
+                                                    color: Colors.white,
+                                                  )),
+                                              SizedBox(
+                                                width:
+                                                    ScreenConfig.screenWidth *
+                                                        0.04,
+                                              ),
+                                              RotatedBox(
+                                                  quarterTurns: 2,
+                                                  child: SvgPicture.asset(
+                                                      nextScreenArrow)),
+                                            ],
+                                          )
+                                        : spinkit),
                               ),
                             ),
                           ),

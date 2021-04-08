@@ -5,24 +5,33 @@ import 'package:misson_tasker/utils/CColors.dart';
 import 'package:misson_tasker/utils/ScreenConfig.dart';
 import 'package:misson_tasker/utils/StringsPath.dart';
 import 'package:misson_tasker/utils/local_data.dart';
+import 'package:misson_tasker/view/startup_screens/Drawer.dart';
 import 'package:misson_tasker/view/startup_screens/SplashScreen.dart';
 
 class Dashboard extends StatelessWidget {
+  GlobalKey<ScaffoldState> _drawerKey = GlobalKey();
+
   @override
   Widget build(BuildContext context) {
-
-
-
-
-
     return Scaffold(
+      key: _drawerKey,
+      drawer: Drawer(
+          // Add a ListView to the drawer. This ensures the user can scroll
+          // through the options in the drawer if there isn't enough vertical
+          // space to fit everything.
+          child: MyDrawer()),
       appBar: AppBar(
         elevation: 0,
         backgroundColor: CColors.missonNormalWhiteColor,
         titleSpacing: -1.0,
-        leading: Padding(
-          padding: const EdgeInsets.all(18.0),
-          child: SvgPicture.asset(drawerIcon),
+        leading: InkWell(
+          onTap: () {
+            _drawerKey.currentState.openDrawer();
+          },
+          child: Padding(
+            padding: const EdgeInsets.all(18.0),
+            child: SvgPicture.asset(drawerIcon),
+          ),
         ),
         title: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -179,7 +188,6 @@ class Dashboard extends StatelessWidget {
                   // ),
                 ),
                 Container(
-
                   width: ScreenConfig.screenWidth,
                   color: CColors.backgroundRed,
                   // child: ListView.builder(itemBuilder: (context, index){
@@ -194,7 +202,6 @@ class Dashboard extends StatelessWidget {
                   //   );
                   // }, itemCount: 4,scrollDirection: Axis.horizontal,)
                 ),
-
               ],
             ),
           );
@@ -209,18 +216,23 @@ class Dashboard extends StatelessWidget {
     }
   }
 
-  Widget customTile({String heading, String subheading, String lines, Color bottomLineColor, Color tileColor}) {
+  Widget customTile(
+      {String heading,
+      String subheading,
+      String lines,
+      Color bottomLineColor,
+      Color tileColor}) {
     return Container(
-      width: ScreenConfig.screenWidth*0.70,
+      width: ScreenConfig.screenWidth * 0.70,
       color: tileColor,
       child: Padding(
-        padding: const EdgeInsets.
-          symmetric(horizontal:8.0),
+        padding: const EdgeInsets.symmetric(horizontal: 8.0),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Padding(
-              padding: const EdgeInsets.symmetric(horizontal:8.0, vertical:16.0),
+              padding:
+                  const EdgeInsets.symmetric(horizontal: 8.0, vertical: 16.0),
               child: Text(
                 heading,
                 style: TextStyle(fontSize: ScreenConfig.fontSizeXlarge),
@@ -243,9 +255,10 @@ class Dashboard extends StatelessWidget {
               ),
             ),
             Spacer(),
-            Container(color:bottomLineColor,height: 2.5,)
-
-
+            Container(
+              color: bottomLineColor,
+              height: 2.5,
+            )
           ],
         ),
       ),
