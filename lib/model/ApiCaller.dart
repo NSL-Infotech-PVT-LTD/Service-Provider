@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:connectivity/connectivity.dart';
 import 'package:flutter/cupertino.dart';
 
 import 'api_models/ForgetPasswordModel.dart';
@@ -54,7 +55,7 @@ class ApiCaller {
       }),
     );
 
-    if (response.statusCode == 201) {
+    if (response.statusCode == 201 || response.statusCode == 422) {
       print("QWERTY ${response.body}");
       return forgetPasswordModel = forgetPasswordModelFromJson(response.body);
     } else {
@@ -104,5 +105,15 @@ class ApiCaller {
           "THERE IS AN ERROR INT THE REGISTER API WITH STATUS CODE ${response.statusCode}"); print(
           "THERE IS AN ERROR INT THE REGISTER API WITH STATUS CODE ${response.body}");
     }
+  }
+}
+Future<bool> isConnectedToInternet() async {
+  var connectivityResult = await (Connectivity().checkConnectivity());
+  if (connectivityResult == ConnectivityResult.mobile) {
+    return true;
+  } else if (connectivityResult == ConnectivityResult.wifi) {
+    return true;
+  } else {
+    return false;
   }
 }

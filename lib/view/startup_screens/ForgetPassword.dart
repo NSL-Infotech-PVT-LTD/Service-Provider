@@ -5,7 +5,11 @@ import 'package:flutter_svg/svg.dart';
 import 'package:misson_tasker/model/ApiCaller.dart';
 import 'package:misson_tasker/model/api_models/ForgetPasswordModel.dart';
 import 'package:misson_tasker/utils/CColors.dart';
+import 'package:misson_tasker/utils/NavMe.dart';
 import 'package:misson_tasker/utils/ScreenConfig.dart';
+
+import '../Dashboard.dart';
+import 'LoginPage.dart';
 
 final _formKey = GlobalKey<FormState>();
 
@@ -17,8 +21,9 @@ class ForgotPassword extends StatefulWidget {
 class _ForgotPasswordState extends State<ForgotPassword> {
   TextEditingController _emailAddressFieldController = TextEditingController();
   ForgetPasswordModel forgetPasswordobj;
+  bool isLoading =false;
   var spinkit;
-  bool isLodaing = false;
+
 
   @override
   void initState() {
@@ -44,16 +49,84 @@ class _ForgotPasswordState extends State<ForgotPassword> {
         .then((value) => forgetPasswordobj = value)
         .whenComplete(() {
       setState(() {
-        isLodaing = false;
+        isLoading = false;
       });
-      print(forgetPasswordobj.toJson());
+      // print(forgetPasswordobj.toJson());
+if(forgetPasswordobj!=null  && forgetPasswordobj.code==201)
+  {
+
+    return showCupertinoDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return CupertinoAlertDialog(
+          title: Text('Info'),
+          content: Text('${forgetPasswordobj.data.message}'),
+          actions: [
+            CupertinoDialogAction(
+              child: Text('OK'),
+              onPressed: () {
+                Navigator.pop(context);
+                // NavMe().NavPushReplaceFadeIn(LoginPage());
+                // Navigator.pushReplacement(context, MaterialPageRoute(builder: (_)=> LoginPage()));
+              },
+            ),
+          ],
+        );
+      },
+    );
+  }
+else
+  if(forgetPasswordobj!=null && forgetPasswordobj.code==422)
+    {
 
       return showCupertinoDialog(
         context: context,
         builder: (BuildContext context) {
           return CupertinoAlertDialog(
             title: Text('Info'),
+            content: Text('${forgetPasswordobj.error}'),
+            actions: [
+              CupertinoDialogAction(
+                child: Text('OK'),
+                onPressed: () {
+                  Navigator.pop(context);
+
+                  // NavMe().NavPushReplaceFadeIn(LoginPage());
+                },
+              ),
+            ],
+          );
+        },
+      );
+    }
+      return showCupertinoDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return CupertinoAlertDialog(
+            title: Text('Info'),
             content: Text('${forgetPasswordobj.data.message}'),
+            actions: [
+              CupertinoDialogAction(
+                child: Text('OK'),
+                onPressed: () {
+                  Navigator.pop(context);
+                  // NavMe().NavPushReplaceFadeIn(LoginPage());
+                },
+              ),
+            ],
+          );
+        },
+      );
+    }).timeout(Duration(minutes: 1), onTimeout: () {
+      setState(() {
+        isLoading = false;
+      });
+      return showCupertinoDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return CupertinoAlertDialog(
+            title: Text('Info'),
+            content: Text('Something Went Wrong Please Try Again Later'),
             actions: [
               CupertinoDialogAction(
                 child: Text('OK'),
@@ -117,10 +190,34 @@ class _ForgotPasswordState extends State<ForgotPassword> {
                     ),
                     labelText: "Email Address",
                     fillColor: Colors.black,
+                    errorBorder: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(15.0),
+                      borderSide: BorderSide(
+                        color: Colors.red,
+                        width: 2.0,
+                      ),
+                    ),
+                    focusColor:Colors.black,
+                    labelStyle: TextStyle(color: Colors.black),
+                    focusedErrorBorder: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(15.0),
+                      borderSide: BorderSide(
+                        color: Colors.red,
+                        width: 2.0,
+                      ),
+                    ),
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(15.0),
+                      borderSide: BorderSide(
+                        color: Colors.red,
+                        width: 2.0,
+                      ),
+                    ),
                     focusedBorder: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(15.0),
                       borderSide: BorderSide(
-                        color: Colors.blue,
+                        color: Colors.black,
+                        width: 2.0,
                       ),
                     ),
                     enabledBorder: OutlineInputBorder(
@@ -136,8 +233,13 @@ class _ForgotPasswordState extends State<ForgotPassword> {
                     fontFamily: "Poppins",
                   ),
                   validator: (value) {
+                    Pattern pattern =
+                        r'^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$';
+                    RegExp regex = new RegExp(pattern);
                     if (value == null || value.isEmpty) {
                       return 'Please enter email';
+                    } else if (!regex.hasMatch(value)) {
+                      return 'Enter Valid Email';
                     }
                     return null;
                   },
@@ -148,32 +250,71 @@ class _ForgotPasswordState extends State<ForgotPassword> {
                 SizedBox(
                   height: ScreenConfig.screenHeight * 0.08,
                   width: ScreenConfig.screenWidth * 0.70,
-                  child: isLodaing==false? ElevatedButton(
-                    onPressed: () {
-                      if (_formKey.currentState.validate()) {
-                        setState(() {
-                          isLodaing = true;
-                        });
-                        forgotPassApi();
-                        // ScaffoldMessenger.of(context)
-                        //     .showSnackBar(SnackBar(content: Text('Processing Data 1')));
-                      } else {
-                        // ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Processing Data 2')));
-                      }
-                    },
-                    child:Text("Send mail",
-                            style: TextStyle(color: Colors.white, fontSize: 18))
-                        ,
-                    style: ElevatedButton.styleFrom(
-                      primary: CColors.missonButtonColor, // background
-                      onPrimary: CColors.missonButtonColor, // fo
-                      shape: new RoundedRectangleBorder(
-                          borderRadius: new BorderRadius.circular(10.0),
-                          side: BorderSide(
-                              color: CColors.missonPrimaryColor) // reground,
+                  child: isLoading == false
+                      ? ElevatedButton(
+                          onPressed: () {
+                            if (_formKey.currentState.validate()) {
+
+                              isConnectedToInternet()
+                                  .then((internet) {
+                                if (internet != null && internet) {
+                                  setState(() {
+                                    isLoading = true;
+                                  });
+                                  forgotPassApi();
+                                }
+                                else {
+
+
+                                  showCupertinoDialog(
+                                    context: context,
+                                    builder: (BuildContext context) {
+                                      return CupertinoAlertDialog(
+                                        title: Text('Alert'),
+                                        content: Text('Please Check internet connection'),
+                                        actions: [
+                                          CupertinoDialogAction(
+                                            child: Text('OK'),
+                                            onPressed: () {
+                                              Navigator.pop(context);
+
+                                            },
+                                          ),
+                                        ],
+                                      );
+                                    },
+                                  );
+                                }
+                              });
+
+
+
+
+                              setState(() {
+                                isLoading = true;
+                              });
+
+                              // ScaffoldMessenger.of(context)
+                              //     .showSnackBar(SnackBar(content: Text('Processing Data 1')));
+                            } else {
+                              // ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Processing Data 2')));
+                            }
+                          },
+                          child: Text("Send mail",
+                              style:
+                                  TextStyle(color: Colors.white, fontSize: 18)),
+                          style: ElevatedButton.styleFrom(
+                            primary: CColors.missonButtonColor, // background
+                            onPrimary: CColors.missonButtonColor, // fo
+                            shape: new RoundedRectangleBorder(
+                                borderRadius: new BorderRadius.circular(10.0),
+                                side: BorderSide(
+                                    color:
+                                        CColors.missonPrimaryColor) // reground,
+                                ),
                           ),
-                    ),
-                  ): spinkit,
+                        )
+                      : spinkit,
                 )
               ],
             ),

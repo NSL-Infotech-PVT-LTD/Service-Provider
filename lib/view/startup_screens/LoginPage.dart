@@ -63,10 +63,10 @@ class _LoginPageState extends State<LoginPage> {
     void login() async {
       ApiCaller()
           .loginUser(
-              email: _emailAddressFieldController.text,
-              password: _passwordFieldController.text,
-              deviceType: "android",
-              deviceToken: "asdfsdfgdsgds")
+          email: _emailAddressFieldController.text,
+          password: _passwordFieldController.text,
+          deviceType: "android",
+          deviceToken: "asdfsdfgdsgds")
           .then((value) => loginUserModel = value)
           .whenComplete(() {
         if (loginUserModel != null &&
@@ -88,12 +88,12 @@ class _LoginPageState extends State<LoginPage> {
           getString(sharedPref.userEmail).then((value) => print("123 $value"));
 
           getString(sharedPref.userLocation)
-              .then((value) => print("123 $value")).whenComplete(()  {
-          setState(() {
-          isLoading = false;
-          });
-          NavMe().NavPushReplaceFadeIn(Dashboard());
-
+              .then((value) => print("123 $value"))
+              .whenComplete(() {
+            setState(() {
+              isLoading = false;
+            });
+            NavMe().NavPushReplaceFadeIn(Dashboard());
           });
         } else if (loginUserModel != null && loginUserModel.code == 422) {
           setState(() {
@@ -119,9 +119,27 @@ class _LoginPageState extends State<LoginPage> {
         }
 
         // print("1234 ${loginUserModel.toJson().toString()}");
-      }).whenComplete(() {
-
-
+      }).timeout(Duration(minutes: 1), onTimeout: () {
+        return showCupertinoDialog(
+          context: context,
+          builder: (BuildContext context) {
+            setState(() {
+              isLoading = false;
+            });
+            return CupertinoAlertDialog(
+              title: Text('Opps !'),
+              content: Text('Something Went Wrong, Please Try Again Later'),
+              actions: [
+                CupertinoDialogAction(
+                  child: Text('OK'),
+                  onPressed: () {
+                    Navigator.pop(context);
+                  },
+                ),
+              ],
+            );
+          },
+        );
       });
     }
 
@@ -183,7 +201,7 @@ class _LoginPageState extends State<LoginPage> {
                     decoration: BoxDecoration(
                       borderRadius: BorderRadius.all(
                           Radius.circular(8.0) //  <--- border radius here
-                          ),
+                      ),
                       border: Border.all(color: Colors.black),
                     ),
                     child: Column(
@@ -192,6 +210,7 @@ class _LoginPageState extends State<LoginPage> {
                       children: [
                         SizedBox(height: ScreenConfig.screenHeight * 0.00),
                         TextFormField(
+                          readOnly: isLoading == false ? false : true,
                           controller: _emailAddressFieldController,
                           validator: (value) {
                             Pattern pattern =
@@ -199,8 +218,7 @@ class _LoginPageState extends State<LoginPage> {
                             RegExp regex = new RegExp(pattern);
                             if (value == null || value.isEmpty) {
                               return 'Please enter email';
-                            }
-                            else if(!regex.hasMatch(value)){
+                            } else if (!regex.hasMatch(value)) {
                               return 'Enter Valid Email';
                             }
                             return null;
@@ -224,15 +242,12 @@ class _LoginPageState extends State<LoginPage> {
                           ),
                         ),
                         TextFormField(
+                          readOnly: isLoading == false ? false : true,
                           controller: _passwordFieldController,
                           validator: (value) {
-
-
-
                             if (value == null || value.isEmpty) {
                               return 'Please enter password';
-                            }
-                            else if( value.length<5){
+                            } else if (value.length < 5) {
                               return 'Please enter password more than 5 character';
                             }
                             return null;
@@ -264,7 +279,8 @@ class _LoginPageState extends State<LoginPage> {
                 Column(
                   children: [
                     InkWell(
-                      onTap: () {
+                      onTap: isLoading == false
+                          ? () {
                         print("PRINCE");
                         // NavMe().NavPushLeftToRight(ForgotPassword);
                         Get.to(ForgotPassword(),
@@ -273,7 +289,8 @@ class _LoginPageState extends State<LoginPage> {
                         // Navigator.push(context, MaterialPageRoute(
                         //   builder: (context)=>ForgotPassword()
                         // ));
-                      },
+                      }
+                          : null,
                       child: Container(
                         child: Padding(
                           padding: const EdgeInsets.only(right: 28),
@@ -303,13 +320,16 @@ class _LoginPageState extends State<LoginPage> {
                                 padding: const EdgeInsets.fromLTRB(
                                     15.0, 8.0, 8.0, 8.0),
                                 child: InkWell(
-                                  onTap: () =>isLoading==false?
-                                      NavMe().NavPushReplaceFadeIn(SignUp()):null,
+                                  onTap: () =>
+                                  isLoading == false
+                                      ? NavMe()
+                                      .NavPushReplaceLeftToRight(SignUp())
+                                      : null,
                                   // navigatorPushReplacedFun(context, SignUp()),
                                   child: Column(
                                     mainAxisAlignment: MainAxisAlignment.start,
                                     crossAxisAlignment:
-                                        CrossAxisAlignment.start,
+                                    CrossAxisAlignment.start,
                                     children: [
                                       Spacer(),
                                       Text("Don’t have an account?",
@@ -329,12 +349,38 @@ class _LoginPageState extends State<LoginPage> {
                           ),
                           Expanded(
                             child: InkWell(
-                              onTap:isLoading == false ? (){
+                              onTap: isLoading == false
+                                  ? () {
                                 if (_formKey.currentState.validate()) {
-                                  setState(() {
-                                    isLoading = true;
+                                  isConnectedToInternet()
+                                      .then((internet) {
+                                    if (internet != null && internet) {
+                                      setState(() {
+                                        isLoading = true;
+                                      });
+                                      login();
+                                    }
+                                    else {
+                                      showCupertinoDialog(
+                                        context: context,
+                                        builder: (BuildContext context) {
+                                          return CupertinoAlertDialog(
+                                            title: Text('Alert'),
+                                            content: Text('Please Check internet connection'),
+                                            actions: [
+                                              CupertinoDialogAction(
+                                                child: Text('OK'),
+                                                onPressed: () {
+                                                  Navigator.pop(context);
+                                                },
+                                              ),
+                                            ],
+                                          );
+                                        },
+                                      );
+                                    }
                                   });
-                                  login();
+
                                   // ScaffoldMessenger.of(context).showSnackBar(
                                   //     SnackBar(
                                   //         content: Text('Logging you back')));
@@ -344,7 +390,8 @@ class _LoginPageState extends State<LoginPage> {
                                   //         content: Text(
                                   //             'Please fill required fields')));
                                 }
-                              }:null,
+                              }
+                                  : null,
                               child: Container(
                                 width: ScreenConfig.screenWidth / 2,
                                 color: CColors.missonButtonColor,
@@ -353,24 +400,24 @@ class _LoginPageState extends State<LoginPage> {
                                     alignment: Alignment.center,
                                     child: isLoading == false
                                         ? Row(
-                                            mainAxisAlignment:
-                                                MainAxisAlignment.center,
-                                            children: [
-                                              Text("SIGN IN",
-                                                  style: TextStyle(
-                                                    color: Colors.white,
-                                                  )),
-                                              SizedBox(
-                                                width:
-                                                    ScreenConfig.screenWidth *
-                                                        0.04,
-                                              ),
-                                              RotatedBox(
-                                                  quarterTurns: 2,
-                                                  child: SvgPicture.asset(
-                                                      nextScreenArrow)),
-                                            ],
-                                          )
+                                      mainAxisAlignment:
+                                      MainAxisAlignment.center,
+                                      children: [
+                                        Text("SIGN IN",
+                                            style: TextStyle(
+                                              color: Colors.white,
+                                            )),
+                                        SizedBox(
+                                          width:
+                                          ScreenConfig.screenWidth *
+                                              0.04,
+                                        ),
+                                        RotatedBox(
+                                            quarterTurns: 2,
+                                            child: SvgPicture.asset(
+                                                nextScreenArrow)),
+                                      ],
+                                    )
                                         : spinkit),
                               ),
                             ),
