@@ -50,7 +50,7 @@ class _SignUpState extends State<SignUp> {
   bool _mailer = true;
   bool _phone = true;
   bool _id = true;
-  bool _postal = true;
+  // bool _postal = true;
   var height = AppBar().preferredSize.height;
   String _selectedRadioValue;
   String lat;
@@ -100,7 +100,7 @@ class _SignUpState extends State<SignUp> {
             return CupertinoAlertDialog(
               title: Text('Please allow Permission'),
               content: Text(
-                  'App need location permission to get your current location'),
+                  'Go to the setting and allow the location permission to the app'),
               actions: [
                 CupertinoDialogAction(
                   child: Text('OK'),
@@ -111,6 +111,15 @@ class _SignUpState extends State<SignUp> {
                     }).whenComplete(() {
                       // callMe();
                     });
+                    // openAppSettings();
+                    // Navigator.pop(context);
+                  },
+                ),
+                CupertinoDialogAction(
+                  child: Text('cancel'),
+                  onPressed: () {
+                    Navigator.pop(context);
+
                     // openAppSettings();
                     // Navigator.pop(context);
                   },
@@ -260,6 +269,7 @@ class _SignUpState extends State<SignUp> {
           isLoading = false;
         });
         setString(sharedPref.userEmail, registerNewUserModel.data.user.email);
+        setString(sharedPref.userName, registerNewUserModel.data.user.name);
 
         setString(sharedPref.userToken, registerNewUserModel.data.token);
         setString(
@@ -274,6 +284,7 @@ class _SignUpState extends State<SignUp> {
 
         getString(sharedPref.userEmail).then((value) => print("123 $value"));
 
+        getString(sharedPref.userLocation).then((value) => print("123 $value"));
         getString(sharedPref.userLocation).then((value) => print("123 $value"));
 
         Get.off(Dashboard(), transition: Transition.rightToLeft);
@@ -452,7 +463,7 @@ class _SignUpState extends State<SignUp> {
                                   padding:
                                       const EdgeInsets.symmetric(vertical: 7.5),
                                   child: TextFormField(
-                                    readOnly:    isLoading == false? false: true,
+                                    readOnly: isLoading == false ? false : true,
                                     keyboardType: TextInputType.name,
                                     inputFormatters: [
                                       new FilteringTextInputFormatter.allow(
@@ -462,16 +473,26 @@ class _SignUpState extends State<SignUp> {
                                     validator: (value) {
                                       if (value == null || value.isEmpty) {
                                         _username = false;
+
                                         setState(() {});
+                                        return null;
                                         if (value.length < 5) {
                                           _username = false;
                                           setState(() {});
                                           return null;
                                         }
+                                      } else if (value.length < 2) {
+                                        _username = false;
+                                        return null;
+                                        // return "A user name must have more that 1 word";
                                       } else {
+                                        _username = true;
+                                        setState(() {
+
+                                        });
                                         return null;
                                       }
-                                      return null;
+                                      // return null;
                                     },
                                     controller: _fullNameController,
                                     decoration: InputDecoration(
@@ -519,22 +540,28 @@ class _SignUpState extends State<SignUp> {
                                   padding:
                                       const EdgeInsets.symmetric(vertical: 7.5),
                                   child: TextFormField(
-                                    readOnly:   isLoading == false? false: true,
+                                    readOnly: isLoading == false ? false : true,
                                     validator: (value) {
                                       Pattern pattern =
                                           r'^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$';
                                       RegExp regex = new RegExp(pattern);
                                       if (value == null || value.isEmpty) {
                                         _mailer = false;
+                                        // return "Please fill the email";
                                         setState(() {});
-                                        if (value.length < 5) {
-                                          _mailer = false;
-                                          setState(() {});
-                                          return null;
-                                        }
-                                      } else if (!regex.hasMatch(value)) {
-                                        return 'Enter Valid Email';
+
+                                        return null;
+                                      }  else if (!regex.hasMatch(value)) {
+                                        _mailer = false;
+                                        // return "Please fill the email";
+                                        setState(() {});
+
+                                        return null;
                                       } else {
+                                        _mailer = true;
+                                        setState(() {
+
+                                        });
                                         return null;
                                       }
                                       return null;
@@ -585,20 +612,27 @@ class _SignUpState extends State<SignUp> {
                                   padding:
                                       const EdgeInsets.symmetric(vertical: 7.5),
                                   child: TextFormField(
-                                    readOnly:   isLoading == false? false: true,
+                                    readOnly: isLoading == false ? false : true,
                                     validator: (value) {
                                       if (value == null || value.isEmpty) {
                                         _pass = false;
                                         setState(() {});
-                                        if (value.length < 5) {
-                                          _pass = false;
-                                          setState(() {});
-                                          return null;
-                                        }
+                                        // return "Please fill the password";
+                                        return null;
+                                      } else if (value.length < 5) {
+                                        // _pass = false;
+                                        _pass = false;
+                                        setState(() {});
+                                        // return "Please fill the password";
+                                        return null;
                                       } else {
+                                        _pass = true;
+                                        setState(() {
+
+                                        });
                                         return null;
                                       }
-                                      return null;
+                                      // return null;
                                     },
                                     obscureText: !isPasswordShown,
                                     controller: _passwordFieldController,
@@ -615,23 +649,26 @@ class _SignUpState extends State<SignUp> {
                                         ),
                                         suffixIcon: _pass
                                             ? InkWell(
-                                                onTap: () {
-                                                  setState(() {
-                                                    isPasswordShown =
-                                                        !isPasswordShown;
-                                                  });
-                                                },
-                                                child: Padding(
-                                                  padding: EdgeInsets.fromLTRB(
-                                                    16.0,
-                                                    8.0,
-                                                    16.0,
-                                                    15,
-                                                  ),
-                                                  child: Icon(
-                                                      Icons.remove_red_eye),
-                                                ),
+                                          onTap: () {
+                                            setState(() {
+                                              isPasswordShown = !isPasswordShown;
+                                            });
+                                          },
+                                          child: Padding(
+                                              padding: EdgeInsets.fromLTRB(
+                                                16.0,
+                                                8.0,
+                                                16.0,
+                                                15,
+                                              ),
+                                              child: isPasswordShown == true
+                                                  ? SvgPicture.asset(
+                                                "assets/svg_assets/eye_open.svg",
+                                                height: 25,
                                               )
+                                                  : SvgPicture.asset(
+                                                "assets/svg_assets/eye_close.svg",height: 25,)),
+                                        )
                                             : Icon(
                                                 Icons.error_outlined,
                                                 color: Colors.red,
@@ -664,17 +701,21 @@ class _SignUpState extends State<SignUp> {
                                   padding:
                                       const EdgeInsets.symmetric(vertical: 7.5),
                                   child: TextFormField(
-                                    readOnly:   isLoading == false? false: true,
+                                    readOnly: isLoading == false ? false : true,
                                     validator: (value) {
                                       if (value == null || value.isEmpty) {
                                         _repass = false;
                                         setState(() {});
-                                        if (value.length < 5) {
-                                          _repass = false;
-                                          setState(() {});
-                                          return null;
-                                        }
+                                        return null;
+                                      } else if (value.length < 5) {
+                                        _repass = false;
+                                        setState(() {});
+                                        return null;
                                       } else {
+                                        _repass = true;
+                                        setState(() {
+
+                                        });
                                         return null;
                                       }
                                       return null;
@@ -693,24 +734,27 @@ class _SignUpState extends State<SignUp> {
                                                   .missonGreyBorderColor),
                                         ),
                                         suffixIcon: _repass
-                                            ? InkWell(
-                                                onTap: () {
-                                                  setState(() {
-                                                    isRePasswordShown =
-                                                        !isRePasswordShown;
-                                                  });
-                                                },
-                                                child: Padding(
-                                                  padding: EdgeInsets.fromLTRB(
-                                                    16.0,
-                                                    8.0,
-                                                    16.0,
-                                                    15,
-                                                  ),
-                                                  child: Icon(
-                                                      Icons.remove_red_eye),
-                                                ),
+                                            ?InkWell(
+                                          onTap: () {
+                                            setState(() {
+                                              isRePasswordShown = !isRePasswordShown;
+                                            });
+                                          },
+                                          child: Padding(
+                                              padding: EdgeInsets.fromLTRB(
+                                                16.0,
+                                                8.0,
+                                                16.0,
+                                                15,
+                                              ),
+                                              child: isRePasswordShown == true
+                                                  ? SvgPicture.asset(
+                                                "assets/svg_assets/eye_open.svg",
+                                                height: 25,
                                               )
+                                                  : SvgPicture.asset(
+                                                "assets/svg_assets/eye_close.svg",height: 25,)),
+                                        )
                                             : Icon(
                                                 Icons.error_outlined,
                                                 color: Colors.red,
@@ -743,19 +787,33 @@ class _SignUpState extends State<SignUp> {
                                   padding:
                                       const EdgeInsets.symmetric(vertical: 7.5),
                                   child: TextFormField(
-                                    readOnly:   isLoading == false? false: true,
+                                    readOnly: isLoading == false ? false : true,
                                     keyboardType: TextInputType.phone,
                                     controller: _phoneNumberController,
                                     validator: (value) {
                                       if (value == null || value.isEmpty) {
                                         _phone = false;
                                         setState(() {});
-                                        if (value.length < 5) {
-                                          _phone = false;
-                                          setState(() {});
-                                          return null;
-                                        }
+                                        return null;
+                                      } else if (value.length < 10) {
+                                        // _phone = false;
+                                        _phone = false;
+                                        setState(() {});
+                                        return null;
+
+
+                                        // return null;
+                                      } else if (value.length > 13) {
+                                        // _phone = false;
+                                        _phone = false;
+                                        setState(() {});
+                                        return null;
+
+
+                                        // return null;
                                       } else {
+                                        _phone = true;
+                                        setState(() {});
                                         return null;
                                       }
                                       return null;
@@ -812,15 +870,12 @@ class _SignUpState extends State<SignUp> {
                                         controller: _locationController,
                                         validator: (value) {
                                           if (value == null || value.isEmpty) {
-                                            _pass = false;
+                                            // _pass = false;
                                             setState(() {});
-                                            if (value.length < 5) {
-                                              _pass = false;
-                                              setState(() {});
-                                              return null;
-                                            }
+
+                                            return null;
                                           } else if (value == "Loading......") {
-                                            _pass = false;
+                                            // _pass = false;
                                             if (ispermanentDenied == true) {
                                               ScaffoldMessenger.of(context)
                                                   .showSnackBar(SnackBar(
@@ -943,20 +998,18 @@ class _SignUpState extends State<SignUp> {
                                 ),
 
                                 TextFormField(
-                                  readOnly:   isLoading == false? false: true,
+                                  readOnly: isLoading == false ? false : true,
                                   controller: _id_number,
                                   validator: (value) {
                                     if (value == null || value.isEmpty) {
                                       _id = false;
                                       setState(() {});
-                                      if (value.length < 5) {
-                                        _id = false;
-                                        setState(() {});
-                                        return null;
-                                      }
-                                    } else {
                                       return null;
                                     }
+                                    _id = true;
+                                    setState(() {
+
+                                    });
                                     return null;
                                   },
                                   decoration: InputDecoration(
@@ -1003,8 +1056,10 @@ class _SignUpState extends State<SignUp> {
                   children: [
                     Expanded(
                       child: InkWell(
-                        onTap:      isLoading == false? () =>
-                            NavMe().NavPushReplaceLeftToRight(LoginPage()):null,
+                        onTap: isLoading == false
+                            ? () =>
+                                NavMe().NavPushReplaceLeftToRight(LoginPage())
+                            : null,
                         child: Container(
                           decoration: BoxDecoration(
                               border: Border(
@@ -1023,7 +1078,7 @@ class _SignUpState extends State<SignUp> {
                                 Spacer(),
                                 Text("Already have an account?",
                                     style: TextStyle(
-                                        color: CColors.missonGrey,
+                                        color: CColors.missonPrimaryColor,
                                         fontSize: ScreenConfig.fontSizeSmall)),
                                 Spacer(),
                                 // Text("SIGN",
@@ -1053,12 +1108,9 @@ class _SignUpState extends State<SignUp> {
                                 _pass == true &&
                                 _repass == true &&
                                 _id == true &&
-                                _phone == true &&
-                                isLoading == false) {
-
-
-                              isConnectedToInternet()
-                                  .then((internet) {
+                                _phone == true
+                              ){
+                              isConnectedToInternet().then((internet) {
                                 if (internet != null && internet) {
                                   setState(() {
                                     isLoading = true;
@@ -1066,12 +1118,13 @@ class _SignUpState extends State<SignUp> {
                                   registerUser();
                                 }
                                 else {
-                                 return  showCupertinoDialog(
+                                  return showCupertinoDialog(
                                     context: context,
                                     builder: (BuildContext context) {
                                       return CupertinoAlertDialog(
                                         title: Text('Alert'),
-                                        content: Text('Please Check internet connection'),
+                                        content: Text(
+                                            'Please Check internet connection'),
                                         actions: [
                                           CupertinoDialogAction(
                                             child: Text('OK'),
@@ -1085,15 +1138,14 @@ class _SignUpState extends State<SignUp> {
                                   );
                                 }
                               });
-
-
+                            }
 
 
                               // setState(() {
                               //   isLoading = true;
                               // });
 
-                            }
+
                             // ScaffoldMessenger.of(context)
                             //     .showSnackBar(SnackBar(content: Text('Processing Data 1')));
                           } else {

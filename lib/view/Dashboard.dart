@@ -8,8 +8,31 @@ import 'package:misson_tasker/utils/local_data.dart';
 import 'package:misson_tasker/view/startup_screens/Drawer.dart';
 import 'package:misson_tasker/view/startup_screens/SplashScreen.dart';
 
-class Dashboard extends StatelessWidget {
+class Dashboard extends StatefulWidget {
+  @override
+  _DashboardState createState() => _DashboardState();
+}
+
+class _DashboardState extends State<Dashboard> {
   GlobalKey<ScaffoldState> _drawerKey = GlobalKey();
+  String username = "";
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    getString(sharedPref.userName).then((value){
+
+
+      username = value;
+      print("!@# $value");
+
+    }).whenComplete(() {
+      setState(() {
+
+      });
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -19,7 +42,7 @@ class Dashboard extends StatelessWidget {
           // Add a ListView to the drawer. This ensures the user can scroll
           // through the options in the drawer if there isn't enough vertical
           // space to fit everything.
-          child: MyDrawer()),
+          child: MyDrawer(username: username,)),
       appBar: AppBar(
         elevation: 0,
         backgroundColor: CColors.missonNormalWhiteColor,

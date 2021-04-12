@@ -1,5 +1,6 @@
 class SharedPref{
   String _userToken= "user_token";
+  String _userName= "user_Name";
   String _userEmail= "user_email";
   String _userPhoneNumber= 'user_phonenumber';
   String _userLocation= "user_location";
@@ -18,6 +19,7 @@ class SharedPref{
   String get userPhoneNumber => _userPhoneNumber;
   String get userCurrentLat => _userCurrentLat;
   String get userCurrentLang => _userCurrentLang;
+  String get userName => _userName;
 
 
 

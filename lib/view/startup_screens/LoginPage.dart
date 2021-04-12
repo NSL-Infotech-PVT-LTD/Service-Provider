@@ -39,6 +39,7 @@ class _LoginPageState extends State<LoginPage> {
   LoginUserModel loginUserModel;
   var spinkit;
   bool isLoading = false;
+  bool isShown =true;
 
   @override
   void initState() {
@@ -63,10 +64,10 @@ class _LoginPageState extends State<LoginPage> {
     void login() async {
       ApiCaller()
           .loginUser(
-          email: _emailAddressFieldController.text,
-          password: _passwordFieldController.text,
-          deviceType: "android",
-          deviceToken: "asdfsdfgdsgds")
+              email: _emailAddressFieldController.text,
+              password: _passwordFieldController.text,
+              deviceType: "android",
+              deviceToken: "asdfsdfgdsgds")
           .then((value) => loginUserModel = value)
           .whenComplete(() {
         if (loginUserModel != null &&
@@ -76,6 +77,7 @@ class _LoginPageState extends State<LoginPage> {
           setString(sharedPref.userEmail, loginUserModel.data.user.email);
 
           setString(sharedPref.userToken, loginUserModel.data.token);
+          setString(sharedPref.userName, loginUserModel.data.user.name);
           setString(sharedPref.userLocation, loginUserModel.data.user.location);
           setString(
               sharedPref.userPhoneNumber, loginUserModel.data.user.mobile);
@@ -197,18 +199,18 @@ class _LoginPageState extends State<LoginPage> {
                 Padding(
                   padding: EdgeInsets.all(28),
                   child: Container(
-                    height: ScreenConfig.screenHeight * 0.13,
+                    height: ScreenConfig.screenHeight * 0.16,
                     decoration: BoxDecoration(
                       borderRadius: BorderRadius.all(
                           Radius.circular(8.0) //  <--- border radius here
-                      ),
+                          ),
                       border: Border.all(color: Colors.black),
                     ),
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                       mainAxisSize: MainAxisSize.max,
                       children: [
-                        SizedBox(height: ScreenConfig.screenHeight * 0.00),
+                        SizedBox(height: ScreenConfig.screenHeight * 0.01),
                         TextFormField(
                           readOnly: isLoading == false ? false : true,
                           controller: _emailAddressFieldController,
@@ -233,7 +235,7 @@ class _LoginPageState extends State<LoginPage> {
                             prefixIcon: Padding(
                               padding: EdgeInsets.fromLTRB(
                                 8.0,
-                                8.0,
+                                14.0,
                                 8.0,
                                 19,
                               ),
@@ -241,7 +243,7 @@ class _LoginPageState extends State<LoginPage> {
                             ),
                           ),
                         ),
-                        TextFormField(
+                        TextFormField( expands: false,
                           readOnly: isLoading == false ? false : true,
                           controller: _passwordFieldController,
                           validator: (value) {
@@ -252,10 +254,34 @@ class _LoginPageState extends State<LoginPage> {
                             }
                             return null;
                           },
+                          obscureText: isShown,
                           decoration: InputDecoration(
+
+                            suffixIcon: InkWell(
+                              onTap: () {
+                                setState(() {
+                                  isShown = !isShown;
+                                });
+                              },
+                              child: Padding(
+                                  padding: EdgeInsets.fromLTRB(
+                                    16.0,
+                                    8.0,
+                                    16.0,
+                                    15,
+                                  ),
+                                  child: isShown == false
+                                      ? SvgPicture.asset(
+                                          "assets/svg_assets/eye_open.svg",
+                                          height: 25,
+                                        )
+                                      : SvgPicture.asset(
+                                          "assets/svg_assets/eye_close.svg",height: 25,)),
+                            ),
                             hintStyle: _textStyle,
                             border: InputBorder.none,
                             isDense: true,
+
                             hintText: "Password",
                             prefixIconConstraints: BoxConstraints(
                                 minHeight: ScreenConfig.screenHeight * 0.05,
@@ -281,15 +307,15 @@ class _LoginPageState extends State<LoginPage> {
                     InkWell(
                       onTap: isLoading == false
                           ? () {
-                        print("PRINCE");
-                        // NavMe().NavPushLeftToRight(ForgotPassword);
-                        Get.to(ForgotPassword(),
-                            transition: Transition.rightToLeft,
-                            duration: Duration(milliseconds: 500));
-                        // Navigator.push(context, MaterialPageRoute(
-                        //   builder: (context)=>ForgotPassword()
-                        // ));
-                      }
+                              print("PRINCE");
+                              // NavMe().NavPushLeftToRight(ForgotPassword);
+                              Get.to(ForgotPassword(),
+                                  transition: Transition.rightToLeft,
+                                  duration: Duration(milliseconds: 500));
+                              // Navigator.push(context, MaterialPageRoute(
+                              //   builder: (context)=>ForgotPassword()
+                              // ));
+                            }
                           : null,
                       child: Container(
                         child: Padding(
@@ -320,16 +346,15 @@ class _LoginPageState extends State<LoginPage> {
                                 padding: const EdgeInsets.fromLTRB(
                                     15.0, 8.0, 8.0, 8.0),
                                 child: InkWell(
-                                  onTap: () =>
-                                  isLoading == false
+                                  onTap: () => isLoading == false
                                       ? NavMe()
-                                      .NavPushReplaceLeftToRight(SignUp())
+                                          .NavPushReplaceLeftToRight(SignUp())
                                       : null,
                                   // navigatorPushReplacedFun(context, SignUp()),
                                   child: Column(
                                     mainAxisAlignment: MainAxisAlignment.start,
                                     crossAxisAlignment:
-                                    CrossAxisAlignment.start,
+                                        CrossAxisAlignment.start,
                                     children: [
                                       Spacer(),
                                       Text("Don’t have an account?",
@@ -351,46 +376,46 @@ class _LoginPageState extends State<LoginPage> {
                             child: InkWell(
                               onTap: isLoading == false
                                   ? () {
-                                if (_formKey.currentState.validate()) {
-                                  isConnectedToInternet()
-                                      .then((internet) {
-                                    if (internet != null && internet) {
-                                      setState(() {
-                                        isLoading = true;
-                                      });
-                                      login();
-                                    }
-                                    else {
-                                      showCupertinoDialog(
-                                        context: context,
-                                        builder: (BuildContext context) {
-                                          return CupertinoAlertDialog(
-                                            title: Text('Alert'),
-                                            content: Text('Please Check internet connection'),
-                                            actions: [
-                                              CupertinoDialogAction(
-                                                child: Text('OK'),
-                                                onPressed: () {
-                                                  Navigator.pop(context);
-                                                },
-                                              ),
-                                            ],
-                                          );
-                                        },
-                                      );
-                                    }
-                                  });
+                                      if (_formKey.currentState.validate()) {
+                                        isConnectedToInternet()
+                                            .then((internet) {
+                                          if (internet != null && internet) {
+                                            setState(() {
+                                              isLoading = true;
+                                            });
+                                            login();
+                                          } else {
+                                            showCupertinoDialog(
+                                              context: context,
+                                              builder: (BuildContext context) {
+                                                return CupertinoAlertDialog(
+                                                  title: Text('Alert'),
+                                                  content: Text(
+                                                      'Please Check internet connection'),
+                                                  actions: [
+                                                    CupertinoDialogAction(
+                                                      child: Text('OK'),
+                                                      onPressed: () {
+                                                        Navigator.pop(context);
+                                                      },
+                                                    ),
+                                                  ],
+                                                );
+                                              },
+                                            );
+                                          }
+                                        });
 
-                                  // ScaffoldMessenger.of(context).showSnackBar(
-                                  //     SnackBar(
-                                  //         content: Text('Logging you back')));
-                                } else {
-                                  // ScaffoldMessenger.of(context).showSnackBar(
-                                  //     SnackBar(
-                                  //         content: Text(
-                                  //             'Please fill required fields')));
-                                }
-                              }
+                                        // ScaffoldMessenger.of(context).showSnackBar(
+                                        //     SnackBar(
+                                        //         content: Text('Logging you back')));
+                                      } else {
+                                        // ScaffoldMessenger.of(context).showSnackBar(
+                                        //     SnackBar(
+                                        //         content: Text(
+                                        //             'Please fill required fields')));
+                                      }
+                                    }
                                   : null,
                               child: Container(
                                 width: ScreenConfig.screenWidth / 2,
@@ -400,24 +425,24 @@ class _LoginPageState extends State<LoginPage> {
                                     alignment: Alignment.center,
                                     child: isLoading == false
                                         ? Row(
-                                      mainAxisAlignment:
-                                      MainAxisAlignment.center,
-                                      children: [
-                                        Text("SIGN IN",
-                                            style: TextStyle(
-                                              color: Colors.white,
-                                            )),
-                                        SizedBox(
-                                          width:
-                                          ScreenConfig.screenWidth *
-                                              0.04,
-                                        ),
-                                        RotatedBox(
-                                            quarterTurns: 2,
-                                            child: SvgPicture.asset(
-                                                nextScreenArrow)),
-                                      ],
-                                    )
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.center,
+                                            children: [
+                                              Text("SIGN IN",
+                                                  style: TextStyle(
+                                                    color: Colors.white,
+                                                  )),
+                                              SizedBox(
+                                                width:
+                                                    ScreenConfig.screenWidth *
+                                                        0.04,
+                                              ),
+                                              RotatedBox(
+                                                  quarterTurns: 2,
+                                                  child: SvgPicture.asset(
+                                                      nextScreenArrow)),
+                                            ],
+                                          )
                                         : spinkit),
                               ),
                             ),

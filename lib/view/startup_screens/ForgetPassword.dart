@@ -73,7 +73,11 @@ if(forgetPasswordobj!=null  && forgetPasswordobj.code==201)
           ],
         );
       },
-    );
+    ).whenComplete(() {
+      // Navigator.pushReplacement(context, MaterialPageRoute(builder: (_)=> LoginPage()));
+      NavMe().NavPushReplaceFadeIn(LoginPage());
+
+    });
   }
 else
   if(forgetPasswordobj!=null && forgetPasswordobj.code==422)
@@ -186,7 +190,7 @@ else
                         14.0,
                         10,
                       ),
-                      child: SvgPicture.asset(""),
+                      child: SvgPicture.asset("assets/svg_assets/misson_textfield_message_icon.svg"),
                     ),
                     labelText: "Email Address",
                     fillColor: Colors.black,

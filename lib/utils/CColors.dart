@@ -16,6 +16,8 @@ class CColors{
   static final backgroundRed=Color(0xFFF9EFEF);
   static final missonRed=Color(0xFFFF0303);
   static final missonYellow=Color(0xFFFFAE0D);
+  static final missonSkyBlue=Color(0xFF1AA7DC);
+  static final missonDividerGrey=Color(0xFF395C6B);
 
 
 
