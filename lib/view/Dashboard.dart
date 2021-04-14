@@ -66,6 +66,13 @@ class _DashboardState extends State<Dashboard> {
           // space to fit everything.
           child: MyDrawer(
         username: username,
+            ImageUrl: getProfileDataModel == null ||
+        getProfileDataModel.data == null ||
+        getProfileDataModel.data.user == null ||
+        getProfileDataModel.data.user.image == null
+        ? null
+        : getProfileDataModel.data.user.image,
+
       )),
       appBar: AppBar(
         elevation: 0,

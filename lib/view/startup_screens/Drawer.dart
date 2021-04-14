@@ -11,7 +11,10 @@ import 'package:misson_tasker/view/startup_screens/SplashScreen.dart';
 
 class MyDrawer extends StatefulWidget {
   String username;
-  MyDrawer({@required this.username});
+  String ImageUrl;
+
+  MyDrawer({@required this.username, this.ImageUrl});
+
   @override
   _MyDrawerState createState() => _MyDrawerState();
 }
@@ -19,10 +22,8 @@ class MyDrawer extends StatefulWidget {
 class _MyDrawerState extends State<MyDrawer> {
   // static String username = "";
 
-
   @override
   Widget build(BuildContext context) {
-
     return Container(
       color: CColors.missonPrimaryColor,
       child: ListView(
@@ -37,7 +38,9 @@ class _MyDrawerState extends State<MyDrawer> {
                   Expanded(
                       flex: 2,
                       child: CircleAvatar(
-                        backgroundImage: AssetImage(avatar1),
+                        backgroundImage: widget.ImageUrl == null
+                            ? AssetImage(avatar1)
+                            : NetworkImage(widget.ImageUrl),
                         radius: 45,
                       )),
                   Expanded(
@@ -61,10 +64,13 @@ class _MyDrawerState extends State<MyDrawer> {
                                 color: CColors.missonSignUpButtonColor),
                           ),
                         ),
-                        SizedBox(height: 5,),
-                        InkWell(onTap: (){
-                          NavMe().NavPushLeftToRight(EditProfile());
-                        },
+                        SizedBox(
+                          height: 5,
+                        ),
+                        InkWell(
+                          onTap: () {
+                            NavMe().NavPushLeftToRight(EditProfile());
+                          },
                           child: Text(
                             "Edit Profile",
                             style: TextStyle(color: CColors.missonSkyBlue),
@@ -83,10 +89,11 @@ class _MyDrawerState extends State<MyDrawer> {
           Divider(
             color: CColors.missonDividerGrey,
           ),
-
           Column(
             children: [
-              SizedBox(height: ScreenConfig.screenHeight*0.07,),
+              SizedBox(
+                height: ScreenConfig.screenHeight * 0.07,
+              ),
               ListTile(
                 title: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -257,7 +264,11 @@ class _MyDrawerState extends State<MyDrawer> {
                             child: Text('Yes'),
                             onPressed: () {
                               clearedShared();
-                              Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: (_)=>LoginPage()), (route) => false);
+                              Navigator.pushAndRemoveUntil(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (_) => LoginPage()),
+                                  (route) => false);
                               // NavMe().NavPushReplaceFadeIn(LoginPage());
                             },
                           ),
