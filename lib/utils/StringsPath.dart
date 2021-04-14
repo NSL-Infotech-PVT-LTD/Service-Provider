@@ -33,6 +33,7 @@ final String rightArrowIcon= "assets/svg_assets/right_arrow_icon.svg";
 final String walletIcon= "assets/svg_assets/wallet.svg";
 final String settingIcon= "assets/svg_assets/setting.svg";
 final String bellIcon="assets/svg_assets/bell_icon.svg";
+final String cameraLogo="assets/svg_assets/camera_logo.svg";
 
 
 //<=============================PNG IMAGES=========================>

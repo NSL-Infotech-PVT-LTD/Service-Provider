@@ -1,12 +1,20 @@
 import 'dart:io';
 
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:geocoder/geocoder.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:misson_tasker/model/ApiCaller.dart';
+import 'package:misson_tasker/model/api_models/GetProfileDataModel.dart';
+import 'package:misson_tasker/model/api_models/UpdateProfileDataModel.dart';
 import 'package:misson_tasker/utils/CColors.dart';
 import 'package:misson_tasker/utils/ScreenConfig.dart';
 import 'package:misson_tasker/utils/StringsPath.dart';
+import 'package:misson_tasker/utils/local_data.dart';
+import 'package:misson_tasker/view/startup_screens/SplashScreen.dart';
 
 class EditProfile extends StatefulWidget {
   @override
@@ -19,6 +27,9 @@ class _EditProfileState extends State<EditProfile> {
   String pickedFile;
   final picker = ImagePicker();
   bool imageLoader = false;
+  String lat;
+  String lang;
+  UpdateProfileDataModel _profileDataModel;
 
   // Future getImage(int type) async {
   //   Navigator.of(context).pop();
@@ -188,9 +199,102 @@ class _EditProfileState extends State<EditProfile> {
   //     }
   //   });
   // }
+
+  updateUser() async {
+    getString(sharedPref.userToken).then((value) {
+      auth = value;
+
+      print("123 $value");
+    }).whenComplete(() {
+      ApiCaller()
+          .updateUserApi(auth: auth, file: file, params: {
+            "name": "${_fullName.text}",
+            "location": "${_location.text}",
+            "lattitude": "$lat",
+            "longitude": "$lang",
+            "mobile": "${_number.text}",
+            "postal_code": "${_postal.text}",
+          })
+          .then((value) => _profileDataModel = value)
+          .whenComplete(() {
+            setState(() {
+              isLoadingApi = false;
+
+              _fullName.text = _profileDataModel.data.user.name;
+              _email.text = _profileDataModel.data.user.email;
+              _number.text = _profileDataModel.data.user.mobile;
+              _location.text = _profileDataModel.data.user.location;
+              _postal.text = _profileDataModel.data.user.postalCode;
+            });
+          })
+          .whenComplete(() {
+            showCupertinoDialog(
+              context: context,
+              builder: (BuildContext context) {
+                return CupertinoAlertDialog(
+                  title: Text('Alert'),
+                  content: Text('${_profileDataModel.data.message}'),
+                  actions: [
+                    CupertinoDialogAction(
+                      child: Text('OK'),
+                      onPressed: () {
+                        Navigator.pop(context);
+                        // NavMe().NavPushReplaceFadeIn(LoginPage());
+                        // Navigator.pushReplacement(context, MaterialPageRoute(builder: (_)=> LoginPage()));
+                      },
+                    ),
+                  ],
+                );
+              },
+            );
+          });
+    });
+  }
+
+  bool isLoadingData = true;
+  bool isLoadingApi = false;
+  String auth;
+  var spinkit;
+  GetProfileDataModel getProfileDataModel;
+
   @override
   void initState() {
+    spinkit = SpinKitWave(
+      size: 40,
+      itemBuilder: (BuildContext context, int index) {
+        return DecoratedBox(
+          decoration: BoxDecoration(
+            color: index.isEven
+                ? CColors.missonPrimaryColor
+                : CColors.missonMediumGrey,
+          ),
+        );
+      },
+    );
+
     // registerUser();
+
+    getString(sharedPref.userToken).then((value) {
+      auth = value;
+
+      print("123 $value");
+    }).whenComplete(() {
+      ApiCaller().getProfileData(auth: auth).then((value) {
+        getProfileDataModel = value;
+      }).whenComplete(() {
+        setState(() {
+          isLoadingData = false;
+
+          _fullName.text = getProfileDataModel.data.user.name;
+          _email.text = getProfileDataModel.data.user.email;
+          _number.text = getProfileDataModel.data.user.mobile;
+          _location.text = getProfileDataModel.data.user.location;
+          _postal.text = getProfileDataModel.data.user.postalCode;
+          lat = getProfileDataModel.data.user.latitude;
+          lang = getProfileDataModel.data.user.longitude;
+        });
+      });
+    });
     super.initState();
   }
 
@@ -296,7 +400,8 @@ class _EditProfileState extends State<EditProfile> {
         //   toolbarHeight: ScreenConfig.screenHeight * 0.25,
       ),
       body: SingleChildScrollView(
-        child: Container( height: ScreenConfig.screenHeight*0.88,
+        child: Container(
+          height: ScreenConfig.screenHeight * 0.88,
           child: Stack(
             children: [
               Container(
@@ -311,27 +416,47 @@ class _EditProfileState extends State<EditProfile> {
                         },
                         child: Container(
                           height: ScreenConfig.screenHeight * 0.15,
-                          child:
-                          CircleAvatar(
-                          backgroundColor: CColors.missonGrey,
+                          child: CircleAvatar(
+                            backgroundColor: CColors.missonGrey,
                             radius: 47,
-                            child:  CircleAvatar(
-                              backgroundImage: AssetImage(avatar1),
+                            child: CircleAvatar(
+                              backgroundImage: file == null
+                                  ? getProfileDataModel == null ||
+                                          getProfileDataModel.data == null ||
+                                          getProfileDataModel.data.user ==
+                                              null ||
+                                          getProfileDataModel.data.user.image ==
+                                              null
+                                      ? AssetImage(avatar1)
+                                      : NetworkImage(
+                                          "${getProfileDataModel.data.user.image}")
+                                  : FileImage(file),
+                              child: Opacity(
+                                  opacity: 0.5,
+                                  child: CircleAvatar(
+                                    child: Center(
+                                        child: SvgPicture.asset(
+                                      cameraLogo,
+                                      height: 75,
+                                    )),
+                                    backgroundColor: Colors.black,
+                                    radius: 45,
+                                  )),
                               radius: 45,
                             ),
                           ),
-
                         ),
                       ),
                       Padding(
-                        padding: EdgeInsets.only(top: 20.0, left: 30,right: 30),
+                        padding:
+                            EdgeInsets.only(top: 20.0, left: 30, right: 30),
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Text(
                               "Full name",
-                              style:
-                              TextStyle(fontSize: 12, color: CColors.textColor),
+                              style: TextStyle(
+                                  fontSize: 12, color: CColors.textColor),
                             ),
                             TextFormField(
                               controller: _fullName,
@@ -346,8 +471,10 @@ class _EditProfileState extends State<EditProfile> {
                                   isDense: true,
                                   hintText: "Full name",
                                   prefixIconConstraints: BoxConstraints(
-                                      minHeight: ScreenConfig.screenHeight * 0.05,
-                                      minWidth: ScreenConfig.screenWidth * 0.04),
+                                      minHeight:
+                                          ScreenConfig.screenHeight * 0.05,
+                                      minWidth:
+                                          ScreenConfig.screenWidth * 0.04),
                                   prefixIcon: Padding(
                                     padding: EdgeInsets.fromLTRB(
                                       8.0,
@@ -361,10 +488,11 @@ class _EditProfileState extends State<EditProfile> {
                             SizedBox(height: ScreenConfig.screenHeight * 0.02),
                             Text(
                               "Message",
-                              style:
-                              TextStyle(fontSize: 12, color: CColors.textColor),
+                              style: TextStyle(
+                                  fontSize: 12, color: CColors.textColor),
                             ),
                             TextFormField(
+                              readOnly: true,
                               controller: _email,
                               validator: (value) {
                                 if (value == null || value.isEmpty) {
@@ -377,8 +505,10 @@ class _EditProfileState extends State<EditProfile> {
                                   isDense: true,
                                   hintText: "Message",
                                   prefixIconConstraints: BoxConstraints(
-                                      minHeight: ScreenConfig.screenHeight * 0.05,
-                                      minWidth: ScreenConfig.screenWidth * 0.04),
+                                      minHeight:
+                                          ScreenConfig.screenHeight * 0.05,
+                                      minWidth:
+                                          ScreenConfig.screenWidth * 0.04),
                                   prefixIcon: Padding(
                                     padding: EdgeInsets.fromLTRB(
                                       8.0,
@@ -386,15 +516,14 @@ class _EditProfileState extends State<EditProfile> {
                                       8.0,
                                       15,
                                     ),
-                                    child: SvgPicture.asset(messageIcon
-                                    ),
+                                    child: SvgPicture.asset(messageIcon),
                                   )),
                             ),
                             SizedBox(height: ScreenConfig.screenHeight * 0.02),
                             Text(
                               "Contact Number",
-                              style:
-                              TextStyle(fontSize: 12, color: CColors.textColor),
+                              style: TextStyle(
+                                  fontSize: 12, color: CColors.textColor),
                             ),
                             TextFormField(
                               readOnly: true,
@@ -410,8 +539,10 @@ class _EditProfileState extends State<EditProfile> {
                                   isDense: true,
                                   hintText: "Contact Number",
                                   prefixIconConstraints: BoxConstraints(
-                                      minHeight: ScreenConfig.screenHeight * 0.05,
-                                      minWidth: ScreenConfig.screenWidth * 0.04),
+                                      minHeight:
+                                          ScreenConfig.screenHeight * 0.05,
+                                      minWidth:
+                                          ScreenConfig.screenWidth * 0.04),
                                   prefixIcon: Padding(
                                     padding: EdgeInsets.fromLTRB(
                                       8.0,
@@ -425,10 +556,11 @@ class _EditProfileState extends State<EditProfile> {
                             SizedBox(height: ScreenConfig.screenHeight * 0.02),
                             Text(
                               "Location",
-                              style:
-                              TextStyle(fontSize: 12, color: CColors.textColor),
+                              style: TextStyle(
+                                  fontSize: 12, color: CColors.textColor),
                             ),
                             TextFormField(
+                              readOnly: true,
                               controller: _location,
                               validator: (value) {
                                 if (value == null || value.isEmpty) {
@@ -437,12 +569,32 @@ class _EditProfileState extends State<EditProfile> {
                                 return null;
                               },
                               decoration: InputDecoration(
+                                  suffixIcon: InkWell(
+                                    onTap: () {
+                                      setState(() {
+                                        _location.text = "Loading......";
+                                        _postal.text = "Loading......";
+                                      });
+                                      callMe();
+                                    },
+                                    child: Padding(
+                                      padding: EdgeInsets.fromLTRB(
+                                        16.0,
+                                        8.0,
+                                        16.0,
+                                        15,
+                                      ),
+                                      child: SvgPicture.asset(myLocationIcon),
+                                    ),
+                                  ),
                                   hintStyle: _textStyle,
                                   isDense: true,
                                   hintText: "Location",
                                   prefixIconConstraints: BoxConstraints(
-                                      minHeight: ScreenConfig.screenHeight * 0.05,
-                                      minWidth: ScreenConfig.screenWidth * 0.04),
+                                      minHeight:
+                                          ScreenConfig.screenHeight * 0.05,
+                                      minWidth:
+                                          ScreenConfig.screenWidth * 0.04),
                                   prefixIcon: Padding(
                                     padding: EdgeInsets.fromLTRB(
                                       8.0,
@@ -456,10 +608,11 @@ class _EditProfileState extends State<EditProfile> {
                             SizedBox(height: ScreenConfig.screenHeight * 0.02),
                             Text(
                               "postal code",
-                              style:
-                              TextStyle(fontSize: 12, color: CColors.textColor),
+                              style: TextStyle(
+                                  fontSize: 12, color: CColors.textColor),
                             ),
                             TextFormField(
+                              readOnly: true,
                               controller: _postal,
                               validator: (value) {
                                 if (value == null || value.isEmpty) {
@@ -472,8 +625,10 @@ class _EditProfileState extends State<EditProfile> {
                                   isDense: true,
                                   hintText: "postal code",
                                   prefixIconConstraints: BoxConstraints(
-                                      minHeight: ScreenConfig.screenHeight * 0.05,
-                                      minWidth: ScreenConfig.screenWidth * 0.04),
+                                      minHeight:
+                                          ScreenConfig.screenHeight * 0.05,
+                                      minWidth:
+                                          ScreenConfig.screenWidth * 0.04),
                                   prefixIcon: Padding(
                                     padding: EdgeInsets.fromLTRB(
                                       8.0,
@@ -490,18 +645,22 @@ class _EditProfileState extends State<EditProfile> {
                       // SizedBox(
                       //   height: ScreenConfig.screenHeight * 0.08,
                       // ),
-
                     ],
                   ),
                 ),
               ),
-              Align(alignment: Alignment.bottomCenter,
+              Align(
+                alignment: Alignment.bottomCenter,
                 child: SizedBox(
                   height: ScreenConfig.screenHeight * 0.06,
                   width: ScreenConfig.screenWidth * 0.70,
                   child: ElevatedButton(
                     onPressed: () {
                       if (_formKey.currentState.validate()) {
+                        setState(() {
+                          isLoadingApi = true;
+                          updateUser();
+                        });
                         // updateUser();
                         // ScaffoldMessenger.of(context)
                         //     .showSnackBar(SnackBar(content: Text('Processing Data 1')));
@@ -509,8 +668,11 @@ class _EditProfileState extends State<EditProfile> {
                         // ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Processing Data 2')));
                       }
                     },
-                    child: Text("Save",
-                        style: TextStyle(color: Colors.white, fontSize: 18)),
+                    child: isLoadingApi == true
+                        ? spinkit
+                        : Text("Save",
+                            style:
+                                TextStyle(color: Colors.white, fontSize: 18)),
                     style: ElevatedButton.styleFrom(
                       primary: CColors.missonButtonColor, // background
                       onPrimary: CColors.missonButtonColor, // fo
@@ -518,16 +680,62 @@ class _EditProfileState extends State<EditProfile> {
                           borderRadius: new BorderRadius.circular(06.0),
                           side: BorderSide(
                               color: CColors.missonButtonColor) // reground,
-                      ),
+                          ),
                     ),
                   ),
                 ),
               )
             ],
-
           ),
         ),
       ),
     );
+  }
+
+  Position position;
+
+  void callMe() {
+    _determinePosition().then((value) {
+      position = value;
+    }).whenComplete(() {
+      if (position != null) {
+        setString(sharedPref.userCurrentLat, position.latitude.toString());
+        setString(sharedPref.userCurrentLang, position.longitude.toString());
+        getString(sharedPref.userCurrentLat).then((value) {
+          lat = value;
+        }).whenComplete(() {
+          getString(sharedPref.userCurrentLang).then((value) {
+            lang = value;
+          }).whenComplete(() {
+            getLocationName(Position(
+                    latitude: double.parse(lat), longitude: double.parse(lang)))
+                .then((value) {
+              setState(() {
+                // _locationController.text = value.elementAt(0).addressLine;
+                // value.forEach((element){print("QWER ${element.addressLine}");});
+                print(value.elementAt(0).addressLine);
+                _location.text = value.elementAt(0).addressLine;
+                _postal.text = value.elementAt(0).postalCode;
+              });
+            }).whenComplete(() {
+              setState(() {
+                // islocationAvailible = true;
+              });
+            });
+          });
+        });
+      }
+    });
+  }
+
+  Future<Position> _determinePosition() async {
+    Position position = await Geolocator.getCurrentPosition(
+        desiredAccuracy: LocationAccuracy.high);
+    return position;
+  }
+
+  Future<List<Address>> getLocationName(Position pos) async {
+    return await Geocoder.local
+        .findAddressesFromCoordinates(Coordinates(pos.latitude, pos.longitude));
   }
 }

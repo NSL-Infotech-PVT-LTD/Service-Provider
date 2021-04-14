@@ -1,6 +1,8 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:misson_tasker/model/ApiCaller.dart';
+import 'package:misson_tasker/model/api_models/GetProfileDataModel.dart';
 import 'package:misson_tasker/utils/CColors.dart';
 import 'package:misson_tasker/utils/NavMe.dart';
 import 'package:misson_tasker/utils/ScreenConfig.dart';
@@ -19,21 +21,38 @@ class Dashboard extends StatefulWidget {
 class _DashboardState extends State<Dashboard> {
   GlobalKey<ScaffoldState> _drawerKey = GlobalKey();
   String username = "";
+  String auth = "";
+  GetProfileDataModel getProfileDataModel;
+  bool isLoadingData = true;
+
+  String _location="Loading....";
 
   @override
   void initState() {
+    getString(sharedPref.userToken).then((value) {
+      auth = value;
+
+      print("123 $value");
+    }).whenComplete(() {
+      ApiCaller().getProfileData(auth: auth).then((value) {
+        getProfileDataModel = value;
+      }).whenComplete(() {
+        setState(() {
+          isLoadingData = false;
+
+
+
+          _location = getProfileDataModel.data.user.location;
+        });
+      });
+    });
     // TODO: implement initState
     super.initState();
-    getString(sharedPref.userName).then((value){
-
-
+    getString(sharedPref.userName).then((value) {
       username = value;
       print("!@# $value");
-
     }).whenComplete(() {
-      setState(() {
-
-      });
+      setState(() {});
     });
   }
 
@@ -45,7 +64,9 @@ class _DashboardState extends State<Dashboard> {
           // Add a ListView to the drawer. This ensures the user can scroll
           // through the options in the drawer if there isn't enough vertical
           // space to fit everything.
-          child: MyDrawer(username: username,)),
+          child: MyDrawer(
+        username: username,
+      )),
       appBar: AppBar(
         elevation: 0,
         backgroundColor: CColors.missonNormalWhiteColor,
@@ -63,14 +84,14 @@ class _DashboardState extends State<Dashboard> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(
-              "Delivery",
+              "current location",
               textAlign: TextAlign.left,
               style: TextStyle(
                   fontSize: ScreenConfig.fontSizeSmall,
                   color: CColors.textColor),
             ),
             Text(
-              "B-52 Technobuilding, Sec-53, Noida",
+              "$_location",
               style: TextStyle(
                   fontSize: ScreenConfig.fontSizeMedium,
                   color: CColors.textColor),
@@ -81,11 +102,24 @@ class _DashboardState extends State<Dashboard> {
         actions: [
           Padding(
             padding: EdgeInsets.only(right: 16.0),
-            child: InkWell(onTap: (){
-              NavMe().NavPushLeftToRight(BusinessProfile());
-            },
-              child: CircleAvatar(
-                backgroundImage: AssetImage(avatar1),
+            child: InkWell(
+              onTap: () {
+                NavMe().NavPushLeftToRight(BusinessProfile());
+              },
+              child:CircleAvatar(
+                backgroundColor: CColors.missonGrey,
+                // radius: ,
+                child: CircleAvatar(
+                  backgroundImage: getProfileDataModel == null ||
+                      getProfileDataModel.data == null ||
+                      getProfileDataModel.data.user == null ||
+                      getProfileDataModel.data.user.image == null
+                      ? AssetImage(avatar1)
+                      : NetworkImage(
+                      "${getProfileDataModel.data.user.image}"),
+
+
+                ),
               ),
             ),
           )

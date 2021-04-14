@@ -87,29 +87,30 @@ class _UserProfileState extends State<UserProfile> {
   //   });
   // }
   GetProfileDataModel getProfileDataModel;
-String auth;
-bool isLoadingData=true;
+  String auth;
+  bool isLoadingData = true;
+
   @override
   void initState() {
     // registerUser();
     getString(sharedPref.userToken).then((value) {
-      auth=value;
+      auth = value;
 
-      print("123 $value");}).whenComplete(() {
+      print("123 $value");
+    }).whenComplete(() {
       ApiCaller().getProfileData(auth: auth).then((value) {
-    getProfileDataModel=value;
-  }).whenComplete(() {
-    setState(() {
-      isLoadingData=false;
+        getProfileDataModel = value;
+      }).whenComplete(() {
+        setState(() {
+          isLoadingData = false;
 
-      _fullName=getProfileDataModel.data.user.name;
-     _email =getProfileDataModel.data.user.email;
-       _number = getProfileDataModel.data.user.mobile;
-       _location = getProfileDataModel.data.user.location;
-       _postal = getProfileDataModel.data.user.postalCode;
-    });
-
-  });
+          _fullName = getProfileDataModel.data.user.name;
+          _email = getProfileDataModel.data.user.email;
+          _number = getProfileDataModel.data.user.mobile;
+          _location = getProfileDataModel.data.user.location;
+          _postal = getProfileDataModel.data.user.postalCode;
+        });
+      });
     });
 // getString(sharedPref.userToken).then((value) => auth=value).whenComplete(() {
 //   print(" QWE$auth");
@@ -140,13 +141,13 @@ bool isLoadingData=true;
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
-        actions: [
-          Padding(
-            padding: const EdgeInsets.only(right: 12.0, top: 30.0),
-            child: Align(
-                alignment: Alignment.topRight, child: SvgPicture.asset("")),
-          ),
-        ],
+        // actions: [
+        //   Padding(
+        //     padding: const EdgeInsets.only(right: 12.0, top: 30.0),
+        //     child: Align(
+        //         alignment: Alignment.topRight, child: SvgPicture.asset("")),
+        //   ),
+        // ],
         centerTitle: true,
         title: Padding(
           padding: const EdgeInsets.only(right: 12.0, top: 30.0),
@@ -188,10 +189,17 @@ bool isLoadingData=true;
                     children: [
                       // circleImageSha(), // Image.asset(ImagePath+"avatarSample.png"),
                       CircleAvatar(
-                        radius: 48,
-                        backgroundColor: CColors.missonMediumGrey,
+                        backgroundColor: CColors.missonGrey,
+                        radius: 47,
                         child: CircleAvatar(
-                          backgroundImage: AssetImage(avatar1),
+                          backgroundImage: getProfileDataModel == null ||
+                                  getProfileDataModel.data == null ||
+                                  getProfileDataModel.data.user == null ||
+                                  getProfileDataModel.data.user.image == null
+                              ? AssetImage(avatar1)
+                              : NetworkImage(
+                                  "${getProfileDataModel.data.user.image}"),
+
                           radius: 45,
                         ),
                       ),
@@ -204,7 +212,7 @@ bool isLoadingData=true;
                         children: [
                           Text(
                             _fullName,
-                            style: TextStyle(color: Colors.black,fontSize: 20),
+                            style: TextStyle(color: Colors.black, fontSize: 20),
                           ),
                           SizedBox(
                             height: ScreenConfig.screenHeight * 0.01,
@@ -235,7 +243,8 @@ bool isLoadingData=true;
                 child: Column(
                   children: [
                     Container(
-                      margin: EdgeInsets.only(top: ScreenConfig.screenHeight*0.03),
+                      margin: EdgeInsets.only(
+                          top: ScreenConfig.screenHeight * 0.03),
                       color: CColors.missonNormalWhiteColor,
                       child: Padding(
                         padding: EdgeInsets.only(
@@ -247,9 +256,7 @@ bool isLoadingData=true;
                               crossAxisAlignment: CrossAxisAlignment.center,
                               children: [
                                 SvgPicture.asset(userIcon),
-                                SizedBox(
-                                  width:20
-                                ),
+                                SizedBox(width: 20),
                                 Column(
                                   mainAxisAlignment: MainAxisAlignment.start,
                                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -280,9 +287,7 @@ bool isLoadingData=true;
                               crossAxisAlignment: CrossAxisAlignment.center,
                               children: [
                                 SvgPicture.asset(messageIcon),
-                                SizedBox(
-                                    width:20
-                                ),
+                                SizedBox(width: 20),
                                 Column(
                                   mainAxisAlignment: MainAxisAlignment.start,
                                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -312,9 +317,7 @@ bool isLoadingData=true;
                               crossAxisAlignment: CrossAxisAlignment.center,
                               children: [
                                 SvgPicture.asset(PhoneIcon),
-                                SizedBox(
-                                    width:20
-                                ),
+                                SizedBox(width: 20),
                                 Column(
                                   mainAxisAlignment: MainAxisAlignment.start,
                                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -345,14 +348,13 @@ bool isLoadingData=true;
                               crossAxisAlignment: CrossAxisAlignment.center,
                               children: [
                                 SvgPicture.asset(compassIcon),
-                                SizedBox(
-                                    width:20
-                                ),
+                                SizedBox(width: 20),
                                 Container(
-                                  width: ScreenConfig.screenWidth*0.80,
+                                  width: ScreenConfig.screenWidth * 0.80,
                                   child: Column(
                                     mainAxisAlignment: MainAxisAlignment.start,
-                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
                                     children: [
                                       Text(
                                         "Location",
@@ -369,7 +371,6 @@ bool isLoadingData=true;
                                         style: TextStyle(
                                           fontSize: 18,
                                           color: Colors.black,
-
                                         ),
                                         overflow: TextOverflow.ellipsis,
                                       ),
@@ -383,9 +384,7 @@ bool isLoadingData=true;
                               crossAxisAlignment: CrossAxisAlignment.center,
                               children: [
                                 SvgPicture.asset(postboxIcon),
-                                SizedBox(
-                                    width:20
-                                ),
+                                SizedBox(width: 20),
                                 Column(
                                   mainAxisAlignment: MainAxisAlignment.start,
                                   crossAxisAlignment: CrossAxisAlignment.start,

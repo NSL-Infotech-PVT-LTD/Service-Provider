@@ -1,15 +1,15 @@
 // To parse this JSON data, do
 //
-//     final getProfileDataModel = getProfileDataModelFromJson(jsonString);
+//     final updateProfileDataModel = updateProfileDataModelFromJson(jsonString);
 
 import 'dart:convert';
 
-GetProfileDataModel getProfileDataModelFromJson(String str) => GetProfileDataModel.fromJson(json.decode(str));
+UpdateProfileDataModel updateProfileDataModelFromJson(String str) => UpdateProfileDataModel.fromJson(json.decode(str));
 
-String getProfileDataModelToJson(GetProfileDataModel data) => json.encode(data.toJson());
+String updateProfileDataModelToJson(UpdateProfileDataModel data) => json.encode(data.toJson());
 
-class GetProfileDataModel {
-  GetProfileDataModel({
+class UpdateProfileDataModel {
+  UpdateProfileDataModel({
     this.status,
     this.code,
     this.data,
@@ -19,10 +19,12 @@ class GetProfileDataModel {
   int code;
   Data data;
 
-  factory GetProfileDataModel.fromJson(Map<String, dynamic> json) => GetProfileDataModel(
+  factory UpdateProfileDataModel.fromJson(Map<String, dynamic> json) => UpdateProfileDataModel(
     status: json["status"],
     code: json["code"],
-    data: Data.fromJson(json["data"]),
+    data: json["data"] != null &&
+        (json["data"] as Map<String, dynamic>).isNotEmpty
+        ? Data.fromJson(json["data"]):null,
   );
 
   Map<String, dynamic> toJson() => {
@@ -34,16 +36,20 @@ class GetProfileDataModel {
 
 class Data {
   Data({
+    this.message,
     this.user,
   });
 
+  String message;
   User user;
 
   factory Data.fromJson(Map<String, dynamic> json) => Data(
+    message: json["message"],
     user: User.fromJson(json["user"]),
   );
 
   Map<String, dynamic> toJson() => {
+    "message": message,
     "user": user.toJson(),
   };
 }
@@ -63,8 +69,6 @@ class User {
     this.description,
     this.postalCode,
     this.isNotify,
-    this.latitude,
-    this.longitude,
     this.stripeAccountId,
     this.image1,
     this.image2,
@@ -92,8 +96,6 @@ class User {
   dynamic description;
   String postalCode;
   String isNotify;
-  String latitude;
-  String longitude;
   dynamic stripeAccountId;
   dynamic image1;
   dynamic image2;
@@ -121,8 +123,6 @@ class User {
     description: json["description"],
     postalCode: json["postal_code"],
     isNotify: json["is_notify"],
-    latitude: json["latitude"],
-    longitude: json["longitude"],
     stripeAccountId: json["stripe_account_id"],
     image1: json["image_1"],
     image2: json["image_2"],
@@ -151,8 +151,6 @@ class User {
     "description": description,
     "postal_code": postalCode,
     "is_notify": isNotify,
-    "latitude": latitude,
-    "longitude": longitude,
     "stripe_account_id": stripeAccountId,
     "image_1": image1,
     "image_2": image2,

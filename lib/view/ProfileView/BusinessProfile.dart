@@ -1,11 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:misson_tasker/model/ApiCaller.dart';
+import 'package:misson_tasker/model/api_models/GetProfileDataModel.dart';
 import 'package:misson_tasker/utils/CColors.dart';
 import 'package:misson_tasker/utils/NavMe.dart';
 import 'package:misson_tasker/utils/ScreenConfig.dart';
 import 'package:misson_tasker/utils/StringsPath.dart';
+import 'package:misson_tasker/utils/local_data.dart';
 import 'package:misson_tasker/view/ProfileView/UserProfile.dart';
+import 'package:misson_tasker/view/startup_screens/SplashScreen.dart';
 
 import 'editProfile.dart';
 
@@ -16,7 +19,7 @@ class BusinessProfile extends StatefulWidget {
 
 class _BusinessProfileState extends State<BusinessProfile> {
   bool isLoading = true;
-  String _fullName = "Jannie mals";
+  String _fullName = "Loading....";
   String _email = "Loading..";
   String _number = "Loading..";
   String _location = "Loading..";
@@ -83,10 +86,32 @@ class _BusinessProfileState extends State<BusinessProfile> {
   //     }
   //   });
   // }
-
+String auth="";
+  GetProfileDataModel getProfileDataModel;
+  bool isLoadingData=true;
   @override
   void initState() {
     // registerUser();
+
+    getString(sharedPref.userToken).then((value) {
+      auth = value;
+
+      print("123 $value");
+    }).whenComplete(() {
+      ApiCaller().getProfileData(auth: auth).then((value) {
+        getProfileDataModel = value;
+      }).whenComplete(() {
+        setState(() {
+          isLoadingData = false;
+
+          _fullName = getProfileDataModel.data.user.name;
+          _email = getProfileDataModel.data.user.email;
+          _number = getProfileDataModel.data.user.mobile;
+          _location = getProfileDataModel.data.user.location;
+          _postal = getProfileDataModel.data.user.postalCode;
+        });
+      });
+    });
     super.initState();
   }
 
@@ -145,8 +170,19 @@ class _BusinessProfileState extends State<BusinessProfile> {
                       children: [
                         // circleImageSha(), // Image.asset(ImagePath+"avatarSample.png"),
                         CircleAvatar(
-                          backgroundImage: AssetImage(avatar1),
-                          radius: 45,
+                          backgroundColor: CColors.missonGrey,
+                          radius: 47,
+                          child: CircleAvatar(
+                            backgroundImage: getProfileDataModel == null ||
+                                getProfileDataModel.data == null ||
+                                getProfileDataModel.data.user == null ||
+                                getProfileDataModel.data.user.image == null
+                                ? AssetImage(avatar1)
+                                : NetworkImage(
+                                "${getProfileDataModel.data.user.image}"),
+
+                            radius: 45,
+                          ),
                         ),
                         SizedBox(
                           width: ScreenConfig.screenWidth * 0.06,
