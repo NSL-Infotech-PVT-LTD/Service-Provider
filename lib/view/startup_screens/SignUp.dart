@@ -12,6 +12,7 @@ import 'package:misson_tasker/utils/NavMe.dart';
 import 'package:misson_tasker/utils/SharedStrings.dart';
 import 'package:misson_tasker/utils/local_data.dart';
 import 'package:misson_tasker/view/Dashboard.dart';
+import 'package:misson_tasker/view/startup_screens/PackageScreen.dart';
 import 'package:permission_handler/permission_handler.dart';
 
 import '../../utils/CColors.dart';
@@ -49,6 +50,7 @@ class _SignUpState extends State<SignUp> {
   bool _repass = true;
   bool _mailer = true;
   bool _phone = true;
+  bool _location = true;
   bool _id = true;
   // bool _postal = true;
   var height = AppBar().preferredSize.height;
@@ -158,7 +160,8 @@ class _SignUpState extends State<SignUp> {
       }
     });
     super.initState();
-    _locationController.text = "Loading......";
+
+
     spinkit = SpinKitWave(
       size: 35,
       itemBuilder: (BuildContext context, int index) {
@@ -268,26 +271,26 @@ class _SignUpState extends State<SignUp> {
         setState(() {
           isLoading = false;
         });
-        setString(sharedPref.userEmail, registerNewUserModel.data.user.email);
-        setString(sharedPref.userName, registerNewUserModel.data.user.name);
+        // setString(sharedPref.userEmail, registerNewUserModel.data.user.email);
+        // setString(sharedPref.userName, registerNewUserModel.data.user.name);
 
-        setString(sharedPref.userToken, registerNewUserModel.data.token);
-        setString(
-            sharedPref.userLocation, registerNewUserModel.data.user.location);
-        setString(
-            sharedPref.userPhoneNumber, registerNewUserModel.data.user.mobile);
+        // setString(sharedPref.userToken, registerNewUserModel.data.token);
+        // setString(
+        //     sharedPref.userLocation, registerNewUserModel.data.user.location);
+        // setString(
+        //     sharedPref.userPhoneNumber, registerNewUserModel.data.user.mobile);
 
-        getString(sharedPref.userPhoneNumber)
-            .then((value) => print("123 $value"));
+        // getString(sharedPref.userPhoneNumber)
+        //     .then((value) => print("123 $value"));
 
-        getString(sharedPref.userToken).then((value) => print("123 $value"));
+        // getString(sharedPref.userToken).then((value) => print("123 $value"));
 
-        getString(sharedPref.userEmail).then((value) => print("123 $value"));
+        // getString(sharedPref.userEmail).then((value) => print("123 $value"));
 
-        getString(sharedPref.userLocation).then((value) => print("123 $value"));
-        getString(sharedPref.userLocation).then((value) => print("123 $value"));
+        // getString(sharedPref.userLocation).then((value) => print("123 $value"));
+        // getString(sharedPref.userLocation).then((value) => print("123 $value"));
 
-        Get.off(Dashboard(), transition: Transition.rightToLeft);
+        Get.off(PackageScreen(), transition: Transition.rightToLeft);
       } else if (registerNewUserModel != null &&
           registerNewUserModel.code == 422) {
         setState(() {
@@ -859,19 +862,24 @@ class _SignUpState extends State<SignUp> {
                                   ),
                                 ),
 
-                                Padding(
-                                  padding: const EdgeInsets.only(top: 7.5),
-                                  child: InkWell(
+                                InkWell(
                                     onTap: () {
+                                      setState(() {
+                                        _locationController.text = "Loading......";
+                                      });
                                       callMe();
                                     },
+                                  child: Padding(
+                                    padding: const EdgeInsets.only(top: 7.5),
                                     child: TextFormField(
                                         readOnly: true,
                                         controller: _locationController,
                                         validator: (value) {
                                           if (value == null || value.isEmpty) {
                                             // _pass = false;
-                                            setState(() {});
+                                            setState(() {
+                                              _location=false;
+                                            });
 
                                             return null;
                                           } else if (value == "Loading......") {
@@ -893,6 +901,14 @@ class _SignUpState extends State<SignUp> {
                                           return null;
                                         },
                                         decoration: InputDecoration(
+
+                                          focusColor: CColors
+                                              .missonGreyBorderColor,
+                                          focusedBorder:UnderlineInputBorder(
+                                            borderSide: BorderSide(
+                                                color: CColors
+                                                    .missonGreyBorderColor),
+                                          ) ,
                                           border: UnderlineInputBorder(
                                             borderSide: BorderSide(
                                                 color: CColors
@@ -905,6 +921,9 @@ class _SignUpState extends State<SignUp> {
                                           ),
                                           suffixIcon: InkWell(
                                             onTap: () {
+                                              setState(() {
+                                                _locationController.text = "Loading......";
+                                              });
                                               callMe();
                                             },
                                             child: Padding(

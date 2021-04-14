@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:connectivity/connectivity.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:misson_tasker/model/api_models/GetProfileDataModel.dart';
 
 import 'api_models/ForgetPasswordModel.dart';
 import 'api_models/LoginUserModel.dart';
@@ -15,6 +16,7 @@ class ApiCaller {
   String login = "login";
   String register = "register";
   String forgetPassword = "reset-password";
+  String getProfile = "get-profile";
 
   Future<LoginUserModel> loginUser(
       {@required String email,
@@ -61,6 +63,26 @@ class ApiCaller {
     } else {
       print(
           "THERE IS AN ERROR INT THE FORGET PASSWORD API WITH STATUS CODE ${response.statusCode}");
+    }
+  }
+  Future<GetProfileDataModel> getProfileData({@required String auth}) async {
+    GetProfileDataModel getProfileDataModel;
+    var response = await http.post(
+      Uri.parse(baseUrl + getProfile),
+      headers: <String, String>{
+        'Content-Type': 'application/json; charset=UTF-8',
+        'Authorization':"Bearer "+auth
+      },
+
+    );
+
+    if (response.statusCode == 200) {
+      print("QWERTY ${response.body}");
+      return getProfileDataModel = getProfileDataModelFromJson(response.body);
+    } else {
+      print("QWERTY ${response.body}");
+      print(
+          "THERE IS AN ERROR INT THE GET PROFILE DATA API WITH STATUS CODE ${response.statusCode}");
     }
   }
 

@@ -39,7 +39,7 @@ class _LoginPageState extends State<LoginPage> {
   LoginUserModel loginUserModel;
   var spinkit;
   bool isLoading = false;
-  bool isShown =true;
+  bool isShown = true;
 
   @override
   void initState() {
@@ -81,6 +81,9 @@ class _LoginPageState extends State<LoginPage> {
           setString(sharedPref.userLocation, loginUserModel.data.user.location);
           setString(
               sharedPref.userPhoneNumber, loginUserModel.data.user.mobile);
+          setString(sharedPref.userDefaultImage, avatar1);
+          setString(
+              sharedPref.userNetworkImage, loginUserModel.data.user.image);
 
           getString(sharedPref.userPhoneNumber)
               .then((value) => print("123 $value"));
@@ -227,23 +230,18 @@ class _LoginPageState extends State<LoginPage> {
                           },
                           decoration: InputDecoration(
                             hintStyle: _textStyle,
-                            isDense: true,
+                            // isDense: true,
                             hintText: "Email",
                             prefixIconConstraints: BoxConstraints(
                                 minHeight: ScreenConfig.screenHeight * 0.05,
                                 minWidth: ScreenConfig.screenWidth * 0.04),
                             prefixIcon: Padding(
-                              padding: EdgeInsets.fromLTRB(
-                                8.0,
-                                14.0,
-                                8.0,
-                                19,
-                              ),
-                              child: SvgPicture.asset(emailTextFiledIcon),
-                            ),
+                                padding: EdgeInsets.symmetric(horizontal: 10),
+                                child: SvgPicture.asset(emailTextFiledIcon)),
                           ),
                         ),
-                        TextFormField( expands: false,
+                        TextFormField(
+                          expands: false,
                           readOnly: isLoading == false ? false : true,
                           controller: _passwordFieldController,
                           validator: (value) {
@@ -256,7 +254,6 @@ class _LoginPageState extends State<LoginPage> {
                           },
                           obscureText: isShown,
                           decoration: InputDecoration(
-
                             suffixIcon: InkWell(
                               onTap: () {
                                 setState(() {
@@ -264,23 +261,20 @@ class _LoginPageState extends State<LoginPage> {
                                 });
                               },
                               child: Padding(
-                                  padding: EdgeInsets.fromLTRB(
-                                    16.0,
-                                    8.0,
-                                    16.0,
-                                    15,
-                                  ),
+                                  padding: EdgeInsets.symmetric(horizontal: 10),
                                   child: isShown == false
                                       ? SvgPicture.asset(
                                           "assets/svg_assets/eye_open.svg",
                                           height: 25,
                                         )
                                       : SvgPicture.asset(
-                                          "assets/svg_assets/eye_close.svg",height: 25,)),
+                                          "assets/svg_assets/eye_close.svg",
+                                          height: 25,
+                                        )),
                             ),
                             hintStyle: _textStyle,
                             border: InputBorder.none,
-                            isDense: true,
+                            // isDense: true,
 
                             hintText: "Password",
                             prefixIconConstraints: BoxConstraints(

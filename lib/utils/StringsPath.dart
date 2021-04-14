@@ -24,6 +24,15 @@ final String navbarClockDeactive="assets/svg_assets/navbar_clock_deactive.svg";
 final String navbarChatDeactive="assets/svg_assets/navbar_chat_deactive.svg";
 final String navbarChatActive="assets/svg_assets/navbar_chat_active.svg";
 final String postbox="assets/svg_assets/postbox.svg";
+final String userIcon="assets/svg_assets/user_logo.svg";
+final String postboxIcon="assets/svg_assets/postbox_logo.svg";
+final String messageIcon="assets/svg_assets/email_logo.svg";
+final String compassIcon="assets/svg_assets/compass_logo.svg";
+final String PhoneIcon="assets/svg_assets/phone_logo.svg";
+final String rightArrowIcon= "assets/svg_assets/right_arrow_icon.svg";
+final String walletIcon= "assets/svg_assets/wallet.svg";
+final String settingIcon= "assets/svg_assets/setting.svg";
+final String bellIcon="assets/svg_assets/bell_icon.svg";
 
 
 //<=============================PNG IMAGES=========================>

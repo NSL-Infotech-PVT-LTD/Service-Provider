@@ -6,6 +6,8 @@ class SharedPref{
   String _userLocation= "user_location";
   String _userCurrentLat= "user_current_lat";
   String _userCurrentLang= "user_current_lang";
+  String _userDefaultImage= "user_default_image";
+  String _userNetworkImage= "user_network_image";
 
   String get userToken => _userToken;
 
@@ -20,6 +22,8 @@ class SharedPref{
   String get userCurrentLat => _userCurrentLat;
   String get userCurrentLang => _userCurrentLang;
   String get userName => _userName;
+  String get userDefaultImage => _userDefaultImage;
+  String get userNetworkImage => _userNetworkImage;
 
 
 

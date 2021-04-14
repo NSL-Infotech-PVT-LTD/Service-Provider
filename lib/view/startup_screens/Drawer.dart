@@ -5,6 +5,7 @@ import 'package:misson_tasker/utils/NavMe.dart';
 import 'package:misson_tasker/utils/ScreenConfig.dart';
 import 'package:misson_tasker/utils/StringsPath.dart';
 import 'package:misson_tasker/utils/local_data.dart';
+import 'package:misson_tasker/view/ProfileView/editProfile.dart';
 import 'package:misson_tasker/view/startup_screens/LoginPage.dart';
 import 'package:misson_tasker/view/startup_screens/SplashScreen.dart';
 
@@ -37,7 +38,7 @@ class _MyDrawerState extends State<MyDrawer> {
                       flex: 2,
                       child: CircleAvatar(
                         backgroundImage: AssetImage(avatar1),
-                        radius: 40,
+                        radius: 45,
                       )),
                   Expanded(
                     flex: 3,
@@ -60,9 +61,14 @@ class _MyDrawerState extends State<MyDrawer> {
                                 color: CColors.missonSignUpButtonColor),
                           ),
                         ),
-                        Text(
-                          "Edit Profile",
-                          style: TextStyle(color: CColors.missonSkyBlue),
+                        SizedBox(height: 5,),
+                        InkWell(onTap: (){
+                          NavMe().NavPushLeftToRight(EditProfile());
+                        },
+                          child: Text(
+                            "Edit Profile",
+                            style: TextStyle(color: CColors.missonSkyBlue),
+                          ),
                         )
                       ],
                     ),
@@ -80,6 +86,7 @@ class _MyDrawerState extends State<MyDrawer> {
 
           Column(
             children: [
+              SizedBox(height: ScreenConfig.screenHeight*0.07,),
               ListTile(
                 title: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,

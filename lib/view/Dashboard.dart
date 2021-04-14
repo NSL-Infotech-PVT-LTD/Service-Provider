@@ -2,9 +2,12 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:misson_tasker/utils/CColors.dart';
+import 'package:misson_tasker/utils/NavMe.dart';
 import 'package:misson_tasker/utils/ScreenConfig.dart';
 import 'package:misson_tasker/utils/StringsPath.dart';
 import 'package:misson_tasker/utils/local_data.dart';
+import 'package:misson_tasker/view/ProfileView/BusinessProfile.dart';
+import 'package:misson_tasker/view/ProfileView/UserProfile.dart';
 import 'package:misson_tasker/view/startup_screens/Drawer.dart';
 import 'package:misson_tasker/view/startup_screens/SplashScreen.dart';
 
@@ -78,8 +81,12 @@ class _DashboardState extends State<Dashboard> {
         actions: [
           Padding(
             padding: EdgeInsets.only(right: 16.0),
-            child: CircleAvatar(
-              backgroundImage: AssetImage(avatar1),
+            child: InkWell(onTap: (){
+              NavMe().NavPushLeftToRight(BusinessProfile());
+            },
+              child: CircleAvatar(
+                backgroundImage: AssetImage(avatar1),
+              ),
             ),
           )
         ],
