@@ -34,6 +34,7 @@ final String walletIcon= "assets/svg_assets/wallet.svg";
 final String settingIcon= "assets/svg_assets/setting.svg";
 final String bellIcon="assets/svg_assets/bell_icon.svg";
 final String cameraLogo="assets/svg_assets/camera_logo.svg";
+final String cancelLogo="assets/svg_assets/cancel_icon.svg";
 
 
 //<=============================PNG IMAGES=========================>

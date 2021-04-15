@@ -7,6 +7,7 @@ import 'package:misson_tasker/utils/NavMe.dart';
 import 'package:misson_tasker/utils/ScreenConfig.dart';
 import 'package:misson_tasker/utils/StringsPath.dart';
 import 'package:misson_tasker/utils/local_data.dart';
+import 'package:misson_tasker/view/ProfileView/BusinessDetails.dart';
 import 'package:misson_tasker/view/ProfileView/UserProfile.dart';
 import 'package:misson_tasker/view/startup_screens/SplashScreen.dart';
 
@@ -312,22 +313,28 @@ String auth="";
                       color: Colors.grey.shade600,
                     ),
                   ),
-                  title: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        "Business Details",
-                        style: TextStyle(
-                            fontSize: ScreenConfig.fontSizelarge,
-                            color: CColors.missonPrimaryColor),
-                      ),
-                      Text(
-                        "Add Category, Price etc.",
-                        style: TextStyle(
-                            fontSize: ScreenConfig.fontSizeSmall,
-                            color: CColors.missonMediumGrey),
-                      ),
-                    ],
+                  title: InkWell(
+                    onTap: (){
+                      print("areewewe");
+                      NavMe().NavPushLeftToRight(BusinessDetails());
+                    },
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          "Business Details",
+                          style: TextStyle(
+                              fontSize: ScreenConfig.fontSizelarge,
+                              color: CColors.missonPrimaryColor),
+                        ),
+                        Text(
+                          "Add Category, Price etc.",
+                          style: TextStyle(
+                              fontSize: ScreenConfig.fontSizeSmall,
+                              color: CColors.missonMediumGrey),
+                        ),
+                      ],
+                    ),
                   ),
                   trailing: SvgPicture.asset(
                     rightArrowIcon,

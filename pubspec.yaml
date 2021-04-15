@@ -37,6 +37,7 @@ dependencies:
   geocoder: ^0.2.1
   permission_handler: ^6.1.1
   image_picker: ^0.7.4
+  multi_image_picker: ^4.6.5
 
 
 

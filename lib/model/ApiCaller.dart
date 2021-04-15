@@ -3,7 +3,9 @@ import 'dart:io';
 
 import 'package:connectivity/connectivity.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:get/get_connect/http/src/multipart/multipart_file.dart';
 import 'package:misson_tasker/model/api_models/GetProfileDataModel.dart';
+import 'package:misson_tasker/model/api_models/ListOfServicesModel.dart';
 
 import 'api_models/ForgetPasswordModel.dart';
 import 'api_models/LoginUserModel.dart';
@@ -20,6 +22,8 @@ class ApiCaller {
   String forgetPassword = "reset-password";
   String getProfile = "get-profile";
   String updateProfile = "update";
+  String category = "category/";
+  String list = "list";
 
   Future<LoginUserModel> loginUser({@required String email,
     @required String password,
@@ -83,6 +87,29 @@ class ApiCaller {
     if (response.statusCode == 200) {
       print("QWERTY ${response.body}");
       return getProfileDataModel = getProfileDataModelFromJson(response.body);
+    } else {
+      print("QWERTY ${response.body}");
+      print(
+          "THERE IS AN ERROR INT THE GET PROFILE DATA API WITH STATUS CODE ${response
+              .statusCode}");
+    }
+  }
+  Future<ListOfServicesModel> getServiceList() async {
+    ListOfServicesModel listOfServicesModel;
+    var response = await http.post(
+      Uri.parse(baseUrl + category+list),
+      headers: <String, String>{
+        'Content-Type': 'application/json; charset=UTF-8',
+        // 'Authorization': "Bearer " + auth
+      },
+      body: jsonEncode(<String, String>{
+        'parent_id': "0",
+      }),
+    );
+
+    if (response.statusCode == 200) {
+      print("QWERTY ${response.body}");
+      return listOfServicesModel = listOfServicesModelFromJson(response.body);
     } else {
       print("QWERTY ${response.body}");
       print(
@@ -170,6 +197,46 @@ class ApiCaller {
       print("${response.body}");
     }
   }
+  // Future<UpdateProfileDataModel> updateBuissnessDetailApi(
+  //     {File file, String auth, Map<String, String> params}) async {
+  //   print(auth);
+  //
+  //   final postUri = Uri.parse(baseUrl + provider + updateProfile);
+  //   UpdateProfileDataModel dataModel;
+  //   http.MultipartRequest request = http.MultipartRequest('POST', postUri);
+  //   request.headers['Authorization'] = "Bearer "+ auth;
+  //   request.fields.addAll(params);
+  //   // print(updateUrl.toString());
+  //   if (file != null) {
+  //     final byteData = await asset.getByteData();
+  //     List<int> imageData = byteData.buffer.asUint8List();
+  //     http.MultipartFile multipartFile  =http.MultipartFile.fromBytes(
+  //       'photo',
+  //       imageData,
+  //       filename: 'some-file-name.jpg',
+  //       contentType: MediaType("image", "jpg"),
+  //     );
+  //     //returns a Future<MultipartFile>
+  //     request.files.add(multipartFile);
+  //   }
+  //
+  //   var streamedResponse = await request.send();
+  //   var response = await http.Response.fromStream(streamedResponse);
+  //
+  //   if (response.statusCode == 200) {
+  //     print("${response.body}");
+  //     dataModel = updateProfileDataModelFromJson(response.body);
+  //     // var map = Map<String, dynamic>.from(jsonData);
+  //     // return UpdateUserData.fromJson(map);
+  //     return dataModel;
+  //   }
+  //   else {
+  //     print(
+  //         "THERE IS AN ERROR IN THE UPDATE USER PROFILE API WITH STATUS CODE ${response
+  //             .statusCode}");
+  //     print("${response.body}");
+  //   }
+  // }
 }
 
 Future<bool> isConnectedToInternet() async {

@@ -13,22 +13,27 @@ class GetProfileDataModel {
     this.status,
     this.code,
     this.data,
+    this.error,
   });
 
   bool status;
   int code;
-  Data data;
+  Data data;String error;
 
   factory GetProfileDataModel.fromJson(Map<String, dynamic> json) => GetProfileDataModel(
     status: json["status"],
     code: json["code"],
-    data: Data.fromJson(json["data"]),
+    data: json["data"] != null &&
+        (json["data"] as Map<String, dynamic>).isNotEmpty
+        ? Data.fromJson(json["data"]):null,
+    error: json["error"],
   );
 
   Map<String, dynamic> toJson() => {
     "status": status,
     "code": code,
     "data": data.toJson(),
+    "error": data.toJson(),
   };
 }
 
@@ -50,22 +55,22 @@ class Data {
 
 class User {
   User({
-    this.id,
     this.name,
-    this.email,
     this.mobile,
-    this.gender,
+    this.email,
     this.status,
-    this.radius,
     this.image,
     this.location,
+    this.latitude,
+    this.longitude,
     this.categoryId,
     this.description,
     this.postalCode,
     this.isNotify,
-    this.latitude,
-    this.longitude,
+    this.radius,
     this.stripeAccountId,
+    this.appleId,
+    this.fbId,
     this.image1,
     this.image2,
     this.image3,
@@ -79,22 +84,22 @@ class User {
     this.role,
   });
 
-  int id;
   String name;
-  String email;
   String mobile;
-  String gender;
+  String email;
   String status;
-  dynamic radius;
   String image;
   String location;
+  String latitude;
+  String longitude;
   List<dynamic> categoryId;
   dynamic description;
   String postalCode;
   String isNotify;
-  String latitude;
-  String longitude;
+  dynamic radius;
   dynamic stripeAccountId;
+  dynamic appleId;
+  dynamic fbId;
   dynamic image1;
   dynamic image2;
   dynamic image3;
@@ -105,25 +110,25 @@ class User {
   dynamic toolboxInfo;
   String saudiId;
   dynamic iqamaId;
-  Role role;
+  List<dynamic> role;
 
   factory User.fromJson(Map<String, dynamic> json) => User(
-    id: json["id"],
     name: json["name"],
-    email: json["email"],
     mobile: json["mobile"],
-    gender: json["gender"],
+    email: json["email"],
     status: json["status"],
-    radius: json["radius"],
     image: json["image"],
     location: json["location"],
+    latitude: json["latitude"],
+    longitude: json["longitude"],
     categoryId: List<dynamic>.from(json["category_id"].map((x) => x)),
     description: json["description"],
     postalCode: json["postal_code"],
     isNotify: json["is_notify"],
-    latitude: json["latitude"],
-    longitude: json["longitude"],
+    radius: json["radius"],
     stripeAccountId: json["stripe_account_id"],
+    appleId: json["apple_id"],
+    fbId: json["fb_id"],
     image1: json["image_1"],
     image2: json["image_2"],
     image3: json["image_3"],
@@ -134,26 +139,26 @@ class User {
     toolboxInfo: json["toolbox_info"],
     saudiId: json["saudi_id"],
     iqamaId: json["iqama_id"],
-    role: Role.fromJson(json["role"]),
+    role: List<dynamic>.from(json["role"].map((x) => x)),
   );
 
   Map<String, dynamic> toJson() => {
-    "id": id,
     "name": name,
-    "email": email,
     "mobile": mobile,
-    "gender": gender,
+    "email": email,
     "status": status,
-    "radius": radius,
     "image": image,
     "location": location,
+    "latitude": latitude,
+    "longitude": longitude,
     "category_id": List<dynamic>.from(categoryId.map((x) => x)),
     "description": description,
     "postal_code": postalCode,
     "is_notify": isNotify,
-    "latitude": latitude,
-    "longitude": longitude,
+    "radius": radius,
     "stripe_account_id": stripeAccountId,
+    "apple_id": appleId,
+    "fb_id": fbId,
     "image_1": image1,
     "image_2": image2,
     "image_3": image3,
@@ -164,30 +169,6 @@ class User {
     "toolbox_info": toolboxInfo,
     "saudi_id": saudiId,
     "iqama_id": iqamaId,
-    "role": role.toJson(),
-  };
-}
-
-class Role {
-  Role({
-    this.name,
-    this.id,
-    this.permission,
-  });
-
-  String name;
-  int id;
-  List<dynamic> permission;
-
-  factory Role.fromJson(Map<String, dynamic> json) => Role(
-    name: json["name"],
-    id: json["id"],
-    permission: List<dynamic>.from(json["permission"].map((x) => x)),
-  );
-
-  Map<String, dynamic> toJson() => {
-    "name": name,
-    "id": id,
-    "permission": List<dynamic>.from(permission.map((x) => x)),
+    "role": List<dynamic>.from(role.map((x) => x)),
   };
 }
