@@ -13,20 +13,20 @@ class LoginUserModel {
     this.status,
     this.code,
     this.data,
-    this.error,
+    this.error
   });
 
   bool status;
   int code;
   Data data;
   String error;
-
   factory LoginUserModel.fromJson(Map<String, dynamic> json) => LoginUserModel(
     status: json["status"],
     code: json["code"],
-      data: json["data"] != null &&
-          (json["data"] as Map<String, dynamic>).isNotEmpty
-          ? Data.fromJson(json["data"]):null,
+    data: json["data"] != null &&
+        (json["data"] as Map<String, dynamic>).isNotEmpty
+        ? Data.fromJson(json["data"])
+        : null,
     error: json["error"],
   );
 
@@ -64,124 +64,120 @@ class Data {
 
 class User {
   User({
-    this.id,
     this.name,
-    this.email,
     this.mobile,
-    this.gender,
+    this.email,
     this.status,
-    this.radius,
     this.image,
     this.location,
+    this.latitude,
+    this.longitude,
     this.categoryId,
     this.description,
+    this.postalCode,
     this.isNotify,
+    this.radius,
     this.stripeAccountId,
-    this.image1,
-    this.image2,
-    this.image3,
-    this.image4,
-    this.image5,
-    this.image6,
+    this.appleId,
+    this.fbId,
+    this.imageOne,
+    this.imageTwo,
+    this.imageThree,
+    this.imageFour,
+    this.imageFive,
+    this.imageSix,
     this.hourlyRate,
     this.toolboxInfo,
+    this.saudiId,
+    this.iqamaId,
     this.role,
   });
 
-  int id;
   String name;
-  String email;
   String mobile;
-  String gender;
+  String email;
   String status;
-  String radius;
-  dynamic image;
+  String image;
   String location;
+  String latitude;
+  String longitude;
   List<dynamic> categoryId;
   String description;
+  String postalCode;
   String isNotify;
+  dynamic radius;
   dynamic stripeAccountId;
-  dynamic image1;
-  dynamic image2;
-  dynamic image3;
-  dynamic image4;
-  dynamic image5;
-  dynamic image6;
-  dynamic hourlyRate;
-  dynamic toolboxInfo;
-  Role role;
+  dynamic appleId;
+  dynamic fbId;
+  String imageOne;
+  dynamic imageTwo;
+  dynamic imageThree;
+  String imageFour;
+  String imageFive;
+  dynamic imageSix;
+  String hourlyRate;
+  String toolboxInfo;
+  String saudiId;
+  dynamic iqamaId;
+  List<dynamic> role;
 
   factory User.fromJson(Map<String, dynamic> json) => User(
-    id: json["id"],
     name: json["name"],
-    email: json["email"],
     mobile: json["mobile"],
-    gender: json["gender"],
+    email: json["email"],
     status: json["status"],
-    radius: json["radius"],
     image: json["image"],
     location: json["location"],
+    latitude: json["latitude"],
+    longitude: json["longitude"],
     categoryId: List<dynamic>.from(json["category_id"].map((x) => x)),
     description: json["description"],
+    postalCode: json["postal_code"],
     isNotify: json["is_notify"],
+    radius: json["radius"],
     stripeAccountId: json["stripe_account_id"],
-    image1: json["image_1"],
-    image2: json["image_2"],
-    image3: json["image_3"],
-    image4: json["image_4"],
-    image5: json["image_5"],
-    image6: json["image_6"],
+    appleId: json["apple_id"],
+    fbId: json["fb_id"],
+    imageOne: json["image_one"],
+    imageTwo: json["image_two"],
+    imageThree: json["image_three"],
+    imageFour: json["image_four"],
+    imageFive: json["image_five"],
+    imageSix: json["image_six"],
     hourlyRate: json["hourly_rate"],
     toolboxInfo: json["toolbox_info"],
-    role: Role.fromJson(json["role"]),
+    saudiId: json["saudi_id"],
+    iqamaId: json["iqama_id"],
+    role: List<dynamic>.from(json["role"].map((x) => x)),
   );
 
   Map<String, dynamic> toJson() => {
-    "id": id,
     "name": name,
-    "email": email,
     "mobile": mobile,
-    "gender": gender,
+    "email": email,
     "status": status,
-    "radius": radius,
     "image": image,
     "location": location,
+    "latitude": latitude,
+    "longitude": longitude,
     "category_id": List<dynamic>.from(categoryId.map((x) => x)),
     "description": description,
+    "postal_code": postalCode,
     "is_notify": isNotify,
+    "radius": radius,
     "stripe_account_id": stripeAccountId,
-    "image_1": image1,
-    "image_2": image2,
-    "image_3": image3,
-    "image_4": image4,
-    "image_5": image5,
-    "image_6": image6,
+    "apple_id": appleId,
+    "fb_id": fbId,
+    "image_one": imageOne,
+    "image_two": imageTwo,
+    "image_three": imageThree,
+    "image_four": imageFour,
+    "image_five": imageFive,
+    "image_six": imageSix,
     "hourly_rate": hourlyRate,
     "toolbox_info": toolboxInfo,
-    "role": role.toJson(),
-  };
-}
-
-class Role {
-  Role({
-    this.name,
-    this.id,
-    this.permission,
-  });
-
-  String name;
-  int id;
-  List<dynamic> permission;
-
-  factory Role.fromJson(Map<String, dynamic> json) => Role(
-    name: json["name"],
-    id: json["id"],
-    permission: List<dynamic>.from(json["permission"].map((x) => x)),
-  );
-
-  Map<String, dynamic> toJson() => {
-    "name": name,
-    "id": id,
-    "permission": List<dynamic>.from(permission.map((x) => x)),
+    "saudi_id": saudiId,
+    "iqama_id": iqamaId,
+    "role": List<dynamic>.from(role.map((x) => x)),
   };
 }

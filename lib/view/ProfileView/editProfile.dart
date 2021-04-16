@@ -487,7 +487,7 @@ class _EditProfileState extends State<EditProfile> {
                             ),
                             SizedBox(height: ScreenConfig.screenHeight * 0.02),
                             Text(
-                              "Message",
+                              "Email",
                               style: TextStyle(
                                   fontSize: 12, color: CColors.textColor),
                             ),
@@ -526,7 +526,7 @@ class _EditProfileState extends State<EditProfile> {
                                   fontSize: 12, color: CColors.textColor),
                             ),
                             TextFormField(
-                              readOnly: true,
+
                               controller: _number,
                               validator: (value) {
                                 if (value == null || value.isEmpty) {

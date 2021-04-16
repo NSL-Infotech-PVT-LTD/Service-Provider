@@ -12,6 +12,7 @@ import 'api_models/LoginUserModel.dart';
 import 'package:http/http.dart' as http;
 
 import 'api_models/RegisterNewUserModel.dart';
+import 'api_models/UpdateBusinessProfileDataModel.dart';
 import 'api_models/UpdateProfileDataModel.dart';
 
 class ApiCaller {
@@ -25,10 +26,11 @@ class ApiCaller {
   String category = "category/";
   String list = "list";
 
-  Future<LoginUserModel> loginUser({@required String email,
-    @required String password,
-    @required deviceType,
-    @required deviceToken}) async {
+  Future<LoginUserModel> loginUser(
+      {@required String email,
+      @required String password,
+      @required deviceType,
+      @required deviceToken}) async {
     var response = await http.post(
       Uri.parse(baseUrl + provider + login),
       headers: <String, String>{
@@ -47,8 +49,7 @@ class ApiCaller {
       return loginUserModel;
     } else {
       print(
-          "THERE IS AN ERROR IN THE API WITH RESPONSE CODE ${response
-              .statusCode}");
+          "THERE IS AN ERROR IN THE API WITH RESPONSE CODE ${response.statusCode}");
     }
   }
 
@@ -69,8 +70,7 @@ class ApiCaller {
       return forgetPasswordModel = forgetPasswordModelFromJson(response.body);
     } else {
       print(
-          "THERE IS AN ERROR INT THE FORGET PASSWORD API WITH STATUS CODE ${response
-              .statusCode}");
+          "THERE IS AN ERROR INT THE FORGET PASSWORD API WITH STATUS CODE ${response.statusCode}");
     }
   }
 
@@ -90,17 +90,17 @@ class ApiCaller {
     } else {
       print("QWERTY ${response.body}");
       print(
-          "THERE IS AN ERROR INT THE GET PROFILE DATA API WITH STATUS CODE ${response
-              .statusCode}");
+          "THERE IS AN ERROR INT THE GET PROFILE DATA API WITH STATUS CODE ${response.statusCode}");
     }
   }
-  Future<ListOfServicesModel> getServiceList() async {
+
+  Future<ListOfServicesModel> getServiceList({@required String auth}) async {
     ListOfServicesModel listOfServicesModel;
     var response = await http.post(
-      Uri.parse(baseUrl + category+list),
+      Uri.parse(baseUrl + category + list),
       headers: <String, String>{
         'Content-Type': 'application/json; charset=UTF-8',
-        // 'Authorization': "Bearer " + auth
+        'Authorization': "Bearer " + auth
       },
       body: jsonEncode(<String, String>{
         'parent_id': "0",
@@ -113,23 +113,47 @@ class ApiCaller {
     } else {
       print("QWERTY ${response.body}");
       print(
-          "THERE IS AN ERROR INT THE GET PROFILE DATA API WITH STATUS CODE ${response
-              .statusCode}");
+          "THERE IS AN ERROR INT THE GET PROFILE DATA API WITH STATUS CODE ${response.statusCode}");
     }
   }
 
-  Future<RegisterNewUserModel> registerUser({@required String fullName,
-    @required String email,
-    @required String password,
-    @required String phonenumber,
-    @required String location,
-    @required String idName,
-    @required String idNumber,
-    @required String lat,
-    @required String lang,
-    @required String deviceType,
-    @required deviceToken,
-    @required postalCode}) async {
+  Future<ListOfServicesModel> getChildScerviceList(
+      {@required String id, @required auth}) async {
+    ListOfServicesModel listOfServicesModel;
+    var response = await http.post(
+      Uri.parse(baseUrl + category + list),
+      headers: <String, String>{
+        'Content-Type': 'application/json; charset=UTF-8',
+        'Authorization': "Bearer " + auth
+      },
+      body: jsonEncode(<String, String>{
+        'parent_id': "$id",
+      }),
+    );
+
+    if (response.statusCode == 200) {
+      print("QWERTY ${response.body}");
+      return listOfServicesModel = listOfServicesModelFromJson(response.body);
+    } else {
+      print("QWERTY ${response.body}");
+      print(
+          "THERE IS AN ERROR INT THE GET CHILD SERVICE LIST API WITH STATUS CODE ${response.statusCode}");
+    }
+  }
+
+  Future<RegisterNewUserModel> registerUser(
+      {@required String fullName,
+      @required String email,
+      @required String password,
+      @required String phonenumber,
+      @required String location,
+      @required String idName,
+      @required String idNumber,
+      @required String lat,
+      @required String lang,
+      @required String deviceType,
+      @required deviceToken,
+      @required postalCode}) async {
     RegisterNewUserModel registerNewUserModel;
     var response = await http.post(
       Uri.parse(baseUrl + provider + register),
@@ -156,11 +180,9 @@ class ApiCaller {
       return registerNewUserModel = registerNewUserModelFromJson(response.body);
     } else {
       print(
-          "THERE IS AN ERROR INT THE REGISTER API WITH STATUS CODE ${response
-              .statusCode}");
+          "THERE IS AN ERROR INT THE REGISTER API WITH STATUS CODE ${response.statusCode}");
       print(
-          "THERE IS AN ERROR INT THE REGISTER API WITH STATUS CODE ${response
-              .body}");
+          "THERE IS AN ERROR INT THE REGISTER API WITH STATUS CODE ${response.body}");
     }
   }
 
@@ -171,7 +193,7 @@ class ApiCaller {
     final postUri = Uri.parse(baseUrl + provider + updateProfile);
     UpdateProfileDataModel dataModel;
     http.MultipartRequest request = http.MultipartRequest('POST', postUri);
-    request.headers['Authorization'] = "Bearer "+ auth;
+    request.headers['Authorization'] = "Bearer " + auth;
     request.fields.addAll(params);
     // print(updateUrl.toString());
     if (file != null) {
@@ -189,14 +211,13 @@ class ApiCaller {
       // var map = Map<String, dynamic>.from(jsonData);
       // return UpdateUserData.fromJson(map);
       return dataModel;
-    }
-    else {
+    } else {
       print(
-          "THERE IS AN ERROR IN THE UPDATE USER PROFILE API WITH STATUS CODE ${response
-              .statusCode}");
+          "THERE IS AN ERROR IN THE UPDATE USER PROFILE API WITH STATUS CODE ${response.statusCode}");
       print("${response.body}");
     }
   }
+
   // Future<UpdateProfileDataModel> updateBuissnessDetailApi(
   //     {File file, String auth, Map<String, String> params}) async {
   //   print(auth);
@@ -237,6 +258,32 @@ class ApiCaller {
   //     print("${response.body}");
   //   }
   // }
+  Future<UpdateBusinessProfileDataModel> addChooseCategories(
+      {@required String parent_id,
+      @required List<int> child_id,
+      @required String auth}) async {
+    UpdateBusinessProfileDataModel businessProfileDataModel;
+    var response = await http.post(
+      Uri.parse(baseUrl +provider + updateProfile),
+      headers: <String, String>{
+        'Content-Type': 'application/json; charset=UTF-8',
+        'Authorization': "Bearer " + auth
+      },
+      body: jsonEncode(<String, dynamic>{
+        'parent_category_id': parent_id,
+        "child_category_id": child_id.toList().toString()
+      }),
+    );
+
+    if (response.statusCode == 200) {
+      print("QWERTY ${response.body}");
+      return businessProfileDataModel = updateBusinessProfileDataModelFromJson(response.body);
+    } else {
+      print("QWERTY ${response.body}");
+      print(
+          "THERE IS AN ERROR INT THE ADD CHOOSE CATEGORIES API WITH STATUS CODE ${response.statusCode}");
+    }
+  }
 }
 
 Future<bool> isConnectedToInternet() async {

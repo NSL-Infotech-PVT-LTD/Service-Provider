@@ -10,6 +10,7 @@ import 'package:misson_tasker/utils/NavMe.dart';
 import 'package:misson_tasker/utils/ScreenConfig.dart';
 import 'package:misson_tasker/utils/StringsPath.dart';
 import 'package:misson_tasker/utils/local_data.dart';
+import 'package:misson_tasker/view/ProfileView/ChildCategory.dart';
 import 'package:misson_tasker/view/ProfileView/UserProfile.dart';
 import 'package:misson_tasker/view/startup_screens/SplashScreen.dart';
 import 'package:multi_image_picker/multi_image_picker.dart';
@@ -24,7 +25,7 @@ class ChooseServices extends StatefulWidget {
 class _ChooseServicesState extends State<ChooseServices> {
   bool isLoading = true;
   String _fullName = "Loading....";
-  bool isLoadingApi = false;
+  bool isLoadingApi = true;
   List<Asset> images = List<Asset>();
   String _error;
   bool isLoadingData = true;
@@ -32,7 +33,7 @@ class _ChooseServicesState extends State<ChooseServices> {
   final _formKey = GlobalKey<FormState>();
 
   ListOfServicesModel listOfServicesModel;
-
+String auth="";
   @override
   void initState() {
     // registerUser();
@@ -49,15 +50,21 @@ class _ChooseServicesState extends State<ChooseServices> {
         );
       },
     );
+    getString(sharedPref.userToken).then((value) {
+      auth = value;
 
-    ApiCaller()
-        .getServiceList()
-        .then((value) => listOfServicesModel = value)
-        .whenComplete(() {
-      setState(() {
-        isLoadingApi = false;
+      print("123 $value");
+    }).whenComplete(() {
+      ApiCaller()
+          .getServiceList(auth:auth )
+          .then((value) => listOfServicesModel = value)
+          .whenComplete(() {
+        setState(() {
+          isLoadingApi = false;
+        });
       });
     });
+
     super.initState();
   }
 
@@ -99,37 +106,48 @@ class _ChooseServicesState extends State<ChooseServices> {
           backgroundColor: Colors.white,
           elevation: 0,
         ),
-        body:  Container(
+        body: Container(
             margin: EdgeInsets.only(top: 30),
             color: Colors.white,
-            child: ListOfServicesModel == null
-                ? Center(child: spinkit)
-                :Form(
-                key: _formKey,
-                child: ListView.builder(
-                        itemBuilder: (context, index) {
-                          return Padding(
-                            padding: const EdgeInsets.only(
-                                bottom: 16.0, left: 10, right: 10),
-                            child: ListTile(
-                              title: InkWell(
-                                onTap: () {},
-                                child: Text(
-                                  "${listOfServicesModel.data.data.elementAt(index).name}",
-                                  style: TextStyle(
-                                      fontSize: ScreenConfig.fontSizelarge,
-                                      color: CColors.missonPrimaryColor,
-                                      fontFamily: "Product"),
-                                ),
-                              ),
-                              trailing: SvgPicture.asset(
-                                rightArrowIcon,
-                                height: 15,
+            child: isLoadingApi ==true
+                ?     Center(child: spinkit)
+                : Form(
+                    key: _formKey,
+                    child: ListView.builder(
+                      itemBuilder: (context, index) {
+                        return Padding(
+                          padding: const EdgeInsets.only(
+                              bottom: 16.0, left: 10, right: 10),
+                          child: ListTile(
+                            title: InkWell(
+                              onTap: () {
+                                NavMe().NavPushLeftToRight(ChildCategory(
+                                  parentName: listOfServicesModel.data.data
+                                      .elementAt(index)
+                                      .name,
+                                  parentId: listOfServicesModel.data.data
+                                      .elementAt(index)
+                                      .id,
+                                ));
+                              },
+                              child: Text(
+                                "${listOfServicesModel.data.data.elementAt(index).name}",
+                                style: TextStyle(
+                                    fontSize: ScreenConfig.fontSizelarge,
+                                    color: CColors.missonPrimaryColor,
+                                    fontFamily: "Product"),
                               ),
                             ),
-                          );
-                        },
-                        itemCount: listOfServicesModel==null ? 0:listOfServicesModel.data.data.length,
-                      ))));
+                            trailing: SvgPicture.asset(
+                              rightArrowIcon,
+                              height: 15,
+                            ),
+                          ),
+                        );
+                      },
+                      itemCount: listOfServicesModel == null
+                          ? 0
+                          : listOfServicesModel.data.data.length,
+                    ))));
   }
 }

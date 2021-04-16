@@ -13,22 +13,28 @@ class ListOfServicesModel {
     this.status,
     this.code,
     this.data,
+    this. error
   });
 
   bool status;
   int code;
   Data data;
-
+  String error;
   factory ListOfServicesModel.fromJson(Map<String, dynamic> json) => ListOfServicesModel(
     status: json["status"],
     code: json["code"],
-    data: Data.fromJson(json["data"]),
+    data: json["data"] != null &&
+        (json["data"] as Map<String, dynamic>).isNotEmpty
+        ? Data.fromJson(json["data"])
+        : null,
+    error: json["error"],
   );
 
   Map<String, dynamic> toJson() => {
     "status": status,
     "code": code,
     "data": data.toJson(),
+    "error": data.toJson(),
   };
 }
 
@@ -98,18 +104,21 @@ class Datum {
     this.name,
     this.image,
     this.parentId,
+    this.isSelected
   });
 
   int id;
   String name;
   String image;
   int parentId;
+  bool isSelected;
 
   factory Datum.fromJson(Map<String, dynamic> json) => Datum(
     id: json["id"],
     name: json["name"],
     image: json["image"],
     parentId: json["parent_id"],
+    isSelected: json["is_selected"],
   );
 
   Map<String, dynamic> toJson() => {
@@ -117,5 +126,6 @@ class Datum {
     "name": name,
     "image": image,
     "parent_id": parentId,
+    "is_selected": isSelected
   };
 }
