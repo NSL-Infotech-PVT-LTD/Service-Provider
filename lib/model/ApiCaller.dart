@@ -218,53 +218,52 @@ class ApiCaller {
     }
   }
 
-  // Future<UpdateProfileDataModel> updateBuissnessDetailApi(
-  //     {File file, String auth, Map<String, String> params}) async {
-  //   print(auth);
-  //
-  //   final postUri = Uri.parse(baseUrl + provider + updateProfile);
-  //   UpdateProfileDataModel dataModel;
-  //   http.MultipartRequest request = http.MultipartRequest('POST', postUri);
-  //   request.headers['Authorization'] = "Bearer "+ auth;
-  //   request.fields.addAll(params);
-  //   // print(updateUrl.toString());
-  //   if (file != null) {
-  //     final byteData = await asset.getByteData();
-  //     List<int> imageData = byteData.buffer.asUint8List();
-  //     http.MultipartFile multipartFile  =http.MultipartFile.fromBytes(
-  //       'photo',
-  //       imageData,
-  //       filename: 'some-file-name.jpg',
-  //       contentType: MediaType("image", "jpg"),
-  //     );
-  //     //returns a Future<MultipartFile>
-  //     request.files.add(multipartFile);
-  //   }
-  //
-  //   var streamedResponse = await request.send();
-  //   var response = await http.Response.fromStream(streamedResponse);
-  //
-  //   if (response.statusCode == 200) {
-  //     print("${response.body}");
-  //     dataModel = updateProfileDataModelFromJson(response.body);
-  //     // var map = Map<String, dynamic>.from(jsonData);
-  //     // return UpdateUserData.fromJson(map);
-  //     return dataModel;
-  //   }
-  //   else {
-  //     print(
-  //         "THERE IS AN ERROR IN THE UPDATE USER PROFILE API WITH STATUS CODE ${response
-  //             .statusCode}");
-  //     print("${response.body}");
-  //   }
-  // }
+  Future<UpdateProfileDataModel> updateBusinessDetailApi(
+      {List<File> listFile, String auth, Map<String, String> params}) async {
+    var names = [
+      "image_one",  "image_two",  "image_three",  "image_four",  "image_five",  "image_six",
+    ];
+    print(auth);
+
+    final postUri = Uri.parse(baseUrl + provider + updateProfile);
+    UpdateProfileDataModel dataModel;
+    http.MultipartRequest request = http.MultipartRequest('POST', postUri);
+    request.headers['Authorization'] = "Bearer " + auth;
+    request.fields.addAll(params);
+    // print(updateUrl.toString());
+    if (listFile.length > 0) {
+      for (int i = 0; i < listFile.length; i++) {
+        http.MultipartFile multipartFile = await http.MultipartFile.fromPath(
+            // 'image_${i + 1}',
+            '${names.elementAt(i)}',
+            listFile[i].path); //returns a Future<MultipartFile>
+        request.files.add(multipartFile);
+      }
+    }
+
+    var streamedResponse = await request.send();
+    var response = await http.Response.fromStream(streamedResponse);
+
+    if (response.statusCode == 200) {
+      print("${response.body}");
+      dataModel = updateProfileDataModelFromJson(response.body);
+      // var map = Map<String, dynamic>.from(jsonData);
+      // return UpdateUserData.fromJson(map);
+      return dataModel;
+    } else {
+      print(
+          "THERE IS AN ERROR IN THE UPDATE USER PROFILE API WITH STATUS CODE ${response.statusCode}");
+      print("${response.body}");
+    }
+  }
+
   Future<UpdateBusinessProfileDataModel> addChooseCategories(
       {@required String parent_id,
       @required List<int> child_id,
       @required String auth}) async {
     UpdateBusinessProfileDataModel businessProfileDataModel;
     var response = await http.post(
-      Uri.parse(baseUrl +provider + updateProfile),
+      Uri.parse(baseUrl + provider + updateProfile),
       headers: <String, String>{
         'Content-Type': 'application/json; charset=UTF-8',
         'Authorization': "Bearer " + auth
@@ -277,7 +276,8 @@ class ApiCaller {
 
     if (response.statusCode == 200) {
       print("QWERTY ${response.body}");
-      return businessProfileDataModel = updateBusinessProfileDataModelFromJson(response.body);
+      return businessProfileDataModel =
+          updateBusinessProfileDataModelFromJson(response.body);
     } else {
       print("QWERTY ${response.body}");
       print(

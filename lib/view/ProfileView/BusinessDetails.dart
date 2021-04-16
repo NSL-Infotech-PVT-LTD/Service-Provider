@@ -1,4 +1,7 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
+import 'package:flutter_absolute_path/flutter_absolute_path.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:misson_tasker/model/ApiCaller.dart';
@@ -26,11 +29,15 @@ class _BusinessDetailsState extends State<BusinessDetails> {
   String _fullName = "Loading....";
   bool isLoadingApi = false;
   List<Asset> images = List<Asset>();
+  List<File> files = [];
   String _error;
   bool isLoadingData = true;
   var spinkit;
   final _formKey = GlobalKey<FormState>();
-
+  TextEditingController hour = TextEditingController();
+  TextEditingController toolBox = TextEditingController();
+  TextEditingController description = TextEditingController();
+String auth="";
   Widget buildListView() {
     if (images != null)
       return ListView.builder(
@@ -83,12 +90,17 @@ class _BusinessDetailsState extends State<BusinessDetails> {
 
     try {
       resultList = await MultiImagePicker.pickImages(
-        maxImages: 300,
+        maxImages: 6,
+
       );
     } on Exception catch (e) {
       error = e.toString();
     }
-
+    files = [];
+    for (Asset asset in resultList) {
+      final path = await FlutterAbsolutePath.getAbsolutePath(asset.identifier);
+      files.add(File(path));
+    }
     // If the widget was removed from the tree while the asynchronous platform
     // message was in flight, we want to discard the reply rather than calling
     // setState to update our non-existent appearance.
@@ -102,6 +114,7 @@ class _BusinessDetailsState extends State<BusinessDetails> {
 
   @override
   void initState() {
+    getString(sharedPref.userToken).then((value) => auth=value);
     // registerUser();
     spinkit = SpinKitWave(
       size: 40,
@@ -240,7 +253,7 @@ class _BusinessDetailsState extends State<BusinessDetails> {
                                   child: TextButton(
                                     style: TextButton.styleFrom(
                                         backgroundColor:
-                                            CColors.missonLightGrey),
+                                        CColors.missonLightGrey),
                                     onPressed: () {},
                                     child: Text(
                                       images.isEmpty
@@ -273,12 +286,12 @@ class _BusinessDetailsState extends State<BusinessDetails> {
                         images.isEmpty
                             ? Container()
                             : Container(
-                                margin: const EdgeInsets.symmetric(
-                                    vertical: 6.0, horizontal: 16),
-                                height: 100,
-                                width: ScreenConfig.screenWidth,
-                                child: buildListView(),
-                              ),
+                          margin: const EdgeInsets.symmetric(
+                              vertical: 6.0, horizontal: 16),
+                          height: 100,
+                          width: ScreenConfig.screenWidth,
+                          child: buildListView(),
+                        ),
                         Padding(
                           padding: const EdgeInsets.only(
                               top: 16.0, left: 10, right: 10),
@@ -308,15 +321,17 @@ class _BusinessDetailsState extends State<BusinessDetails> {
                           padding: const EdgeInsets.only(
                               bottom: 16.0, left: 24, right: 24),
                           child: TextFormField(
+                            controller: hour,
                             keyboardType:
-                                TextInputType.numberWithOptions(signed: true),
+                            TextInputType.numberWithOptions(signed: true),
                             decoration: InputDecoration(
                               border: OutlineInputBorder(
                                 borderSide: BorderSide(
                                   color: CColors.missonMediumGrey,
                                 ),
                               ),
-                              suffixIcon: Column( mainAxisAlignment: MainAxisAlignment.center,
+                              suffixIcon: Column(
+                                mainAxisAlignment: MainAxisAlignment.center,
                                 children: [
                                   Text(
                                     "\$/hr",
@@ -364,6 +379,7 @@ class _BusinessDetailsState extends State<BusinessDetails> {
                           padding: const EdgeInsets.only(
                               bottom: 5.0, left: 24, right: 24),
                           child: TextFormField(
+                            controller: toolBox,
                             decoration: InputDecoration(
                               border: OutlineInputBorder(
                                 borderSide: BorderSide(
@@ -399,6 +415,7 @@ class _BusinessDetailsState extends State<BusinessDetails> {
                               bottom: 10.0, left: 24, right: 24),
                           child: Container(
                             child: TextFormField(
+                              controller: description,
                               keyboardType: TextInputType.multiline,
                               maxLines: 8,
                               decoration: InputDecoration(
@@ -418,7 +435,7 @@ class _BusinessDetailsState extends State<BusinessDetails> {
             Align(
               child: Padding(
                 padding:
-                    const EdgeInsets.symmetric(horizontal: 8.0, vertical: 20),
+                const EdgeInsets.symmetric(horizontal: 8.0, vertical: 20),
                 child: SizedBox(
                   height: ScreenConfig.screenHeight * 0.06,
                   width: ScreenConfig.screenWidth * 0.70,
@@ -427,14 +444,30 @@ class _BusinessDetailsState extends State<BusinessDetails> {
                       if (_formKey.currentState.validate()) {
                         setState(() {
                           isLoadingApi = true;
+
+
+
+
+                        });
+                        ApiCaller().updateBusinessDetailApi(auth:auth,
+                            params: {
+                              "hourly_rate": "${hour.text}",
+                              "toolbox_info": "${toolBox.text}",
+                              "description": "${description}",
+                            }, listFile: files).whenComplete(() {
+
+                          setState(() {
+                            isLoadingApi = false;
+                          });
+
                         });
                       } else {}
                     },
                     child: isLoadingApi == true
                         ? spinkit
                         : Text("Save",
-                            style:
-                                TextStyle(color: Colors.white, fontSize: 18)),
+                        style:
+                        TextStyle(color: Colors.white, fontSize: 18)),
                     style: ElevatedButton.styleFrom(
                       primary: CColors.missonButtonColor, // background
                       onPrimary: CColors.missonButtonColor, // fo
@@ -442,7 +475,7 @@ class _BusinessDetailsState extends State<BusinessDetails> {
                           borderRadius: new BorderRadius.circular(06.0),
                           side: BorderSide(
                               color: CColors.missonButtonColor) // reground,
-                          ),
+                      ),
                     ),
                   ),
                 ),
