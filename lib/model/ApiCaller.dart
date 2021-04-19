@@ -6,7 +6,10 @@ import 'package:flutter/cupertino.dart';
 import 'package:get/get_connect/http/src/multipart/multipart_file.dart';
 import 'package:misson_tasker/model/api_models/GetProfileDataModel.dart';
 import 'package:misson_tasker/model/api_models/ListOfServicesModel.dart';
+import 'package:misson_tasker/view/ProfileView/ConfigurationScreen.dart';
 
+import 'api_models/ChangePasswordModel.dart';
+import 'api_models/ConfigurationModel.dart';
 import 'api_models/ForgetPasswordModel.dart';
 import 'api_models/LoginUserModel.dart';
 import 'package:http/http.dart' as http;
@@ -25,6 +28,11 @@ class ApiCaller {
   String updateProfile = "update";
   String category = "category/";
   String list = "list";
+  String changePassword = "change-password";
+  String termsAndCondition = "terms_and_conditions";
+  String aboutUs = "about_us";
+  String PrivacyPolicy = "privacy_policy";
+  String config = "config/";
 
   Future<LoginUserModel> loginUser(
       {@required String email,
@@ -221,7 +229,12 @@ class ApiCaller {
   Future<UpdateProfileDataModel> updateBusinessDetailApi(
       {List<File> listFile, String auth, Map<String, String> params}) async {
     var names = [
-      "image_one",  "image_two",  "image_three",  "image_four",  "image_five",  "image_six",
+      "image_one",
+      "image_two",
+      "image_three",
+      "image_four",
+      "image_five",
+      "image_six",
     ];
     print(auth);
 
@@ -282,6 +295,90 @@ class ApiCaller {
       print("QWERTY ${response.body}");
       print(
           "THERE IS AN ERROR INT THE ADD CHOOSE CATEGORIES API WITH STATUS CODE ${response.statusCode}");
+    }
+  }
+
+  Future<ChangePasswordModel> changePasswordApi(
+      {@required String oldPassword,
+      @required String newPassword,
+      @required String reNewPassword,
+      @required String auth}) async {
+    ChangePasswordModel changePasswordModel;
+    var response = await http.post(
+      Uri.parse(baseUrl + provider + changePassword),
+      headers: <String, String>{
+        'Content-Type': 'application/json; charset=UTF-8',
+        'Authorization': "Bearer " + auth
+      },
+      body: jsonEncode(<String, dynamic>{
+        'old_password': oldPassword,
+        "password": newPassword,
+        "confirm_password": reNewPassword
+      }),
+    );
+
+    if (response.statusCode == 200 || response.statusCode == 422) {
+      print("QWERTY ${response.body}");
+      return changePasswordModel = changePasswordModelFromJson(response.body);
+    } else {
+      print("QWERTY ${response.body}");
+      print(
+          "THERE IS AN ERROR INT THE CHANGE PASSWORD API WITH STATUS CODE ${response.statusCode}");
+    }
+  }
+
+  Future<ConfigurationModel> termsAndConditionsApi() async {
+    ConfigurationModel configurationModel;
+    var response = await http.get(
+      Uri.parse(baseUrl + config+ termsAndCondition),
+      headers: <String, String>{
+        'Content-Type': 'application/json; charset=UTF-8',
+      },
+    );
+
+    if (response.statusCode == 200 || response.statusCode == 422) {
+      print("QWERTY ${response.body}");
+      return configurationModel = configurationModelFromJson(response.body);
+    } else {
+      print("QWERTY ${response.body}");
+      print(
+          "THERE IS AN ERROR INT THE TERMS AND CONDITION API WITH STATUS CODE ${response.statusCode}");
+    }
+  }  Future<ConfigurationModel> privacyPolicyApi() async {
+    ConfigurationModel configurationModel;
+    var response = await http.get(
+      Uri.parse(baseUrl + config+PrivacyPolicy),
+      headers: <String, String>{
+        'Content-Type': 'application/json; charset=UTF-8',
+      },
+    );
+
+    if (response.statusCode == 200 || response.statusCode == 422) {
+      print("QWERTY ${response.body}");
+      return configurationModel = configurationModelFromJson(response.body);
+    } else {
+      print("QWERTY ${response.body}");
+      print(
+          "THERE IS AN ERROR INT THE TERMS AND CONDITION API WITH STATUS CODE ${response.statusCode}");
+    }
+  }
+
+  Future<ConfigurationModel> aboutUsApi() async {
+    ConfigurationModel configurationModel;
+    var response = await http.get(
+      Uri.parse(baseUrl + config+aboutUs),
+      headers: <String, String>{
+        'Content-Type': 'application/json; charset=UTF-8',
+      },
+    );
+
+    if (response.statusCode == 200 || response.statusCode == 422) {
+      print("QWERTY ${response.body}");
+      return configurationModel = configurationModelFromJson(response.body);
+    } else {
+      print("QWERTY ${response.body}");
+      print(
+          "THERE IS AN ERROR INT THE TERMS AND CONDITION API WITH STATUS CODE ${response.statusCode}");
     }
   }
 }

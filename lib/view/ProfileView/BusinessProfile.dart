@@ -8,6 +8,7 @@ import 'package:misson_tasker/utils/ScreenConfig.dart';
 import 'package:misson_tasker/utils/StringsPath.dart';
 import 'package:misson_tasker/utils/local_data.dart';
 import 'package:misson_tasker/view/ProfileView/BusinessDetails.dart';
+import 'package:misson_tasker/view/ProfileView/SettingPage.dart';
 import 'package:misson_tasker/view/ProfileView/UserProfile.dart';
 import 'package:misson_tasker/view/startup_screens/SplashScreen.dart';
 
@@ -407,31 +408,35 @@ String auth="";
               Padding(
                 padding:
                     const EdgeInsets.symmetric(vertical: 16.0, horizontal: 10),
-                child: ListTile(
-                  leading: Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: SvgPicture.asset(settingIcon),
-                  ),
-                  title: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        "Settings",
-                        style: TextStyle(
-                            fontSize: ScreenConfig.fontSizelarge,
-                            color: CColors.missonPrimaryColor),
-                      ),
-                      Text(
-                        "Notifications, Change password, Help & support",
-                        style: TextStyle(
-                            fontSize: ScreenConfig.fontSizeSmall,
-                            color: CColors.missonMediumGrey),
-                      ),
-                    ],
-                  ),
-                  trailing: SvgPicture.asset(
-                    rightArrowIcon,
-                    height: 15,
+                child: InkWell(onTap: (){
+                  NavMe().NavPushLeftToRight(SettingPage());
+                },
+                  child: ListTile(
+                    leading: Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: SvgPicture.asset(settingIcon),
+                    ),
+                    title: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          "Settings",
+                          style: TextStyle(
+                              fontSize: ScreenConfig.fontSizelarge,
+                              color: CColors.missonPrimaryColor),
+                        ),
+                        Text(
+                          "Notifications, Change password, Help & support",
+                          style: TextStyle(
+                              fontSize: ScreenConfig.fontSizeSmall,
+                              color: CColors.missonMediumGrey),
+                        ),
+                      ],
+                    ),
+                    trailing: SvgPicture.asset(
+                      rightArrowIcon,
+                      height: 15,
+                    ),
                   ),
                 ),
               ),
