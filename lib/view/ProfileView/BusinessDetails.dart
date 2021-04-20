@@ -28,7 +28,7 @@ class _BusinessDetailsState extends State<BusinessDetails> {
   bool isLoading = true;
   String _fullName = "Loading....";
   bool isLoadingApi = false;
-  List<Asset> images = List<Asset>();
+  List<Asset> images=[];
   List<File> files = [];
   String _error;
   bool isLoadingData = true;
@@ -81,9 +81,7 @@ String auth="";
   }
 
   Future<void> loadAssets() async {
-    setState(() {
-      images = List<Asset>();
-    });
+
 
     List<Asset> resultList;
     String error;
@@ -91,12 +89,13 @@ String auth="";
     try {
       resultList = await MultiImagePicker.pickImages(
         maxImages: 6,
+        selectedAssets: images
 
       );
     } on Exception catch (e) {
       error = e.toString();
     }
-    files = [];
+    // files = [];
     for (Asset asset in resultList) {
       final path = await FlutterAbsolutePath.getAbsolutePath(asset.identifier);
       files.add(File(path));

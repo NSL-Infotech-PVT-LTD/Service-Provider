@@ -401,25 +401,23 @@ class _ChangePasswordState extends State<ChangePassword> {
                 child: ElevatedButton(
                   onPressed: () {
                     if (_formKey.currentState.validate()) {
-                      if (_newPasswordFieldController.text !=
-                          _reNewPasswordFieldController.text) {
-                        _reNewpass = false;
-                        _newPass = false;
-                        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                            content: Text(
-                                "new Password doesn't match with re-enter new password ")));
-                      } else {
+                      if (_reNewpass == true &&
+                          _newPass == true &&
+                          _pass == true
+
+                      ){
                         setState(() {
                           isLoading = true;
+
                         });
 
                         ApiCaller()
                             .changePasswordApi(
-                                oldPassword: _oldPasswordFieldController.text,
-                                newPassword: _newPasswordFieldController.text,
-                                reNewPassword:
-                                    _reNewPasswordFieldController.text,
-                                auth: auth)
+                            oldPassword: _oldPasswordFieldController.text,
+                            newPassword: _newPasswordFieldController.text,
+                            reNewPassword:
+                            _reNewPasswordFieldController.text,
+                            auth: auth)
                             .then((value) => changePasswordModel = value)
                             .whenComplete(() {
                           setState(() {
@@ -431,7 +429,7 @@ class _ChangePasswordState extends State<ChangePassword> {
                                   title: Text('Info'),
                                   content: changePasswordModel.status == true
                                       ? Text(
-                                          '${changePasswordModel.data.message}')
+                                      '${changePasswordModel.data.message}')
                                       : Text('${changePasswordModel.error}'),
                                   actions: [
                                     CupertinoDialogAction(
@@ -449,6 +447,21 @@ class _ChangePasswordState extends State<ChangePassword> {
                           });
                         });
                       }
+
+
+                      // if (_newPasswordFieldController.text !=
+                      //     _reNewPasswordFieldController.text) {
+                      //   _reNewpass = false;
+                      //   _newPass = false;
+                      //   ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                      //       content: Text(
+                      //           "new Password doesn't match with re-enter new password ")));
+                      // }
+                      //
+                      // else {
+
+
+                      // }
 
                       // updateUser();
                       // ScaffoldMessenger.of(context)

@@ -37,6 +37,8 @@ final String cameraLogo="assets/svg_assets/camera_logo.svg";
 final String cancelLogo="assets/svg_assets/cancel_icon.svg";
 final String logoutLogo="assets/svg_assets/logout_icon.svg";
 final String checkLogo="assets/svg_assets/check_icon.svg";
+final String subscritpionLogo="assets/svg_assets/subscription_icon.svg";
+final String dotLogo="assets/svg_assets/dot.svg";
 
 
 //<=============================PNG IMAGES=========================>

@@ -8,7 +8,9 @@ import 'package:misson_tasker/utils/ScreenConfig.dart';
 import 'package:misson_tasker/utils/StringsPath.dart';
 import 'package:misson_tasker/utils/local_data.dart';
 import 'package:misson_tasker/view/ProfileView/BusinessDetails.dart';
+import 'package:misson_tasker/view/ProfileView/NotificationScreen.dart';
 import 'package:misson_tasker/view/ProfileView/SettingPage.dart';
+import 'package:misson_tasker/view/ProfileView/SubscriptionScreen.dart';
 import 'package:misson_tasker/view/ProfileView/UserProfile.dart';
 import 'package:misson_tasker/view/startup_screens/SplashScreen.dart';
 
@@ -125,11 +127,15 @@ String auth="";
       backgroundColor: Colors.white,
       appBar: AppBar(
         actions: [
-          Padding(
-            padding: const EdgeInsets.only(right: 12.0, top: 30.0),
-            child: Align(
-                alignment: Alignment.topRight,
-                child: SvgPicture.asset(bellIcon)),
+          InkWell(onTap:(){
+            NavMe().NavPushLeftToRight(NotificationScreen());
+          } ,
+            child: Padding(
+              padding: const EdgeInsets.only(right: 12.0, top: 30.0),
+              child: Align(
+                  alignment: Alignment.topRight,
+                  child: SvgPicture.asset(bellIcon)),
+            ),
           ),
         ],
         centerTitle: true,
@@ -343,34 +349,38 @@ String auth="";
                   ),
                 ),
               ),
-              Padding(
-                padding:
-                    const EdgeInsets.symmetric(vertical: 16.0, horizontal: 10),
-                child: ListTile(
-                  leading: Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: SvgPicture.asset(user2TextFiledIcon),
-                  ),
-                  title: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        "Subscription",
-                        style: TextStyle(
-                            fontSize: ScreenConfig.fontSizelarge,
-                            color: CColors.missonPrimaryColor),
-                      ),
-                      Text(
-                        "30 day left for expiration ",
-                        style: TextStyle(
-                            fontSize: ScreenConfig.fontSizeSmall,
-                            color: CColors.missonMediumGrey),
-                      ),
-                    ],
-                  ),
-                  trailing: SvgPicture.asset(
-                    rightArrowIcon,
-                    height: 15,
+              InkWell( onTap: (){
+                NavMe().NavPushLeftToRight(Subscription());
+              },
+                child: Padding(
+                  padding:
+                      const EdgeInsets.symmetric(vertical: 16.0, horizontal: 10),
+                  child: ListTile(
+                    leading: Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: SvgPicture.asset(user2TextFiledIcon),
+                    ),
+                    title: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          "Subscription",
+                          style: TextStyle(
+                              fontSize: ScreenConfig.fontSizelarge,
+                              color: CColors.missonPrimaryColor),
+                        ),
+                        Text(
+                          "30 day left for expiration ",
+                          style: TextStyle(
+                              fontSize: ScreenConfig.fontSizeSmall,
+                              color: CColors.missonMediumGrey),
+                        ),
+                      ],
+                    ),
+                    trailing: SvgPicture.asset(
+                      rightArrowIcon,
+                      height: 15,
+                    ),
                   ),
                 ),
               ),

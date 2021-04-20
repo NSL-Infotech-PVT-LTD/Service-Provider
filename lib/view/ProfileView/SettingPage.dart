@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:misson_tasker/model/ApiCaller.dart';
@@ -12,6 +13,7 @@ import 'package:misson_tasker/view/ProfileView/ChangeNotificationScreen.dart';
 import 'package:misson_tasker/view/ProfileView/ChangePassword.dart';
 import 'package:misson_tasker/view/ProfileView/ConfigurationScreen.dart';
 import 'package:misson_tasker/view/ProfileView/UserProfile.dart';
+import 'package:misson_tasker/view/startup_screens/LoginPage.dart';
 import 'package:misson_tasker/view/startup_screens/SplashScreen.dart';
 
 import 'editProfile.dart';
@@ -393,20 +395,56 @@ class _SettingPageState extends State<SettingPage> {
                 //     ),
                 //   ),
                 // ),
-                Padding(
-                  padding: const EdgeInsets.symmetric(
-                      vertical: 16.0, horizontal: 10),
-                  child: ListTile(
-                    title: Text(
-                      "Logout",
-                      style: TextStyle(
-                          fontSize: ScreenConfig.fontSizelarge,
-                          color: CColors.missonPrimaryColor,
-                          fontFamily: "Product"),
-                    ),
-                    trailing: SvgPicture.asset(
-                      logoutLogo,
-                      height: 20,
+                InkWell(onTap: (){
+
+                  return showCupertinoDialog(
+                    context: context,
+                    builder: (BuildContext context) {
+                      return CupertinoAlertDialog(
+                        title: Text('Alert'),
+                        content: Text('Are you sure to logout?'),
+                        actions: [
+                          CupertinoDialogAction(
+                            child: Text('Yes'),
+                            onPressed: () {
+                              clearedShared();
+                              Navigator.pushAndRemoveUntil(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (_) => LoginPage()),
+                                      (route) => false);
+                              // NavMe().NavPushReplaceFadeIn(LoginPage());
+                            },
+                          ),
+                          CupertinoDialogAction(
+                            child: Text('No'),
+                            onPressed: () {
+                              clearedShared();
+                              Navigator.pop(context);
+                            },
+                          ),
+                        ],
+                      );
+                    },
+                  );
+
+
+                },
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(
+                        vertical: 16.0, horizontal: 10),
+                    child: ListTile(
+                      title: Text(
+                        "Logout",
+                        style: TextStyle(
+                            fontSize: ScreenConfig.fontSizelarge,
+                            color: CColors.missonPrimaryColor,
+                            fontFamily: "Product"),
+                      ),
+                      trailing: SvgPicture.asset(
+                        logoutLogo,
+                        height: 20,
+                      ),
                     ),
                   ),
                 ),
