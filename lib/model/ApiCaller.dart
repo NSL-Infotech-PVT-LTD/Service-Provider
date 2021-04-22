@@ -14,6 +14,7 @@ import 'api_models/ForgetPasswordModel.dart';
 import 'api_models/LoginUserModel.dart';
 import 'package:http/http.dart' as http;
 
+import 'api_models/NotificationToggle.dart';
 import 'api_models/RegisterNewUserModel.dart';
 import 'api_models/UpdateBusinessProfileDataModel.dart';
 import 'api_models/UpdateProfileDataModel.dart';
@@ -33,6 +34,9 @@ class ApiCaller {
   String aboutUs = "about_us";
   String PrivacyPolicy = "privacy_policy";
   String config = "config/";
+  String notification = "notification/";
+
+  String status = "status";
 
   Future<LoginUserModel> loginUser(
       {@required String email,
@@ -95,6 +99,28 @@ class ApiCaller {
     if (response.statusCode == 200) {
       print("QWERTY ${response.body}");
       return getProfileDataModel = getProfileDataModelFromJson(response.body);
+    } else {
+      print("QWERTY ${response.body}");
+      print(
+          "THERE IS AN ERROR INT THE GET PROFILE DATA API WITH STATUS CODE ${response.statusCode}");
+    }
+  }
+  Future<NotificationToggleModel> doNotificationToggle({@required String auth, String value}) async {
+    NotificationToggleModel notificationToggleModel;
+    var response = await http.post(
+      Uri.parse(baseUrl + notification+status),
+      headers: <String, String>{
+        'Content-Type': 'application/json; charset=UTF-8',
+        'Authorization': "Bearer " + auth
+      },
+      body: jsonEncode(<String, String>{
+        'is_notify': value,
+      }),
+    );
+
+    if (response.statusCode == 20) {
+      print("QWERTY ${response.body}");
+      return notificationToggleModel = notificationToggleModelFromJson(response.body);
     } else {
       print("QWERTY ${response.body}");
       print(
@@ -215,10 +241,10 @@ class ApiCaller {
 
     if (response.statusCode == 200) {
       print("${response.body}");
-      dataModel = updateProfileDataModelFromJson(response.body);
+     return dataModel = updateProfileDataModelFromJson(response.body);
       // var map = Map<String, dynamic>.from(jsonData);
       // return UpdateUserData.fromJson(map);
-      return dataModel;
+      // return dataModel;
     } else {
       print(
           "THERE IS AN ERROR IN THE UPDATE USER PROFILE API WITH STATUS CODE ${response.statusCode}");

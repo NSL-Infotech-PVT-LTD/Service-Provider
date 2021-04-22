@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_image_compress/flutter_image_compress.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:geocoder/geocoder.dart';
@@ -23,6 +24,7 @@ class EditProfile extends StatefulWidget {
 
 class _EditProfileState extends State<EditProfile> {
   File file;
+  File compressedFile;
   var image = "";
   String pickedFile;
   final picker = ImagePicker();
@@ -659,6 +661,11 @@ class _EditProfileState extends State<EditProfile> {
                       if (_formKey.currentState.validate()) {
                         setState(() {
                           isLoadingApi = true;
+
+                          // compressAndGetFile(file: file,targetPath: file.path).then((value) => )
+
+
+
                           updateUser();
                         });
                         // updateUser();
@@ -693,7 +700,18 @@ class _EditProfileState extends State<EditProfile> {
   }
 
   Position position;
+  Future<File> compressAndGetFile({File file, String targetPath}) async {
+    var result = await FlutterImageCompress.compressAndGetFile(
+      file.absolute.path, targetPath,
+      quality: 88,
+      rotate: 180,
+    );
 
+    print(file.lengthSync());
+    print(result.lengthSync());
+
+    return result;
+  }
   void callMe() {
     _determinePosition().then((value) {
       position = value;

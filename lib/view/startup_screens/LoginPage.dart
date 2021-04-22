@@ -222,21 +222,21 @@ class _LoginPageState extends State<LoginPage> {
                                 r'^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$';
                             RegExp regex = new RegExp(pattern);
                             if (value == null || value.isEmpty) {
-                              return 'Please enter email';
+                              return '    Please enter email address';
                             } else if (!regex.hasMatch(value)) {
-                              return 'Enter Valid Email';
+                              return '    Please enter valid email address';
                             }
                             return null;
                           },
                           decoration: InputDecoration(
                             hintStyle: _textStyle,
                             // isDense: true,
-                            hintText: "Email",
+                            hintText: "Email Address",
                             prefixIconConstraints: BoxConstraints(
                                 minHeight: ScreenConfig.screenHeight * 0.05,
                                 minWidth: ScreenConfig.screenWidth * 0.04),
                             prefixIcon: Padding(
-                                padding: EdgeInsets.symmetric(horizontal: 10),
+                                padding: EdgeInsets.symmetric(horizontal: 20),
                                 child: SvgPicture.asset(emailTextFiledIcon)),
                           ),
                         ),
@@ -246,9 +246,9 @@ class _LoginPageState extends State<LoginPage> {
                           controller: _passwordFieldController,
                           validator: (value) {
                             if (value == null || value.isEmpty) {
-                              return 'Please enter password';
+                              return '    Please enter password';
                             } else if (value.length < 5) {
-                              return 'Please enter password more than 5 character';
+                              return '    Please enter password more than 5 character';
                             }
                             return null;
                           },
@@ -281,12 +281,7 @@ class _LoginPageState extends State<LoginPage> {
                                 minHeight: ScreenConfig.screenHeight * 0.05,
                                 minWidth: ScreenConfig.screenWidth * 0.04),
                             prefixIcon: Padding(
-                              padding: EdgeInsets.fromLTRB(
-                                8.0,
-                                8.0,
-                                8.0,
-                                15,
-                              ),
+                              padding: EdgeInsets.symmetric(horizontal: 20),
                               child: SvgPicture.asset(lockTextFiledIcon),
                             ),
                           ),

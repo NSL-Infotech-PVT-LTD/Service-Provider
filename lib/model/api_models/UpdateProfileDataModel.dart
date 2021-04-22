@@ -13,29 +13,24 @@ class UpdateProfileDataModel {
     this.status,
     this.code,
     this.data,
-    this.error
   });
 
   bool status;
   int code;
   Data data;
-  String error;
 
   factory UpdateProfileDataModel.fromJson(Map<String, dynamic> json) => UpdateProfileDataModel(
     status: json["status"],
     code: json["code"],
-    data: json["data"] != null &&
+    data:json["data"] != null &&
         (json["data"] as Map<String, dynamic>).isNotEmpty
-        ? Data.fromJson(json["data"])
-        : null,
-    error: json["error"],
+        ? Data.fromJson(json["data"]):null,
   );
 
   Map<String, dynamic> toJson() => {
     "status": status,
     "code": code,
     "data": data.toJson(),
-    "error": data.toJson(),
   };
 }
 
@@ -61,6 +56,7 @@ class Data {
 
 class User {
   User({
+    this.id,
     this.name,
     this.mobile,
     this.email,
@@ -88,8 +84,10 @@ class User {
     this.saudiId,
     this.iqamaId,
     this.role,
+    this.images,
   });
 
+  int id;
   String name;
   String mobile;
   String email;
@@ -107,18 +105,20 @@ class User {
   dynamic appleId;
   dynamic fbId;
   String imageOne;
-  dynamic imageTwo;
-  dynamic imageThree;
+  String imageTwo;
+  String imageThree;
   String imageFour;
   String imageFive;
-  dynamic imageSix;
+  String imageSix;
   String hourlyRate;
   String toolboxInfo;
   String saudiId;
-  dynamic iqamaId;
-  List<dynamic> role;
+  String iqamaId;
+  Role role;
+  List<String> images;
 
   factory User.fromJson(Map<String, dynamic> json) => User(
+    id: json["id"],
     name: json["name"],
     mobile: json["mobile"],
     email: json["email"],
@@ -145,10 +145,12 @@ class User {
     toolboxInfo: json["toolbox_info"],
     saudiId: json["saudi_id"],
     iqamaId: json["iqama_id"],
-    role: List<dynamic>.from(json["role"].map((x) => x)),
+    role: Role.fromJson(json["role"]),
+    images: List<String>.from(json["images"].map((x) => x)),
   );
 
   Map<String, dynamic> toJson() => {
+    "id": id,
     "name": name,
     "mobile": mobile,
     "email": email,
@@ -175,6 +177,31 @@ class User {
     "toolbox_info": toolboxInfo,
     "saudi_id": saudiId,
     "iqama_id": iqamaId,
-    "role": List<dynamic>.from(role.map((x) => x)),
+    "role": role.toJson(),
+    "images": List<dynamic>.from(images.map((x) => x)),
+  };
+}
+
+class Role {
+  Role({
+    this.name,
+    this.id,
+    this.permission,
+  });
+
+  String name;
+  int id;
+  List<dynamic> permission;
+
+  factory Role.fromJson(Map<String, dynamic> json) => Role(
+    name: json["name"],
+    id: json["id"],
+    permission: List<dynamic>.from(json["permission"].map((x) => x)),
+  );
+
+  Map<String, dynamic> toJson() => {
+    "name": name,
+    "id": id,
+    "permission": List<dynamic>.from(permission.map((x) => x)),
   };
 }

@@ -90,9 +90,10 @@ class _BusinessProfileState extends State<BusinessProfile> {
   //     }
   //   });
   // }
-String auth="";
+  String auth = "";
   GetProfileDataModel getProfileDataModel;
-  bool isLoadingData=true;
+  bool isLoadingData = true;
+
   @override
   void initState() {
     // registerUser();
@@ -127,9 +128,10 @@ String auth="";
       backgroundColor: Colors.white,
       appBar: AppBar(
         actions: [
-          InkWell(onTap:(){
-            NavMe().NavPushLeftToRight(NotificationScreen());
-          } ,
+          InkWell(
+            onTap: () {
+              NavMe().NavPushLeftToRight(NotificationScreen());
+            },
             child: Padding(
               padding: const EdgeInsets.only(right: 12.0, top: 30.0),
               child: Align(
@@ -171,7 +173,7 @@ String auth="";
           child: Column(
             children: [
               Container(
-                width: ScreenConfig.screenWidth * 0.70,
+                width: ScreenConfig.screenWidth * 0.80,
                 child: Column(
                   children: [
                     Row(
@@ -182,42 +184,48 @@ String auth="";
                           radius: 47,
                           child: CircleAvatar(
                             backgroundImage: getProfileDataModel == null ||
-                                getProfileDataModel.data == null ||
-                                getProfileDataModel.data.user == null ||
-                                getProfileDataModel.data.user.image == null
+                                    getProfileDataModel.data == null ||
+                                    getProfileDataModel.data.user == null ||
+                                    getProfileDataModel.data.user.image == null
                                 ? AssetImage(avatar1)
                                 : NetworkImage(
-                                "${getProfileDataModel.data.user.image}"),
-
+                                    "${getProfileDataModel.data.user.image}"),
                             radius: 45,
                           ),
                         ),
                         SizedBox(
-                          width: ScreenConfig.screenWidth * 0.06,
+                          width: 10,
                         ),
-                        Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(
-                              _fullName,
-                              style: TextStyle(color: Colors.black,fontSize: 20),
-                            ),
-                            SizedBox(
-                              height: ScreenConfig.screenHeight * 0.01,
-                            ),
-                            InkWell(
-                                onTap: () {
-                                  NavMe().NavPushLeftToRight(EditProfile());
-                                },
-                                child: Text(
-                                  "Edit profile",
-                                  style: TextStyle(
-                                    color: Colors.black,
-                                    fontSize: 14,
-                                    decoration: TextDecoration.underline,
-                                  ),
-                                ))
-                          ],
+                        Expanded(
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                _fullName,
+                                style: TextStyle(
+                                  color: Colors.black,
+                                  fontSize: 20,
+                                ),
+                                softWrap: true,
+                                overflow: TextOverflow.ellipsis,
+                              ),
+                              SizedBox(
+                                height: ScreenConfig.screenHeight * 0.01,
+                              ),
+                              InkWell(
+                                  onTap: () {
+                                    NavMe().NavPushLeftToRight(EditProfile());
+                                  },
+                                  child: Text(
+                                    "Edit profile",
+                                    style: TextStyle(
+                                      color: Colors.black,
+                                      fontSize: 14,
+                                      decoration: TextDecoration.underline,
+                                    ),
+                                  ))
+                            ],
+                          ),
                         ),
                       ],
                     ),
@@ -321,7 +329,7 @@ String auth="";
                     ),
                   ),
                   title: InkWell(
-                    onTap: (){
+                    onTap: () {
                       print("areewewe");
                       NavMe().NavPushLeftToRight(BusinessDetails());
                     },
@@ -349,12 +357,13 @@ String auth="";
                   ),
                 ),
               ),
-              InkWell( onTap: (){
-                NavMe().NavPushLeftToRight(Subscription());
-              },
+              InkWell(
+                onTap: () {
+                  NavMe().NavPushLeftToRight(Subscription());
+                },
                 child: Padding(
-                  padding:
-                      const EdgeInsets.symmetric(vertical: 16.0, horizontal: 10),
+                  padding: const EdgeInsets.symmetric(
+                      vertical: 16.0, horizontal: 10),
                   child: ListTile(
                     leading: Padding(
                       padding: const EdgeInsets.all(8.0),
@@ -418,9 +427,10 @@ String auth="";
               Padding(
                 padding:
                     const EdgeInsets.symmetric(vertical: 16.0, horizontal: 10),
-                child: InkWell(onTap: (){
-                  NavMe().NavPushLeftToRight(SettingPage());
-                },
+                child: InkWell(
+                  onTap: () {
+                    NavMe().NavPushLeftToRight(SettingPage());
+                  },
                   child: ListTile(
                     leading: Padding(
                       padding: const EdgeInsets.all(8.0),

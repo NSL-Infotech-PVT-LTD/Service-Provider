@@ -25,7 +25,7 @@ class _DashboardState extends State<Dashboard> {
   GetProfileDataModel getProfileDataModel;
   bool isLoadingData = true;
 
-  String _location="Loading....";
+  String _location = "Loading....";
 
   @override
   void initState() {
@@ -39,8 +39,6 @@ class _DashboardState extends State<Dashboard> {
       }).whenComplete(() {
         setState(() {
           isLoadingData = false;
-
-
 
           _location = getProfileDataModel.data.user.location;
         });
@@ -66,13 +64,12 @@ class _DashboardState extends State<Dashboard> {
           // space to fit everything.
           child: MyDrawer(
         username: username,
-            ImageUrl: getProfileDataModel == null ||
-        getProfileDataModel.data == null ||
-        getProfileDataModel.data.user == null ||
-        getProfileDataModel.data.user.image == null
-        ? null
-        : getProfileDataModel.data.user.image,
-
+        ImageUrl: getProfileDataModel == null ||
+                getProfileDataModel.data == null ||
+                getProfileDataModel.data.user == null ||
+                getProfileDataModel.data.user.image == null
+            ? null
+            : getProfileDataModel.data.user.image,
       )),
       appBar: AppBar(
         elevation: 0,
@@ -113,19 +110,16 @@ class _DashboardState extends State<Dashboard> {
               onTap: () {
                 NavMe().NavPushLeftToRight(BusinessProfile());
               },
-              child:CircleAvatar(
+              child: CircleAvatar(
                 backgroundColor: CColors.missonGrey,
                 // radius: ,
                 child: CircleAvatar(
                   backgroundImage: getProfileDataModel == null ||
-                      getProfileDataModel.data == null ||
-                      getProfileDataModel.data.user == null ||
-                      getProfileDataModel.data.user.image == null
+                          getProfileDataModel.data == null ||
+                          getProfileDataModel.data.user == null ||
+                          getProfileDataModel.data.user.image == null
                       ? AssetImage(avatar1)
-                      : NetworkImage(
-                      "${getProfileDataModel.data.user.image}"),
-
-
+                      : NetworkImage("${getProfileDataModel.data.user.image}"),
                 ),
               ),
             ),
@@ -133,18 +127,20 @@ class _DashboardState extends State<Dashboard> {
         ],
       ),
       body: SafeArea(
-          child: Container(
-        color: CColors.missonNormalWhiteColor,
-        child: currentView(1),
+          child: SingleChildScrollView(
+        child: Container(
+          color: CColors.missonNormalWhiteColor,
+          child: currentView(1),
+        ),
       )),
       bottomNavigationBar: BottomNavigationBar(
         elevation: 0,
-        backgroundColor: Colors.green,
+        backgroundColor: CColors.missonNormalWhiteColor,
         //CColors.missonNormalWhiteColor,
 
         items: <BottomNavigationBarItem>[
           BottomNavigationBarItem(
-              backgroundColor: CColors.missonNormalWhiteColor,
+              // backgroundColor: CColors.missonNormalWhiteColor,
               icon: SvgPicture.asset(
                 navbarHomeDeactive,
                 height: 20,
@@ -155,19 +151,19 @@ class _DashboardState extends State<Dashboard> {
               ),
               label: " "),
           BottomNavigationBarItem(
-            backgroundColor: CColors.missonNormalWhiteColor,
+            // backgroundColor: CColors.missonNormalWhiteColor,
             icon: SvgPicture.asset(navbarExploerDeactive),
             activeIcon: SvgPicture.asset(navbarExplorerActive),
             label: ' ',
           ),
           BottomNavigationBarItem(
-            backgroundColor: CColors.missonNormalWhiteColor,
+            // backgroundColor: CColors.missonNormalWhiteColor,
             icon: SvgPicture.asset(navbarChatDeactive),
             activeIcon: SvgPicture.asset(navbarChatActive),
             label: ' ',
           ),
           BottomNavigationBarItem(
-            backgroundColor: CColors.missonNormalWhiteColor,
+            // backgroundColor: CColors.missonNormalWhiteColor,
             icon: SvgPicture.asset(navbarClockDeactive),
             activeIcon: SvgPicture.asset(navbarClockActive),
             label: ' ',
@@ -176,8 +172,9 @@ class _DashboardState extends State<Dashboard> {
         currentIndex: 0,
         iconSize: 25,
         showUnselectedLabels: false,
-        type: BottomNavigationBarType.shifting,
-        selectedItemColor: Colors.amber[800],
+        showSelectedLabels: false,
+        type: BottomNavigationBarType.fixed,
+        selectedItemColor: CColors.missonNormalWhiteColor,
         onTap: (value) {},
       ),
     );
@@ -259,20 +256,131 @@ class _DashboardState extends State<Dashboard> {
                   // ),
                 ),
                 Container(
-                  width: ScreenConfig.screenWidth,
-                  color: CColors.backgroundRed,
-                  // child: ListView.builder(itemBuilder: (context, index){
-                  //   return Padding(
-                  //     padding: const EdgeInsets.all(10.0),
-                  //     child: customTile(
-                  //         heading: "Shop groceries for me",
-                  //         subheading: "12:32 PM, Thursday, 23 march",
-                  //         lines: "Mission details",
-                  //     bottomLineColor: CColors.missonRed,
-                  //     tileColor: CColors.missonNormalWhiteColor),
-                  //   );
-                  // }, itemCount: 4,scrollDirection: Axis.horizontal,)
+                    height: 180,
+                    width: ScreenConfig.screenWidth,
+                    color: CColors.backgroundRed,
+                    child: ListView.builder(
+                      itemBuilder: (context, index) {
+                        return Padding(
+                          padding: const EdgeInsets.symmetric(
+                              vertical: 20.0, horizontal: 10),
+                          child: customTile(
+                              heading: "Shop groceries for me",
+                              subheading: "12:32 PM, Thursday, 23 march",
+                              lines: "Mission details",
+                              bottomLineColor: CColors.missonRed,
+                              tileColor: CColors.missonNormalWhiteColor),
+                        );
+                      },
+                      itemCount: 4,
+                      scrollDirection: Axis.horizontal,
+                    )),
+                ListTile(
+                  dense: true,
+
+                  title: Row(
+                    children: [
+                      Text(
+                        "Mission Ongoing",
+                        style: TextStyle(fontSize: ScreenConfig.fontSizeMedium),
+                      ),
+                      Spacer(),
+                      Text(
+                        "View All",
+                        style: TextStyle(fontSize: ScreenConfig.fontSizeSmall),
+                      ),
+                    ],
+                  ),
+                  subtitle: Text(
+                    "All the best! Do it perfectly.",
+                    style: TextStyle(fontSize: ScreenConfig.fontSizeSmall),
+                  ),
+                  // trailing: Padding(
+                  //   padding: EdgeInsets.only(right: 8.0, top: 16.0),
+                  //   child: Column(
+                  //     mainAxisAlignment: MainAxisAlignment.start,
+                  //     children: [
+                  //
+                  //
+                  //     ],
+                  //   ),
+                  // ),
                 ),
+                Container(
+                    height: 200,
+                    width: ScreenConfig.screenWidth,
+                    color: CColors.backgroundyellow,
+                    child: ListView.builder(
+                      itemBuilder: (context, index) {
+                        return Padding(
+                          padding: const EdgeInsets.symmetric(
+                              vertical: 10.0, horizontal: 10),
+                          child: customTile2(
+                              heading: "Shop groceries for me",
+                              subheading: "12:32 PM, Thursday, 23 march",
+                              lines: "Mission details",
+                              backgroundColor: CColors.backgroundRed,
+                              bottomWidget: SvgPicture.asset(yellowClockLogo),
+                              bottomLineColor: CColors.missonYellow,
+                              tileColor: CColors.missonNormalWhiteColor),
+                        );
+                      },
+                      itemCount: 4,
+                      scrollDirection: Axis.horizontal,
+                    )),
+                ListTile(
+                  dense: true,
+
+                  title: Row(
+                    children: [
+                      Text(
+                        "Mission Accomplished",
+                        style: TextStyle(fontSize: ScreenConfig.fontSizeMedium),
+                      ),
+                      Spacer(),
+                      Text(
+                        "View All",
+                        style: TextStyle(fontSize: ScreenConfig.fontSizeSmall),
+                      ),
+                    ],
+                  ),
+                  subtitle: Text(
+                    "See your  recent completed work",
+                    style: TextStyle(fontSize: ScreenConfig.fontSizeSmall),
+                  ),
+                  // trailing: Padding(
+                  //   padding: EdgeInsets.only(right: 8.0, top: 16.0),
+                  //   child: Column(
+                  //     mainAxisAlignment: MainAxisAlignment.start,
+                  //     children: [
+                  //
+                  //
+                  //     ],
+                  //   ),
+                  // ),
+                ),
+                Container(
+                    height: 200,
+                    width: ScreenConfig.screenWidth,
+                    color: CColors.backgroundgreen,
+                    child: ListView.builder(
+                      itemBuilder: (context, index) {
+                        return Padding(
+                          padding: const EdgeInsets.symmetric(
+                              vertical: 10.0, horizontal: 10),
+                          child: customTile2(
+                              heading: "Shop groceries for me",
+                              subheading: "12:32 PM, Thursday, 23 march",
+                              lines: "Mission details",
+                              bottomLineColor: CColors.missonGreen,
+                              tileColor: CColors.missonNormalWhiteColor,
+                              bottomWidget: SvgPicture.asset(yellowClockLogo),
+                              backgroundColor: CColors.backgroundgreen),
+                        );
+                      },
+                      itemCount: 4,
+                      scrollDirection: Axis.horizontal,
+                    )),
               ],
             ),
           );
@@ -333,6 +441,90 @@ class _DashboardState extends State<Dashboard> {
           ],
         ),
       ),
+    );
+  }
+
+  Widget customTile2(
+      {String heading,
+      String subheading,
+      String lines,
+      Color bottomLineColor,
+      Color tileColor,
+      Color backgroundColor,
+      Widget bottomWidget}) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Container(
+          width: ScreenConfig.screenWidth * 0.70,
+          height: 140,
+          color: tileColor,
+          child: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 8.0),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Padding(
+                  padding: const EdgeInsets.symmetric(
+                      horizontal: 8.0, vertical: 16.0),
+                  child: Text(
+                    heading,
+                    style: TextStyle(fontSize: ScreenConfig.fontSizeXlarge),
+                  ),
+                ),
+                Padding(
+                  padding: const EdgeInsets.symmetric(
+                      horizontal: 8.0, vertical: 2.0),
+                  child: Text(
+                    subheading,
+                    style: TextStyle(fontSize: ScreenConfig.fontSizeSmall),
+                  ),
+                ),
+                Padding(
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 8.0, vertical: 16),
+                  child: Text(
+                    lines,
+                    style: TextStyle(fontSize: ScreenConfig.fontSizelarge),
+                  ),
+                ),
+                Spacer(),
+                Container(
+                  color: bottomLineColor,
+                  height: 2.5,
+                )
+              ],
+            ),
+          ),
+        ),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.start,
+          children: [
+            // Icon(Icons.watch_later_outlined),
+            bottomWidget,
+            SizedBox(
+              width: 5,
+            ),
+            // Container(
+            //   width: ScreenConfig.screenWidth * 0.50,
+            //   height: 5,
+            //   decoration: BoxDecoration(
+            //       color: CColors.missonYellow,
+            //       border: Border.all(color: CColors.missonYellow),
+            //       borderRadius: BorderRadius.circular(5)),
+            // )
+            Container(
+              child: LinearProgressIndicator(
+                backgroundColor: backgroundColor,
+                value: 0.5,
+                valueColor: AlwaysStoppedAnimation<Color>(bottomLineColor),
+              ),
+              width: ScreenConfig.screenWidth * 0.50,
+              height: 5,
+            )
+          ],
+        )
+      ],
     );
   }
 }
