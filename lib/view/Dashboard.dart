@@ -8,6 +8,7 @@ import 'package:misson_tasker/utils/NavMe.dart';
 import 'package:misson_tasker/utils/ScreenConfig.dart';
 import 'package:misson_tasker/utils/StringsPath.dart';
 import 'package:misson_tasker/utils/local_data.dart';
+import 'package:misson_tasker/view/MissonRequestScreen/MissionRequest.dart';
 import 'package:misson_tasker/view/ProfileView/BusinessProfile.dart';
 import 'package:misson_tasker/view/ProfileView/UserProfile.dart';
 import 'package:misson_tasker/view/startup_screens/Drawer.dart';
@@ -264,12 +265,16 @@ class _DashboardState extends State<Dashboard> {
                         return Padding(
                           padding: const EdgeInsets.symmetric(
                               vertical: 20.0, horizontal: 10),
-                          child: customTile(
-                              heading: "Shop groceries for me",
-                              subheading: "12:32 PM, Thursday, 23 march",
-                              lines: "Mission details",
-                              bottomLineColor: CColors.missonRed,
-                              tileColor: CColors.missonNormalWhiteColor),
+                          child: InkWell( onTap: (){
+                            NavMe().NavPushLeftToRight(MissionRequest());
+                          },
+                            child: customTile(
+                                heading: "Shop groceries for me",
+                                subheading: "12:32 PM, Thursday, 23 march",
+                                lines: "Mission details",
+                                bottomLineColor: CColors.missonRed,
+                                tileColor: CColors.missonNormalWhiteColor),
+                          ),
                         );
                       },
                       itemCount: 4,

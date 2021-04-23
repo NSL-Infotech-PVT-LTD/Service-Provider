@@ -40,6 +40,7 @@ final String checkLogo="assets/svg_assets/check_icon.svg";
 final String subscritpionLogo="assets/svg_assets/subscription_icon.svg";
 final String dotLogo="assets/svg_assets/dot.svg";
 final String yellowClockLogo="assets/svg_assets/yellow_clock_icon.svg";
+final String optionLogo="assets/svg_assets/option_button_logo.svg";
 
 
 //<=============================PNG IMAGES=========================>
