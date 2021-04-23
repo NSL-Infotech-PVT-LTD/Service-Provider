@@ -128,12 +128,10 @@ class _DashboardState extends State<Dashboard> {
         ],
       ),
       body: SafeArea(
-          child: SingleChildScrollView(
-        child: Container(
-          color: CColors.missonNormalWhiteColor,
-          child: currentView(1),
-        ),
-      )),
+          child: Container(
+            color: CColors.missonNormalWhiteColor,
+            child: currentView(1),
+          )),
       bottomNavigationBar: BottomNavigationBar(
         elevation: 0,
         backgroundColor: CColors.missonNormalWhiteColor,
@@ -187,33 +185,35 @@ class _DashboardState extends State<Dashboard> {
         {
           return Center(
             child:
-                Column(mainAxisAlignment: MainAxisAlignment.center, children: [
+                Container(
+                  child: Column(mainAxisAlignment: MainAxisAlignment.center, children: [
               Spacer(),
               SvgPicture.asset(postbox),
               SizedBox(
-                height: ScreenConfig.widgetPaddingXLarge,
+                  height: ScreenConfig.widgetPaddingXLarge,
               ),
               Text(
-                "No Mission To Do",
-                textAlign: TextAlign.center,
-                style: TextStyle(
-                    fontSize: ScreenConfig.fontSizeXXlarge,
-                    color: CColors.missonGrey),
-              ),
-              Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Text(
-                  "Ready for your mission, we will redirect\nrequest in this page.",
+                  "No Mission To Do",
                   textAlign: TextAlign.center,
                   style: TextStyle(
-                      fontSize: ScreenConfig.fontSizeMedium,
-                      color: CColors.missonMediumGrey),
-                ),
+                      fontSize: ScreenConfig.fontSizeXXlarge,
+                      color: CColors.missonGrey),
+              ),
+              Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Text(
+                    "Ready for your mission, we will redirect\nrequest in this page.",
+                    textAlign: TextAlign.center,
+                    style: TextStyle(
+                        fontSize: ScreenConfig.fontSizeMedium,
+                        color: CColors.missonMediumGrey),
+                  ),
               ),
               SizedBox(
-                height: ScreenConfig.widgetPaddingXLarge,
+                  height: ScreenConfig.widgetPaddingXLarge,
               )
             ]),
+                ),
           );
           // statements;
         }
@@ -221,172 +221,174 @@ class _DashboardState extends State<Dashboard> {
 
       case 1:
         {
-          return Padding(
-            padding: const EdgeInsets.only(top: 16.0, right: 16.0),
-            child: Column(
-              children: [
-                ListTile(
-                  dense: true,
+          return SingleChildScrollView(
+            child: Padding(
+              padding: const EdgeInsets.only(top: 16.0, right: 16.0),
+              child: Column(
+                children: [
+                  ListTile(
+                    dense: true,
 
-                  title: Row(
-                    children: [
-                      Text(
-                        "Mission Request",
-                        style: TextStyle(fontSize: ScreenConfig.fontSizeMedium),
-                      ),
-                      Spacer(),
-                      Text(
-                        "View All",
-                        style: TextStyle(fontSize: ScreenConfig.fontSizeSmall),
-                      ),
-                    ],
+                    title: Row(
+                      children: [
+                        Text(
+                          "Mission Request",
+                          style: TextStyle(fontSize: ScreenConfig.fontSizeMedium),
+                        ),
+                        Spacer(),
+                        Text(
+                          "View All",
+                          style: TextStyle(fontSize: ScreenConfig.fontSizeSmall),
+                        ),
+                      ],
+                    ),
+                    subtitle: Text(
+                      "Costumer waiting for your response.",
+                      style: TextStyle(fontSize: ScreenConfig.fontSizeSmall),
+                    ),
+                    // trailing: Padding(
+                    //   padding: EdgeInsets.only(right: 8.0, top: 16.0),
+                    //   child: Column(
+                    //     mainAxisAlignment: MainAxisAlignment.start,
+                    //     children: [
+                    //
+                    //
+                    //     ],
+                    //   ),
+                    // ),
                   ),
-                  subtitle: Text(
-                    "Costumer waiting for your response.",
-                    style: TextStyle(fontSize: ScreenConfig.fontSizeSmall),
+                  Container(
+                      height: 180,
+                      width: ScreenConfig.screenWidth,
+                      color: CColors.backgroundRed,
+                      child: ListView.builder(
+                        itemBuilder: (context, index) {
+                          return Padding(
+                            padding: const EdgeInsets.symmetric(
+                                vertical: 20.0, horizontal: 10),
+                            child: InkWell( onTap: (){
+                              NavMe().NavPushLeftToRight(MissionRequest());
+                            },
+                              child: customTile(
+                                  heading: "Shop groceries for me",
+                                  subheading: "12:32 PM, Thursday, 23 march",
+                                  lines: "Mission details",
+                                  bottomLineColor: CColors.missonRed,
+                                  tileColor: CColors.missonNormalWhiteColor),
+                            ),
+                          );
+                        },
+                        itemCount: 4,
+                        scrollDirection: Axis.horizontal,
+                      )),
+                  ListTile(
+                    dense: true,
+
+                    title: Row(
+                      children: [
+                        Text(
+                          "Mission Ongoing",
+                          style: TextStyle(fontSize: ScreenConfig.fontSizeMedium),
+                        ),
+                        Spacer(),
+                        Text(
+                          "View All",
+                          style: TextStyle(fontSize: ScreenConfig.fontSizeSmall),
+                        ),
+                      ],
+                    ),
+                    subtitle: Text(
+                      "All the best! Do it perfectly.",
+                      style: TextStyle(fontSize: ScreenConfig.fontSizeSmall),
+                    ),
+                    // trailing: Padding(
+                    //   padding: EdgeInsets.only(right: 8.0, top: 16.0),
+                    //   child: Column(
+                    //     mainAxisAlignment: MainAxisAlignment.start,
+                    //     children: [
+                    //
+                    //
+                    //     ],
+                    //   ),
+                    // ),
                   ),
-                  // trailing: Padding(
-                  //   padding: EdgeInsets.only(right: 8.0, top: 16.0),
-                  //   child: Column(
-                  //     mainAxisAlignment: MainAxisAlignment.start,
-                  //     children: [
-                  //
-                  //
-                  //     ],
-                  //   ),
-                  // ),
-                ),
-                Container(
-                    height: 180,
-                    width: ScreenConfig.screenWidth,
-                    color: CColors.backgroundRed,
-                    child: ListView.builder(
-                      itemBuilder: (context, index) {
-                        return Padding(
-                          padding: const EdgeInsets.symmetric(
-                              vertical: 20.0, horizontal: 10),
-                          child: InkWell( onTap: (){
-                            NavMe().NavPushLeftToRight(MissionRequest());
-                          },
-                            child: customTile(
+                  Container(
+                      height: 200,
+                      width: ScreenConfig.screenWidth,
+                      color: CColors.backgroundyellow,
+                      child: ListView.builder(
+                        itemBuilder: (context, index) {
+                          return Padding(
+                            padding: const EdgeInsets.symmetric(
+                                vertical: 10.0, horizontal: 10),
+                            child: customTile2(
                                 heading: "Shop groceries for me",
                                 subheading: "12:32 PM, Thursday, 23 march",
                                 lines: "Mission details",
-                                bottomLineColor: CColors.missonRed,
+                                backgroundColor: CColors.backgroundRed,
+                                bottomWidget: SvgPicture.asset(yellowClockLogo),
+                                bottomLineColor: CColors.missonYellow,
                                 tileColor: CColors.missonNormalWhiteColor),
-                          ),
-                        );
-                      },
-                      itemCount: 4,
-                      scrollDirection: Axis.horizontal,
-                    )),
-                ListTile(
-                  dense: true,
+                          );
+                        },
+                        itemCount: 4,
+                        scrollDirection: Axis.horizontal,
+                      )),
+                  ListTile(
+                    dense: true,
 
-                  title: Row(
-                    children: [
-                      Text(
-                        "Mission Ongoing",
-                        style: TextStyle(fontSize: ScreenConfig.fontSizeMedium),
-                      ),
-                      Spacer(),
-                      Text(
-                        "View All",
-                        style: TextStyle(fontSize: ScreenConfig.fontSizeSmall),
-                      ),
-                    ],
+                    title: Row(
+                      children: [
+                        Text(
+                          "Mission Accomplished",
+                          style: TextStyle(fontSize: ScreenConfig.fontSizeMedium),
+                        ),
+                        Spacer(),
+                        Text(
+                          "View All",
+                          style: TextStyle(fontSize: ScreenConfig.fontSizeSmall),
+                        ),
+                      ],
+                    ),
+                    subtitle: Text(
+                      "See your  recent completed work",
+                      style: TextStyle(fontSize: ScreenConfig.fontSizeSmall),
+                    ),
+                    // trailing: Padding(
+                    //   padding: EdgeInsets.only(right: 8.0, top: 16.0),
+                    //   child: Column(
+                    //     mainAxisAlignment: MainAxisAlignment.start,
+                    //     children: [
+                    //
+                    //
+                    //     ],
+                    //   ),
+                    // ),
                   ),
-                  subtitle: Text(
-                    "All the best! Do it perfectly.",
-                    style: TextStyle(fontSize: ScreenConfig.fontSizeSmall),
-                  ),
-                  // trailing: Padding(
-                  //   padding: EdgeInsets.only(right: 8.0, top: 16.0),
-                  //   child: Column(
-                  //     mainAxisAlignment: MainAxisAlignment.start,
-                  //     children: [
-                  //
-                  //
-                  //     ],
-                  //   ),
-                  // ),
-                ),
-                Container(
-                    height: 200,
-                    width: ScreenConfig.screenWidth,
-                    color: CColors.backgroundyellow,
-                    child: ListView.builder(
-                      itemBuilder: (context, index) {
-                        return Padding(
-                          padding: const EdgeInsets.symmetric(
-                              vertical: 10.0, horizontal: 10),
-                          child: customTile2(
-                              heading: "Shop groceries for me",
-                              subheading: "12:32 PM, Thursday, 23 march",
-                              lines: "Mission details",
-                              backgroundColor: CColors.backgroundRed,
-                              bottomWidget: SvgPicture.asset(yellowClockLogo),
-                              bottomLineColor: CColors.missonYellow,
-                              tileColor: CColors.missonNormalWhiteColor),
-                        );
-                      },
-                      itemCount: 4,
-                      scrollDirection: Axis.horizontal,
-                    )),
-                ListTile(
-                  dense: true,
-
-                  title: Row(
-                    children: [
-                      Text(
-                        "Mission Accomplished",
-                        style: TextStyle(fontSize: ScreenConfig.fontSizeMedium),
-                      ),
-                      Spacer(),
-                      Text(
-                        "View All",
-                        style: TextStyle(fontSize: ScreenConfig.fontSizeSmall),
-                      ),
-                    ],
-                  ),
-                  subtitle: Text(
-                    "See your  recent completed work",
-                    style: TextStyle(fontSize: ScreenConfig.fontSizeSmall),
-                  ),
-                  // trailing: Padding(
-                  //   padding: EdgeInsets.only(right: 8.0, top: 16.0),
-                  //   child: Column(
-                  //     mainAxisAlignment: MainAxisAlignment.start,
-                  //     children: [
-                  //
-                  //
-                  //     ],
-                  //   ),
-                  // ),
-                ),
-                Container(
-                    height: 200,
-                    width: ScreenConfig.screenWidth,
-                    color: CColors.backgroundgreen,
-                    child: ListView.builder(
-                      itemBuilder: (context, index) {
-                        return Padding(
-                          padding: const EdgeInsets.symmetric(
-                              vertical: 10.0, horizontal: 10),
-                          child: customTile2(
-                              heading: "Shop groceries for me",
-                              subheading: "12:32 PM, Thursday, 23 march",
-                              lines: "Mission details",
-                              bottomLineColor: CColors.missonGreen,
-                              tileColor: CColors.missonNormalWhiteColor,
-                              bottomWidget: SvgPicture.asset(yellowClockLogo),
-                              backgroundColor: CColors.backgroundgreen),
-                        );
-                      },
-                      itemCount: 4,
-                      scrollDirection: Axis.horizontal,
-                    )),
-              ],
+                  Container(
+                      height: 200,
+                      width: ScreenConfig.screenWidth,
+                      color: CColors.backgroundgreen,
+                      child: ListView.builder(
+                        itemBuilder: (context, index) {
+                          return Padding(
+                            padding: const EdgeInsets.symmetric(
+                                vertical: 10.0, horizontal: 10),
+                            child: customTile2(
+                                heading: "Shop groceries for me",
+                                subheading: "12:32 PM, Thursday, 23 march",
+                                lines: "Mission details",
+                                bottomLineColor: CColors.missonGreen,
+                                tileColor: CColors.missonNormalWhiteColor,
+                                bottomWidget: SvgPicture.asset(yellowClockLogo),
+                                backgroundColor: CColors.backgroundgreen),
+                          );
+                        },
+                        itemCount: 4,
+                        scrollDirection: Axis.horizontal,
+                      )),
+                ],
+              ),
             ),
           );
         }
