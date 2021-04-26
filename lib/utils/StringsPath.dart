@@ -41,6 +41,8 @@ final String subscritpionLogo="assets/svg_assets/subscription_icon.svg";
 final String dotLogo="assets/svg_assets/dot.svg";
 final String yellowClockLogo="assets/svg_assets/yellow_clock_icon.svg";
 final String optionLogo="assets/svg_assets/option_button_logo.svg";
+final String cashLogo="assets/svg_assets/money_logo.svg";
+final String tickLogo="assets/svg_assets/tick_logo.svg";
 
 
 //<=============================PNG IMAGES=========================>

@@ -6,6 +6,9 @@ import 'package:flutter/cupertino.dart';
 import 'package:get/get_connect/http/src/multipart/multipart_file.dart';
 import 'package:misson_tasker/model/api_models/GetProfileDataModel.dart';
 import 'package:misson_tasker/model/api_models/ListOfServicesModel.dart';
+import 'package:misson_tasker/model/api_models/MissionRequestModel.dart';
+import 'package:misson_tasker/model/api_models/GetJobByIdModel.dart';
+import 'package:misson_tasker/model/api_models/ChnageJobStatusModel.dart';
 import 'package:misson_tasker/view/ProfileView/ConfigurationScreen.dart';
 
 import 'api_models/ChangePasswordModel.dart';
@@ -35,6 +38,10 @@ class ApiCaller {
   String PrivacyPolicy = "privacy_policy";
   String config = "config/";
   String notification = "notification/";
+  String job = "job/";
+  String listofJob = "list";
+  String jobById = "ById";
+  String changeJobStatusApi = "change-job-status";
 
   String status = "status";
 
@@ -97,7 +104,7 @@ class ApiCaller {
     );
 
     if (response.statusCode == 200) {
-      print("QWERTY ${response.body}");
+      print("Job List ${response.body}");
       return getProfileDataModel = getProfileDataModelFromJson(response.body);
     } else {
       print("QWERTY ${response.body}");
@@ -105,10 +112,12 @@ class ApiCaller {
           "THERE IS AN ERROR INT THE GET PROFILE DATA API WITH STATUS CODE ${response.statusCode}");
     }
   }
-  Future<NotificationToggleModel> doNotificationToggle({@required String auth, String value}) async {
+
+  Future<NotificationToggleModel> doNotificationToggle(
+      {@required String auth, String value}) async {
     NotificationToggleModel notificationToggleModel;
     var response = await http.post(
-      Uri.parse(baseUrl + notification+status),
+      Uri.parse(baseUrl + notification + status),
       headers: <String, String>{
         'Content-Type': 'application/json; charset=UTF-8',
         'Authorization': "Bearer " + auth
@@ -120,7 +129,8 @@ class ApiCaller {
 
     if (response.statusCode == 20) {
       print("QWERTY ${response.body}");
-      return notificationToggleModel = notificationToggleModelFromJson(response.body);
+      return notificationToggleModel =
+          notificationToggleModelFromJson(response.body);
     } else {
       print("QWERTY ${response.body}");
       print(
@@ -241,7 +251,7 @@ class ApiCaller {
 
     if (response.statusCode == 200) {
       print("${response.body}");
-     return dataModel = updateProfileDataModelFromJson(response.body);
+      return dataModel = updateProfileDataModelFromJson(response.body);
       // var map = Map<String, dynamic>.from(jsonData);
       // return UpdateUserData.fromJson(map);
       // return dataModel;
@@ -356,7 +366,7 @@ class ApiCaller {
   Future<ConfigurationModel> termsAndConditionsApi() async {
     ConfigurationModel configurationModel;
     var response = await http.get(
-      Uri.parse(baseUrl + config+ termsAndCondition),
+      Uri.parse(baseUrl + config + termsAndCondition),
       headers: <String, String>{
         'Content-Type': 'application/json; charset=UTF-8',
       },
@@ -370,10 +380,12 @@ class ApiCaller {
       print(
           "THERE IS AN ERROR INT THE TERMS AND CONDITION API WITH STATUS CODE ${response.statusCode}");
     }
-  }  Future<ConfigurationModel> privacyPolicyApi() async {
+  }
+
+  Future<ConfigurationModel> privacyPolicyApi() async {
     ConfigurationModel configurationModel;
     var response = await http.get(
-      Uri.parse(baseUrl + config+PrivacyPolicy),
+      Uri.parse(baseUrl + config + PrivacyPolicy),
       headers: <String, String>{
         'Content-Type': 'application/json; charset=UTF-8',
       },
@@ -392,7 +404,7 @@ class ApiCaller {
   Future<ConfigurationModel> aboutUsApi() async {
     ConfigurationModel configurationModel;
     var response = await http.get(
-      Uri.parse(baseUrl + config+aboutUs),
+      Uri.parse(baseUrl + config + aboutUs),
       headers: <String, String>{
         'Content-Type': 'application/json; charset=UTF-8',
       },
@@ -403,6 +415,78 @@ class ApiCaller {
       return configurationModel = configurationModelFromJson(response.body);
     } else {
       print("QWERTY ${response.body}");
+      print(
+          "THERE IS AN ERROR INT THE TERMS AND CONDITION API WITH STATUS CODE ${response.statusCode}");
+    }
+  }
+
+  Future<MissionRequestModel> missionRequest(
+      {String auth, String latitude, String longitude}) async {
+    MissionRequestModel missionRequestModel;
+    var response = await http.post(
+      Uri.parse(baseUrl + provider + job + listofJob),
+      headers: <String, String>{
+        'Content-Type': 'application/json; charset=UTF-8',
+        'Authorization': "Bearer " + auth
+      },
+      body: jsonEncode(<String, dynamic>{
+        'job_type': "direct",
+        'latitude': "$latitude",
+        'longitude': "$longitude",
+      }),
+    );
+
+    if (response.statusCode == 200 || response.statusCode == 422) {
+      print("QWERTY ${response.body}");
+      return missionRequestModel = missionRequestModelFromJson(response.body);
+    } else {
+      print("QWERTY ${response.body}");
+      print(
+          "THERE IS AN ERROR INT THE TERMS AND CONDITION API WITH STATUS CODE ${response.statusCode}");
+    }
+  }
+
+  Future<GetJobByIdModel> getJobDetailsByID({String auth, String Id}) async {
+    GetJobByIdModel getJobByIdModel;
+    var response = await http.post(
+      Uri.parse(baseUrl + provider + job + jobById),
+      headers: <String, String>{
+        'Content-Type': 'application/json; charset=UTF-8',
+        'Authorization': "Bearer " + auth
+      },
+      body: jsonEncode(<String, dynamic>{
+        'id': "$Id",
+      }),
+    );
+
+    if (response.statusCode == 200 || response.statusCode == 422) {
+      print("getJobByIdModel ${response.body}");
+      return getJobByIdModel = getJobByIdModelFromJson(response.body);
+    } else {
+      print("getJobByIdModel ${response.body}");
+      print(
+          "THERE IS AN ERROR INT THE TERMS AND CONDITION API WITH STATUS CODE ${response.statusCode}");
+    }
+  }
+
+  Future<ChangeJobStatusModel> changeJobStatus(
+      {String auth, String Id, String jobStatus}) async {
+    ChangeJobStatusModel changeJobStatusModel;
+    var response = await http.post(
+      Uri.parse(baseUrl + provider +changeJobStatusApi),
+      headers: <String, String>{
+        'Content-Type': 'application/json; charset=UTF-8',
+        'Authorization': "Bearer " + auth
+      },
+      body: jsonEncode(
+          <String, dynamic>{'job_id': "$Id", 'job_status': '$jobStatus'}),
+    );
+
+    if (response.statusCode == 200 || response.statusCode == 422) {
+      print("changeJobStatusModel ${response.body}");
+      return changeJobStatusModel = ChangeJobStatusModelFromJson(response.body);
+    } else {
+      print("changeJobStatusModel ${response.body}");
       print(
           "THERE IS AN ERROR INT THE TERMS AND CONDITION API WITH STATUS CODE ${response.statusCode}");
     }

@@ -207,29 +207,33 @@ class _UserProfileState extends State<UserProfile> {
                       SizedBox(
                         width: ScreenConfig.screenWidth * 0.06,
                       ),
-                      Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                            _fullName,
-                            style: TextStyle(color: Colors.black, fontSize: 20),
-                          ),
-                          SizedBox(
-                            height: ScreenConfig.screenHeight * 0.01,
-                          ),
-                          InkWell(
-                              onTap: () {
-                                NavMe().NavPushLeftToRight(EditProfile());
-                              },
-                              child: Text(
-                                "Edit profile",
-                                style: TextStyle(
-                                  color: Colors.black,
-                                  fontSize: 14,
-                                  decoration: TextDecoration.underline,
-                                ),
-                              ))
-                        ],
+                      Expanded(
+                        child: Column(
+
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              _fullName,
+                              style: TextStyle(color: Colors.black, fontSize: 20),
+                              overflow: TextOverflow.ellipsis,
+                            ),
+                            SizedBox(
+                              height: ScreenConfig.screenHeight * 0.01,
+                            ),
+                            InkWell(
+                                onTap: () {
+                                  NavMe().NavPushLeftToRight(EditProfile());
+                                },
+                                child: Text(
+                                  "Edit profile",
+                                  style: TextStyle(
+                                    color: Colors.black,
+                                    fontSize: 14,
+                                    decoration: TextDecoration.underline,
+                                  ),
+                                ))
+                          ],
+                        ),
                       ),
                     ],
                   ),
@@ -271,11 +275,14 @@ class _UserProfileState extends State<UserProfile> {
                                     SizedBox(
                                         height:
                                             ScreenConfig.screenHeight * 0.01),
-                                    Text(
-                                      "$_fullName",
-                                      style: TextStyle(
-                                        fontSize: 18,
-                                        color: Colors.black,
+                                    Container( width: ScreenConfig.screenWidth*0.7,
+                                      child: Text(
+                                        "$_fullName",
+                                        style: TextStyle(
+                                          fontSize: 18,
+                                          color: Colors.black,
+                                        ),
+                                        overflow: TextOverflow.ellipsis,
                                       ),
                                     ),
                                   ],
