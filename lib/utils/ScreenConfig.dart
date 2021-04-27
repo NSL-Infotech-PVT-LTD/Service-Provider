@@ -17,6 +17,8 @@ class ScreenConfig {
   static double fontSizeMedium;
   static double fontSizeSmall;
   static double fontSizeXSmall;
+  static double fontSizeXhlarge;
+  static double fontSizeXhhlarge;
 
   void init(BuildContext context) {
     screenHeight = MediaQuery.of(context).size.height;
@@ -31,6 +33,8 @@ class ScreenConfig {
     fontSize4Xlarge = 28.0;
     fontSize5Xlarge = 30.0;
     fontSizeXlarge = 18.0;
+    fontSizeXhlarge = 20.0;
+    fontSizeXhhlarge = 22.0;
     fontSizelarge = 16.0;
     fontSizeMedium = 14.0;
     fontSizeSmall = 12.0;

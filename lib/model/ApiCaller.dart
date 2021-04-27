@@ -421,7 +421,7 @@ class ApiCaller {
   }
 
   Future<MissionRequestModel> missionRequest(
-      {String auth, String latitude, String longitude}) async {
+      {String auth, String latitude, String longitude, String jobStatus }) async {
     MissionRequestModel missionRequestModel;
     var response = await http.post(
       Uri.parse(baseUrl + provider + job + listofJob),
@@ -433,6 +433,7 @@ class ApiCaller {
         'job_type': "direct",
         'latitude': "$latitude",
         'longitude': "$longitude",
+        "job_status": jobStatus,
       }),
     );
 

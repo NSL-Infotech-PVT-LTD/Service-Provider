@@ -208,11 +208,13 @@ class _EditProfileState extends State<EditProfile> {
 
       print("123 $value");
     }).whenComplete(() {
+      print("VVVVV $lat");
+      print("VVVVV $lang");
       ApiCaller()
           .updateUserApi(auth: auth, file: file, params: {
             "name": "${_fullName.text}",
             "location": "${_location.text}",
-            "lattitude": "$lat",
+            "latitude": "$lat",
             "longitude": "$lang",
             "mobile": "${_number.text}",
             "postal_code": "${_postal.text}",

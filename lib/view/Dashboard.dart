@@ -64,7 +64,8 @@ var spinkit;
               .missionRequest(
                   auth: auth,
                   latitude: getProfileDataModel.data.user.latitude,
-                  longitude: getProfileDataModel.data.user.longitude)
+                  longitude: getProfileDataModel.data.user.longitude,
+          jobStatus: "pending")
               .then((value) {
             missionRequest = value;
           }).whenComplete(() {

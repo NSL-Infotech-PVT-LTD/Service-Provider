@@ -6,6 +6,7 @@ class CColors{
   static final missonGrey=Color(0xFF535353);
   static final missonLightGrey=Color(0xFFF8F8F8);
   static final missonMediumGrey=Color(0xFFBFBFBF);
+  static final missonNormalGrey=Color(0xFF414A4E);
   static final missonXLightGrey=Color(0xFFD3D5D1);
   static final missonPrimaryColor=Color(0xFF1A2E37);
   static final missonNormalWhiteColor=Color(0xFFFFFFFF);
