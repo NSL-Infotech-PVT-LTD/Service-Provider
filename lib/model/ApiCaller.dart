@@ -438,10 +438,10 @@ class ApiCaller {
     );
 
     if (response.statusCode == 200 || response.statusCode == 422) {
-      print("QWERTY ${response.body}");
+      print(" missionRequestModel ${response.body}");
       return missionRequestModel = missionRequestModelFromJson(response.body);
     } else {
-      print("QWERTY ${response.body}");
+      print("missionRequestModel ${response.body}");
       print(
           "THERE IS AN ERROR INT THE TERMS AND CONDITION API WITH STATUS CODE ${response.statusCode}");
     }

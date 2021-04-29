@@ -15,6 +15,7 @@ import 'package:misson_tasker/view/ProfileView/NotificationScreen.dart';
 import 'package:misson_tasker/view/startup_screens/SplashScreen.dart';
 import 'package:misson_tasker/model/api_models/GetJobByIdModel.dart';
 import 'package:misson_tasker/model/api_models/ChnageJobStatusModel.dart';
+import 'package:timeline_tile/timeline_tile.dart';
 
 class MissionProcessScreen extends StatefulWidget {
   final String id;
@@ -347,7 +348,6 @@ class _MissionProcessScreenState extends State<MissionProcessScreen> {
                           ),
                         ],
                       ),
-
                       ExpansionTile(
                         tilePadding: EdgeInsets.symmetric(horizontal: 10),
                         title: Column(
@@ -364,49 +364,254 @@ class _MissionProcessScreenState extends State<MissionProcessScreen> {
                           ],
                         ),
                         children: [
-                        Stepper(
-                          currentStep: _index,
-                          onStepCancel: () {
-                            if (_index <= 0) {
-                              return;
-                            }
-                            setState(() {
-                              _index--;
-                            });
-                          },
-                          onStepContinue: () {
-                            if (_index >= 1) {
-                              return;
-                            }
-                            setState(() {
-                              _index++;
-                            });
-                          },
-                          onStepTapped: (index) {
-                            setState(() {
-                              _index = index;
-                            });
-                          },
-                          steps: [
-                            Step(
-                              title: Text("Step 1 title"),
-                              content: Container(
-                                  alignment: Alignment.centerLeft,
-                                  child: Text("Content for Step 1")
+                          Padding(
+                            padding:
+                                const EdgeInsets.symmetric(horizontal: 8.0),
+                            child: TimelineTile(
+                              alignment: TimelineAlign.start,
+                              // afterLineStyle: ,
+                              // isLast: false,
+                              isFirst: true,
+                              indicatorStyle: IndicatorStyle(
+                                width: 20,
+                                color: CColors.missonGrey,
+                                // indicator: Text("efdsf"),
+                                // indicatorXY: 0.7,
+                                iconStyle: IconStyle(
+                                  color: CColors.missonNormalWhiteColor,
+                                  iconData: Icons.check,
+                                ),
+                              ),
+                              endChild: Padding(
+                                padding: const EdgeInsets.only(left: 8.0),
+                                child: Column(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Text(
+                                      "Advance pay",
+                                      style: TextStyle(
+                                          fontSize: ScreenConfig.fontSizelarge,
+                                          fontWeight: FontWeight.w500,
+                                          fontFamily: "Product",
+                                          color: CColors.missonPrimaryColor),
+                                    ),
+                                  ],
+                                ),
                               ),
                             ),
-                            Step(
-                              title: Text("Step 2 title"),
-                              content: Text("Content for Step 2"),
+                          ),
+                          Padding(
+                            padding:
+                                const EdgeInsets.symmetric(horizontal: 8.0),
+                            child: TimelineTile(
+                              alignment: TimelineAlign.start,
+                              // afterLineStyle: ,
+                              // isLast: false,
+                              // isFirst: true,
+                              indicatorStyle: IndicatorStyle(
+                                width: 20,
+                                color: CColors.missonGrey,
+                                // indicator: Text("efdsf"),
+                                // indicatorXY: 0.7,
+                                iconStyle: IconStyle(
+                                  color: CColors.missonNormalWhiteColor,
+                                  iconData: Icons.check,
+                                ),
+                              ),
+                              endChild: Padding(
+                                padding:
+                                    const EdgeInsets.only(left: 8.0, top: 30),
+                                child: Column(
+                                  mainAxisAlignment: MainAxisAlignment.end,
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Text(
+                                      "Mission Started",
+                                      style: TextStyle(
+                                          fontSize: ScreenConfig.fontSizelarge,
+                                          fontWeight: FontWeight.w500,
+                                          fontFamily: "Product",
+                                          color: CColors.missonPrimaryColor),
+                                    ),
+                                    SizedBox(
+                                      height: 10,
+                                    ),
+                                    Text(
+                                      "12:36 PM, Thursday, 32 march",
+                                      style: TextStyle(
+                                          fontSize: ScreenConfig.fontSizeMedium,
+                                          fontWeight: FontWeight.w500,
+                                          fontFamily: "Product",
+                                          color: CColors.missonMediumGrey),
+                                    ),
+                                  ],
+                                ),
+                              ),
                             ),
-                          ],
-                        )
+                          ),
+                          Padding(
+                            padding:
+                                const EdgeInsets.symmetric(horizontal: 8.0),
+                            child: TimelineTile(
+                              alignment: TimelineAlign.start,
+                              // afterLineStyle: ,
+                              // isLast: false,
+                              // isFirst: true,
+                              indicatorStyle: IndicatorStyle(
+                                width: 20,
+                                color: CColors.missonGreen,
+                                // indicator: Text("efdsf"),
+                                // indicatorXY: 0.7,
+                                iconStyle: IconStyle(
+                                  color: CColors.missonNormalWhiteColor,
+                                  iconData: Icons.check,
+                                ),
+                              ),
+                              endChild: Padding(
+                                padding:
+                                    const EdgeInsets.only(left: 8.0, top: 20),
+                                child: Column(
+                                  mainAxisAlignment: MainAxisAlignment.end,
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Text(
+                                      "Mission Accomplished",
+                                      style: TextStyle(
+                                          fontSize: ScreenConfig.fontSizelarge,
+                                          fontWeight: FontWeight.w500,
+                                          fontFamily: "Product",
+                                          color: CColors.missonPrimaryColor),
+                                    ),
+                                    SizedBox(
+                                      height: 10,
+                                    ),
+                                    Text(
+                                      "12:36 PM, Thursday, 32 march",
+                                      style: TextStyle(
+                                          fontSize: ScreenConfig.fontSizeMedium,
+                                          fontWeight: FontWeight.w500,
+                                          fontFamily: "Product",
+                                          color: CColors.missonMediumGrey),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ),
+                          ),
+                          Padding(
+                            padding:
+                                const EdgeInsets.symmetric(horizontal: 8.0),
+                            child: TimelineTile(
+                              alignment: TimelineAlign.start,
+                              // afterLineStyle: ,
+                              isLast: true,
+                              // isFirst: true,
+                              indicatorStyle: IndicatorStyle(
+                                width: 20,
+                                color: CColors.missonGrey,
+                                // indicator: Text("efdsf"),
+                                // indicatorXY: 0.7,
+                                iconStyle: IconStyle(
+                                  color: CColors.missonNormalWhiteColor,
+                                  iconData: Icons.check,
+                                ),
+                              ),
+                              endChild: Padding(
+                                padding:
+                                    const EdgeInsets.only(left: 8.0, top: 20),
+                                child: Column(
+                                  mainAxisAlignment: MainAxisAlignment.end,
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Row(
+                                      children: [
+                                        Text(
+                                          "Total Payment",
+                                          style: TextStyle(
+                                              fontSize:
+                                                  ScreenConfig.fontSizelarge,
+                                              fontWeight: FontWeight.w500,
+                                              fontFamily: "Product",
+                                              color:
+                                                  CColors.missonPrimaryColor),
+                                        ),
+                                        Spacer(),
+                                        Text(
+                                          "\$ 174.00",
+                                          style: TextStyle(
+                                              fontSize:
+                                                  ScreenConfig.fontSizelarge,
+                                              fontWeight: FontWeight.bold,
+                                              fontFamily: "Product",
+                                              color: CColors.missonGreen),
+                                        ),
+                                        SizedBox(
+                                          width: 20,
+                                        )
+                                      ],
+                                    ),
+                                    SizedBox(
+                                      height: 10,
+                                    ),
+                                    Text(
+                                      "View Receipt",
+                                      style: TextStyle(
+                                          fontSize: ScreenConfig.fontSizeMedium,
+                                          fontWeight: FontWeight.bold,
+                                          fontFamily: "Product",
+                                          color: Colors.blue),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ),
+                          ),
+                          SizedBox(
+                            height: 10,
+                          ),
                         ],
                       ),
+                      ExpansionTile(
+                        tilePadding: EdgeInsets.symmetric(horizontal: 10),
+                        title: Column(
+                          mainAxisAlignment: MainAxisAlignment.end,
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              "Mission Reviews",
+                              style: TextStyle(
+                                  fontSize: ScreenConfig.fontSizelarge,
+                                  fontWeight: FontWeight.w300,
+                                  color: CColors.missonPrimaryColor),
+                            ),
+                          ],
+                        ),
+                        children: [
+                          Column(
+                            children: [
+                              SizedBox(height: 10,),
+                              Text(
+                                "Assigner reviews will be shown here ",
+                                style: TextStyle(
+                                    fontSize: ScreenConfig.fontSizelarge,
+                                    fontWeight: FontWeight.w300,
+                                    color: CColors.missonPrimaryColor),
+                              ),
+                              SizedBox(height: 10,),
+                              Text(
+                                "Send request for reviews",
+                                style: TextStyle(
+                                    fontSize: ScreenConfig.fontSizelarge,
+                                    fontWeight: FontWeight.bold,
+                                    color: Colors.blue),
+                              ),
+                              SizedBox(height: 10,)
 
-
-
-
+                            ],
+                          )
+                        ],
+                      ),
                       AnimatedSwitcher(
                         duration: Duration(milliseconds: 400),
                         transitionBuilder:
@@ -421,7 +626,9 @@ class _MissionProcessScreenState extends State<MissionProcessScreen> {
             ),
     );
   }
+
   int _index = 0;
+
   Widget bottomView(String status) {
     switch (status) {
       case "pending":
@@ -673,31 +880,7 @@ class _MissionProcessScreenState extends State<MissionProcessScreen> {
 
       default:
         {
-          return ExpansionTile(
-              // key: PageStorageKey(this.widg),
-              title: Container(
-                width: double.infinity,
-                child: Text(
-                  "Header",
-                  style: TextStyle(fontSize: 18),
-                ),
-              ),
-              // trailing: Icon(Icons.arrow_drop_down,size: 32,color: Colors.pink,),
-              onExpansionChanged: (value) {
-                setState(() {
-                  // isExpand=value;
-                });
-              },
-              children: [
-                Text(
-                  "Child 1",
-                  style: TextStyle(fontSize: 18),
-                ),
-                Text(
-                  "Child 2",
-                  style: TextStyle(fontSize: 18),
-                ),
-              ]);
+          return Container();
         }
         break;
     }

@@ -397,7 +397,18 @@ class _MissionRequestState extends State<MissionRequest> {
                                           .whenComplete(() {
                                         setState(() {
                                           isJobStatusChanging = false;
-                                          isDeclineButtonPressed = false;
+
+
+                                          if(isDeclineButtonPressed==true)
+                                            {
+                                              isDeclineButtonPressed = false;
+                                              Navigator.pop(context);
+                                            }
+
+
+
+
+
                                         });
 
                                         if (changeJobStatusModel.code == 422) {
@@ -610,7 +621,47 @@ class _MissionRequestState extends State<MissionRequest> {
 
       default:
         {
-          //statements;
+          return Row(
+            children: [
+              Container(
+                color: CColors.missonNormalWhiteColor,
+                width: 70,
+                height: 100,
+                child: SvgPicture.asset(tickLogo),
+              ),
+              Expanded(
+                child: Container(
+                  height: 100,
+                  color: CColors.missonGrey,
+                  child: Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Spacer(),
+                        Text(
+                          "Response successfully sent to Assigner.",
+                          style: TextStyle(
+                              fontSize: ScreenConfig.fontSizelarge,
+                              fontWeight: FontWeight.w400,
+                              color: CColors.missonNormalWhiteColor),
+                        ),
+                        Spacer(),
+                        Text(
+                          "Ready for your mission, we will redirect request",
+                          style: TextStyle(
+                              fontSize: ScreenConfig.fontSizeSmall,
+                              fontWeight: FontWeight.w400,
+                              color: CColors.missonNormalWhiteColor),
+                        ),
+                        Spacer()
+                      ],
+                    ),
+                  ),
+                ),
+              )
+            ],
+          );
         }
         break;
     }

@@ -126,19 +126,19 @@ class _MissionHistoryScreenState extends State<MissionHistoryScreen> {
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
-        actions: [
-          InkWell(
-            onTap: () {
-              NavMe().NavPushLeftToRight(NotificationScreen());
-            },
-            child: Padding(
-              padding: const EdgeInsets.only(right: 12.0, top: 30.0),
-              child: Align(
-                  alignment: Alignment.topRight,
-                  child: SvgPicture.asset(bellIcon)),
-            ),
-          ),
-        ],
+        // actions: [
+        //   InkWell(
+        //     onTap: () {
+        //       NavMe().NavPushLeftToRight(NotificationScreen());
+        //     },
+        //     child: Padding(
+        //       padding: const EdgeInsets.only(right: 12.0, top: 30.0),
+        //       child: Align(
+        //           alignment: Alignment.topRight,
+        //           child: SvgPicture.asset(bellIcon)),
+        //     ),
+        //   ),
+        // ],
         centerTitle: true,
         title: Padding(
           padding: const EdgeInsets.only(left: 20.0, top: 30.0),

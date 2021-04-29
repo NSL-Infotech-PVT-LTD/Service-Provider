@@ -16,7 +16,7 @@ class MyApp extends StatelessWidget {
      getPages: myRoutes,
 
 
-      title: 'Flutter Demo',
+      title: 'Mission Tasker',
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
 
