@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:get/get.dart';
 import 'package:misson_tasker/model/ApiCaller.dart';
 import 'package:misson_tasker/model/api_models/GetProfileDataModel.dart';
 import 'package:misson_tasker/utils/CColors.dart';
@@ -214,7 +215,11 @@ class _BusinessProfileState extends State<BusinessProfile> {
                               ),
                               InkWell(
                                   onTap: () {
-                                    NavMe().NavPushLeftToRight(EditProfile());
+                                    // NavMe().NavPushLeftToRight(EditProfile());
+
+                                    Get.to(EditProfile(),
+                                        transition: Transition.leftToRightWithFade,
+                                        duration: Duration(milliseconds: 400)).then((value) => initState());
                                   },
                                   child: Text(
                                     "Edit profile",

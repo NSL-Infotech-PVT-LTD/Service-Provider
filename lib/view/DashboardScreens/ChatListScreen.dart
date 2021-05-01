@@ -2,6 +2,8 @@ import 'package:badges/badges.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:get/get.dart';
+import 'package:get/get_navigation/src/routes/transitions_type.dart';
 import 'package:misson_tasker/model/ApiCaller.dart';
 import 'package:misson_tasker/model/api_models/GetProfileDataModel.dart';
 import 'package:misson_tasker/utils/CColors.dart';
@@ -28,7 +30,7 @@ class ChatListScreen extends StatefulWidget {
 class _ChatListScreenState extends State<ChatListScreen> {
   GlobalKey<ScaffoldState> _drawerKey = GlobalKey();
   String _auth = "";
-  int authId = 0;
+  String authId;
   List<ListElement> chatList = [];
   var result1;
 
@@ -38,6 +40,18 @@ class _ChatListScreenState extends State<ChatListScreen> {
 
   @override
   void initState() {
+    getString(sharedPref.userId)
+        .then((value) => authId = value)
+        .whenComplete(() {
+      print("This is auth id $authId");
+
+      getString(sharedPref.userToken)
+          .then((value) => _auth = value)
+          .whenComplete(() {
+        _getChatList();
+      });
+    });
+
     spinkit = SpinKitWave(
       size: 40,
       itemBuilder: (BuildContext context, int index) {
@@ -52,11 +66,6 @@ class _ChatListScreenState extends State<ChatListScreen> {
     );
     // TODO: implement initState
     super.initState();
-    getString(sharedPref.userToken)
-        .then((value) => _auth = value)
-        .whenComplete(() {
-      _getChatList();
-    });
   }
 
   bool _loading = true;
@@ -223,26 +232,37 @@ class _ChatListScreenState extends State<ChatListScreen> {
                               //
                               // ));
 
-                              NavMe().NavPushLeftToRight(ChatScreen(
-                                  reciverName:
-                                      "${listChatUserModel.data.list.elementAt(index).receiverName}",
-                                  image: listChatUserModel.data.list
-                                              .elementAt(index)
-                                              .receiverImage ==
-                                          null
-                                      ? " "
-                                      : "${listChatUserModel.data.list.elementAt(index).receiverImage}",
-                                  receiverId:
-                                      "${listChatUserModel.data.list.elementAt(index).receiverId}",
-                                  channel: IOWebSocketChannel.connect(
-                                      "ws://23.20.179.178:8080/")));
+                              Get.to(
+                                      ChatScreen(
+                                          reciverName:
+                                              "${authId != listChatUserModel.data.list.elementAt(index).senderId.toString() ? listChatUserModel.data.list.elementAt(index).senderName : listChatUserModel.data.list.elementAt(index).receiverName}",
+                                          image:
+                                              "${(authId != listChatUserModel.data.list.elementAt(index).senderId.toString() ? (listChatUserModel.data.list.elementAt(index).senderImage) : (listChatUserModel.data.list.elementAt(index).receiverImage)) == null ? " " : authId != listChatUserModel.data.list.elementAt(index).senderId.toString() ? (listChatUserModel.data.list.elementAt(index).senderImage) : (listChatUserModel.data.list.elementAt(index).receiverImage)}",
+                                          receiverId:
+                                              "${authId != listChatUserModel.data.list.elementAt(index).senderId.toString() ? listChatUserModel.data.list.elementAt(index).senderId : listChatUserModel.data.list.elementAt(index).receiverId}",
+                                          channel: IOWebSocketChannel.connect(
+                                              "ws://23.20.179.178:8080/")),
+                                      transition:
+                                          Transition.leftToRightWithFade,
+                                      duration: Duration(milliseconds: 400))
+                                  .then((value) => initState());
+                              // NavMe().NavPushLeftToRight(ChatScreen(
+                              //     reciverName:
+                              //         "${authId != listChatUserModel.data.list.elementAt(index).senderId.toString() ? listChatUserModel.data.list.elementAt(index).senderName : listChatUserModel.data.list.elementAt(index).receiverName}",
+                              //     image:                                     "${(authId != listChatUserModel.data.list.elementAt(index).senderId.toString() ? (listChatUserModel.data.list.elementAt(index).senderImage) : (listChatUserModel.data.list.elementAt(index).receiverImage)) == null ? " " : authId != listChatUserModel.data.list.elementAt(index).senderId.toString() ? (listChatUserModel.data.list.elementAt(index).senderImage) : (listChatUserModel.data.list.elementAt(index).receiverImage)}",
+                              //
+                              //     receiverId:
+                              //         "${authId != listChatUserModel.data.list.elementAt(index).senderId.toString() ? listChatUserModel.data.list.elementAt(index).senderId : listChatUserModel.data.list.elementAt(index).receiverId}",
+                              //     channel: IOWebSocketChannel.connect(
+                              //         "ws://23.20.179.178:8080/")));
                             },
                             child: MyChatListView(
                                 imageUrl:
-                                    "${listChatUserModel.data.list.elementAt(index).receiverImage == null ? " " : listChatUserModel.data.list.elementAt(index).receiverImage}",
+                                    "${(authId != listChatUserModel.data.list.elementAt(index).senderId.toString() ? (listChatUserModel.data.list.elementAt(index).senderImage) : (listChatUserModel.data.list.elementAt(index).receiverImage)) == null ? " " : authId != listChatUserModel.data.list.elementAt(index).senderId.toString() ? (listChatUserModel.data.list.elementAt(index).senderImage) : (listChatUserModel.data.list.elementAt(index).receiverImage)}",
                                 name:
-                                    "${listChatUserModel.data.list.elementAt(index).receiverName}",
-                                subtitle: "${listChatUserModel.data.list.elementAt(index).message}",
+                                    "${authId != listChatUserModel.data.list.elementAt(index).senderId.toString() ? listChatUserModel.data.list.elementAt(index).senderName : listChatUserModel.data.list.elementAt(index).receiverName}",
+                                subtitle:
+                                    "${listChatUserModel.data.list.elementAt(index).message}",
                                 numberOfMessages: 2),
                           );
                         },
@@ -281,7 +301,10 @@ class _ChatListScreenState extends State<ChatListScreen> {
                       avatar1,
                       height: 50,
                     )
-                  : CircleAvatar(backgroundImage: NetworkImage(imageUrl), radius: 25,),
+                  : CircleAvatar(
+                      backgroundImage: NetworkImage(imageUrl),
+                      radius: 25,
+                    ),
               SizedBox(
                 width: 15,
               ),

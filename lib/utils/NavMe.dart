@@ -15,7 +15,12 @@ class NavMe {
         duration: Duration(milliseconds: 500));
   }
 
-  NavPushLeftToRight(page) {
+  Future NavPushLeftToRight(page) {
+    Get.to(page,
+        transition: Transition.leftToRightWithFade,
+        duration: Duration(milliseconds: 400));
+  }
+  Future NavPushLeftToRightWithResponse(page) {
     Get.to(page,
         transition: Transition.leftToRightWithFade,
         duration: Duration(milliseconds: 400));

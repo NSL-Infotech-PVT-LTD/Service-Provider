@@ -5,6 +5,7 @@ import 'package:dash_chat/dash_chat.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:misson_tasker/model/ApiCaller.dart';
+import 'package:misson_tasker/utils/CColors.dart';
 import 'package:misson_tasker/utils/StringsPath.dart';
 import 'package:misson_tasker/utils/local_data.dart';
 import 'package:misson_tasker/view/Chat/ChatModels/ChatHistoryModel.dart';
@@ -38,8 +39,9 @@ class _ChatScreenState extends State<ChatScreen> {
   MessageDemoDart _messageDemoDart;
   ChatHistoryModel chatHistoryModel;
   bool isLoading = true;
-String appUserId;
-String appUserName;
+  String appUserId;
+  String appUserName;
+
   // final channel2 = IOWebSocketChannel.connect('ws://23.20.179.178:8080/');
   // final ChatUser user = ChatUser(
   //   name: "Fayeed",
@@ -100,11 +102,12 @@ String appUserName;
     // TODO: implement initState
     super.initState();
 
-    getString(sharedPref.userName).then((value) => appUserName=value).whenComplete((){
-
-      getString(sharedPref.userId).then((value) => appUserId=value).whenComplete(() {
-
-
+    getString(sharedPref.userName)
+        .then((value) => appUserName = value)
+        .whenComplete(() {
+      getString(sharedPref.userId)
+          .then((value) => appUserId = value)
+          .whenComplete(() {
         getString(sharedPref.userToken).then((value) {
           _auth = value;
 
@@ -114,7 +117,8 @@ String appUserName;
               .getHistoryOfChat(auth: _auth, reciverId: widget.receiverId)
               .then((value) {
             chatHistoryModel = value;
-            chatHistoryModel.data.chat.data = chatHistoryModel.data.chat.data.reversed;
+            chatHistoryModel.data.chat.data =
+                chatHistoryModel.data.chat.data.reversed;
           }).whenComplete(() {
             chatHistoryModel.data.chat.data.forEach((element) {
               print("QWERTY ${element.toJson()}");
@@ -136,11 +140,7 @@ String appUserName;
             });
           });
         });
-
-
       });
-
-
     });
 
     print("revicer id : ${widget.receiverId}");
@@ -150,7 +150,36 @@ String appUserName;
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("${widget.reciverName}"),
+        backgroundColor: CColors.missonNormalWhiteColor,
+        elevation: 0,
+        title: Text(
+          "${widget.reciverName}",
+          style: TextStyle(color: CColors.missonGrey, fontFamily: "Product"),
+        ),
+        actions: [
+          Padding(
+            padding: const EdgeInsets.only(right: 15.0, bottom: 8.0, top: 8.0),
+            child: CircleAvatar(
+              backgroundImage: NetworkImage(widget.image),
+            ),
+          )
+        ],
+        leading: InkWell(
+          onTap: () {
+            Navigator.pop(context);
+          },
+          child: Padding(
+            padding: const EdgeInsets.only(left: 20.0, top: 20.0),
+            child: Align(
+              alignment: Alignment.topLeft,
+              child: Icon(
+                Icons.arrow_back,
+                color: Colors.black,
+                size: 24.0,
+              ),
+            ),
+          ),
+        ),
       ),
       body: StreamBuilder(
           stream: widget.channel.stream,
@@ -162,6 +191,7 @@ String appUserName;
                 listOfMessage.add(ChatMessage(
                     text: _messageDemoDart.message,
                     user: ChatUser(
+
                         name: _messageDemoDart.senderName,
                         avatar: _messageDemoDart.receiverImage,
                         uid: _messageDemoDart.senderId.toString())));
@@ -189,6 +219,7 @@ String appUserName;
                     sendOnEnter: true,
                     textInputAction: TextInputAction.send,
                     user: ChatUser(
+                   
                       name: "$appUserName",
                       uid: "$appUserId",
                     ),

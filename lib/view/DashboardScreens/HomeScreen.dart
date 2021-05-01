@@ -90,6 +90,7 @@ class _HomeScreenState extends State<HomeScreen> {
             child: InkWell(
               onTap: () {
                 NavMe().NavPushLeftToRight(BusinessProfile());
+
               },
               child: CircleAvatar(
                 backgroundColor: CColors.missonGrey,

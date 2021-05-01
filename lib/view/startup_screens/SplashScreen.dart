@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:get/get.dart';
@@ -17,7 +18,7 @@ import 'package:misson_tasker/view/JobDetailsScreen.dart';
 import 'package:misson_tasker/view/startup_screens/LoginPage.dart';
 
 SharedPref sharedPref = new SharedPref();
-
+var spinkit;
 class SplashScreen extends StatefulWidget {
   @override
   _SplashScreenState createState() => _SplashScreenState();
@@ -36,7 +37,18 @@ class _SplashScreenState extends State<SplashScreen> {
   void initState() {
     // TODO: implement initState
     super.initState();
-
+    spinkit = SpinKitWave(
+      size: 40,
+      itemBuilder: (BuildContext context, int index) {
+        return DecoratedBox(
+          decoration: BoxDecoration(
+            color: index.isEven
+                ? CColors.missonPrimaryColor
+                : CColors.missonMediumGrey,
+          ),
+        );
+      },
+    );
     // clearedShared();
     Timer.periodic(Duration(seconds: 3), (timer) {
       print(timer.toString() + "!!!!");
