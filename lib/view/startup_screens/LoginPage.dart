@@ -83,7 +83,8 @@ class _LoginPageState extends State<LoginPage> {
               sharedPref.userPhoneNumber, loginUserModel.data.user.mobile);
           setString(sharedPref.userDefaultImage, avatar1);
           setString(
-              sharedPref.userNetworkImage, loginUserModel.data.user.image);
+              sharedPref.userNetworkImage, loginUserModel.data.user.image);setString(
+              sharedPref.userId, loginUserModel.data.user.id.toString());
 
           getString(sharedPref.userPhoneNumber)
               .then((value) => print("123 $value"));

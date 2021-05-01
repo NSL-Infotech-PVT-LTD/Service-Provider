@@ -10,7 +10,7 @@ import 'package:misson_tasker/utils/NavMe.dart';
 import 'package:misson_tasker/utils/ScreenConfig.dart';
 import 'package:misson_tasker/utils/StringsPath.dart';
 import 'package:misson_tasker/utils/local_data.dart';
-import 'package:misson_tasker/view/DashboardScreens/ChatScreen.dart';
+import 'package:misson_tasker/view/DashboardScreens/ChatListScreen.dart';
 import 'package:misson_tasker/view/DashboardScreens/MissionExploreScreen.dart';
 import 'package:misson_tasker/view/DashboardScreens/MissionStatusScreen.dart';
 import 'package:misson_tasker/view/MissonRequestScreen/MissionRequest.dart';
@@ -103,7 +103,7 @@ class _DashboardState extends State<Dashboard> {
         missionRequest: missionRequest,
       ),
       MissionExploreScreen(),
-      ChatScreen(getProfileDataModel: getProfileDataModel,),
+      ChatListScreen(getProfileDataModel: getProfileDataModel,),
       MissionStatusScreen()
     ];
 

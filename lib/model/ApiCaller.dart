@@ -9,6 +9,9 @@ import 'package:misson_tasker/model/api_models/ListOfServicesModel.dart';
 import 'package:misson_tasker/model/api_models/MissionRequestModel.dart';
 import 'package:misson_tasker/model/api_models/GetJobByIdModel.dart';
 import 'package:misson_tasker/model/api_models/ChnageJobStatusModel.dart';
+import 'package:misson_tasker/view/Chat/ChatModels/ChatHistoryModel.dart';
+import 'package:misson_tasker/view/Chat/ChatModels/ListChatUserModel.dart';
+
 import 'package:misson_tasker/view/ProfileView/ConfigurationScreen.dart';
 
 import 'api_models/ChangePasswordModel.dart';
@@ -42,6 +45,10 @@ class ApiCaller {
   String listofJob = "list";
   String jobById = "ById";
   String changeJobStatusApi = "change-job-status";
+  String chat = "chat/";
+  String oneToMany = "getItemByReceiverId";
+  String oneToOne = "getItemsByReceiverId";
+  String uploadMedia = "upload-media";
 
   String status = "status";
 
@@ -421,7 +428,10 @@ class ApiCaller {
   }
 
   Future<MissionRequestModel> missionRequest(
-      {String auth, String latitude, String longitude, String jobStatus }) async {
+      {String auth,
+      String latitude,
+      String longitude,
+      String jobStatus}) async {
     MissionRequestModel missionRequestModel;
     var response = await http.post(
       Uri.parse(baseUrl + provider + job + listofJob),
@@ -474,7 +484,7 @@ class ApiCaller {
       {String auth, String Id, String jobStatus}) async {
     ChangeJobStatusModel changeJobStatusModel;
     var response = await http.post(
-      Uri.parse(baseUrl + provider +changeJobStatusApi),
+      Uri.parse(baseUrl + provider + changeJobStatusApi),
       headers: <String, String>{
         'Content-Type': 'application/json; charset=UTF-8',
         'Authorization': "Bearer " + auth
@@ -492,6 +502,52 @@ class ApiCaller {
           "THERE IS AN ERROR INT THE TERMS AND CONDITION API WITH STATUS CODE ${response.statusCode}");
     }
   }
+
+  Future<ListChatUserModel> getListOfChatUsers(
+      {String auth, String limit}) async {
+    ListChatUserModel mssageDemoDart;
+    var response = await http.post(
+      Uri.parse(baseUrl + chat + oneToMany),
+      headers: <String, String>{
+        'Content-Type': 'application/json; charset=UTF-8',
+        'Authorization': "Bearer " + auth
+      },
+      body: jsonEncode(<String, dynamic>{'limit': "$limit"}),
+    );
+
+    if (response.statusCode == 200 || response.statusCode == 422) {
+      print("mssageDemoDart ${response.body}");
+      return mssageDemoDart = listChatUserModelFromJson(response.body);
+    } else {
+      print("mssageDemoDart ${response.body}");
+      print(
+          "THERE IS AN ERROR INT THE TERMS AND CONDITION API WITH STATUS CODE ${response.statusCode}");
+    }
+  }
+
+  Future<ChatHistoryModel> getHistoryOfChat(
+      {String auth, String reciverId}) async {
+    ChatHistoryModel chatHistoryModel;
+    var response = await http.post(
+      Uri.parse(baseUrl + chat + oneToOne),
+      headers: <String, String>{
+        'Content-Type': 'application/json; charset=UTF-8',
+        'Authorization': "Bearer " + auth
+      },
+      body: jsonEncode(<String, dynamic>{'receiver_id': "$reciverId", "limit": "20"}),
+    );
+
+    if (response.statusCode == 200 || response.statusCode == 422) {
+      print("chatHistoryModel 123 ${response.body}");
+      return chatHistoryModel = chatHistoryModelFromJson(response.body);
+    } else {
+      print("chatHistoryModel ERROR+_+_+_++__+_+_++_+_+ ${response.body}");
+      print(
+          "THERE IS AN ERROR INT THE TERMS AND CONDITION API WITH STATUS CODE ${response.statusCode}");
+    }
+  }
+
+
 }
 
 Future<bool> isConnectedToInternet() async {

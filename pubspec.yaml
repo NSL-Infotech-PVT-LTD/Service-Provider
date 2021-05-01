@@ -36,7 +36,7 @@ dependencies:
   geolocator: ^7.0.1
   geocoder: ^0.2.1
   permission_handler: ^6.1.1
-  image_picker: ^0.7.4
+  image_picker: any
   multi_image_picker: ^4.6.5
   flutter_absolute_path: ^1.0.6
   flutter_image_compress: ^1.0.0
@@ -44,6 +44,9 @@ dependencies:
   timelines: ^0.1.0
   timeline_tile: ^2.0.0
   badges: ^1.2.0
+  flutter_socket_io: ^0.6.0
+  web_socket_channel: ^1.1.0
+  dash_chat: ^1.1.15
 
 
 
