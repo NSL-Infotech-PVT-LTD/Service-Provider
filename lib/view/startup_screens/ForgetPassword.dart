@@ -7,6 +7,7 @@ import 'package:misson_tasker/model/api_models/ForgetPasswordModel.dart';
 import 'package:misson_tasker/utils/CColors.dart';
 import 'package:misson_tasker/utils/NavMe.dart';
 import 'package:misson_tasker/utils/ScreenConfig.dart';
+import 'package:misson_tasker/view/startup_screens/SplashScreen.dart';
 
 import '../Dashboard.dart';
 import 'LoginPage.dart';
@@ -22,25 +23,14 @@ class _ForgotPasswordState extends State<ForgotPassword> {
   TextEditingController _emailAddressFieldController = TextEditingController();
   ForgetPasswordModel forgetPasswordobj;
   bool isLoading =false;
-  var spinkit;
+
 
 
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
-    spinkit = SpinKitWave(
-      size: 40,
-      itemBuilder: (BuildContext context, int index) {
-        return DecoratedBox(
-          decoration: BoxDecoration(
-            color: index.isEven
-                ? CColors.missonPrimaryColor
-                : CColors.missonMediumGrey,
-          ),
-        );
-      },
-    );
+
   }
 
   void forgotPassApi() async {

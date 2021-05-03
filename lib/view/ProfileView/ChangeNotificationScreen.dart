@@ -26,25 +26,14 @@ class _ChangeNoticationScreenState extends State<ChangeNoticationScreen> {
   String auth = "";
   GetProfileDataModel getProfileDataModel;
   bool isLoadingData = true;
-  var spinkit;
+
   bool isNotificationOn = true;
   NotificationToggleModel notificationToggleModel;
 
   @override
   void initState() {
     // registerUser();
-    spinkit = SpinKitWave(
-      size: 40,
-      itemBuilder: (BuildContext context, int index) {
-        return DecoratedBox(
-          decoration: BoxDecoration(
-            color: index.isEven
-                ? CColors.missonPrimaryColor
-                : CColors.missonMediumGrey,
-          ),
-        );
-      },
-    );
+
 
     getString(sharedPref.userToken).then((value) {
       auth = value;

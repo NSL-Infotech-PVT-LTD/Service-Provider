@@ -31,22 +31,10 @@ class _ConfigurationScreenState extends State<ConfigurationScreen> {
   GetProfileDataModel getProfileDataModel;
   bool isLoadingData = true;
   ConfigurationModel configurationModel;
-  var spinkit;
 
   @override
   void initState() {
-    spinkit = SpinKitWave(
-      size: 40,
-      itemBuilder: (BuildContext context, int index) {
-        return DecoratedBox(
-          decoration: BoxDecoration(
-            color: index.isEven
-                ? CColors.missonPrimaryColor
-                : CColors.missonMediumGrey,
-          ),
-        );
-      },
-    );
+
     getString(sharedPref.userToken).then((value) {
       auth = value;
 

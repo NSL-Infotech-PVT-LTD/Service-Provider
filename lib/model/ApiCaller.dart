@@ -534,7 +534,7 @@ class ApiCaller {
         'Content-Type': 'application/json; charset=UTF-8',
         'Authorization': "Bearer " + auth
       },
-      body: jsonEncode(<String, dynamic>{'receiver_id': "$reciverId", "limit": "20"}),
+      body: jsonEncode(<String, dynamic>{'receiver_id': "$reciverId", "limit": "200"}),
     );
 
     if (response.statusCode == 200 || response.statusCode == 422) {

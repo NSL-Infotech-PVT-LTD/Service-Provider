@@ -41,24 +41,12 @@ class _MissionRequestState extends State<MissionRequest> {
   bool isAcceptButtonPressed = false;
   bool isDeclineButtonPressed = false;
   String viewValue = "pending";
-  var spinkit;
+
 
   @override
   void initState() {
     // registerUser();
 
-    spinkit = SpinKitWave(
-      size: 40,
-      itemBuilder: (BuildContext context, int index) {
-        return DecoratedBox(
-          decoration: BoxDecoration(
-            color: index.isEven
-                ? CColors.missonPrimaryColor
-                : CColors.missonMediumGrey,
-          ),
-        );
-      },
-    );
     getString(sharedPref.userToken).then((value) {
       auth = value;
 

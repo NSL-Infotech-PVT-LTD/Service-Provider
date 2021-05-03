@@ -34,7 +34,7 @@ class _BusinessDetailsState extends State<BusinessDetails> {
   List<File> files = [];
   String _error;
   bool isLoadingData = true;
-  var spinkit;
+
   final _formKey = GlobalKey<FormState>();
   TextEditingController hour = TextEditingController();
   TextEditingController toolBox = TextEditingController();
@@ -118,18 +118,7 @@ String auth="";
   void initState() {
     getString(sharedPref.userToken).then((value) => auth=value);
     // registerUser();
-    spinkit = SpinKitWave(
-      size: 40,
-      itemBuilder: (BuildContext context, int index) {
-        return DecoratedBox(
-          decoration: BoxDecoration(
-            color: index.isEven
-                ? CColors.missonPrimaryColor
-                : CColors.missonMediumGrey,
-          ),
-        );
-      },
-    );
+
 
     super.initState();
   }

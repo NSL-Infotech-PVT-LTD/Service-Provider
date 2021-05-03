@@ -19,6 +19,7 @@ import 'package:misson_tasker/view/startup_screens/LoginPage.dart';
 
 SharedPref sharedPref = new SharedPref();
 var spinkit;
+
 class SplashScreen extends StatefulWidget {
   @override
   _SplashScreenState createState() => _SplashScreenState();
@@ -26,13 +27,14 @@ class SplashScreen extends StatefulWidget {
 
 class _SplashScreenState extends State<SplashScreen> {
   String _auth = null;
+
   // Future<Position> _determinePosition() async {
   //   Position position = await Geolocator.getCurrentPosition(desiredAccuracy: LocationAccuracy.high);
   //   return position;
   // }
 
-
   Position position;
+
   @override
   void initState() {
     // TODO: implement initState
@@ -42,9 +44,7 @@ class _SplashScreenState extends State<SplashScreen> {
       itemBuilder: (BuildContext context, int index) {
         return DecoratedBox(
           decoration: BoxDecoration(
-            color: index.isEven
-                ? CColors.missonPrimaryColor
-                : CColors.missonMediumGrey,
+            color: index.isEven ? CColors.missonGrey : CColors.missonMediumGrey,
           ),
         );
       },
@@ -76,7 +76,6 @@ class _SplashScreenState extends State<SplashScreen> {
       //     transition: Transition.zoom, duration: Duration(milliseconds: 1000));
       timer.cancel();
     });
-
   }
 
   @override

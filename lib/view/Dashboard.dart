@@ -33,23 +33,12 @@ class _DashboardState extends State<Dashboard> {
   bool isLoadingData = true;
   bool isLoadingRequest = true;
   int _selectedIndex = 0;
-  var spinkit;
+
   String _location = "Loading....";
 
   @override
   void initState() {
-    spinkit = SpinKitWave(
-      size: 40,
-      itemBuilder: (BuildContext context, int index) {
-        return DecoratedBox(
-          decoration: BoxDecoration(
-            color: index.isEven
-                ? CColors.missonPrimaryColor
-                : CColors.missonMediumGrey,
-          ),
-        );
-      },
-    );
+
     getString(sharedPref.userToken).then((value) {
       auth = value;
 

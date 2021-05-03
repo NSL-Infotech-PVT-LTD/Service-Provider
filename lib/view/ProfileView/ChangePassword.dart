@@ -46,24 +46,13 @@ class _ChangePasswordState extends State<ChangePassword> {
   TextEditingController _oldPasswordFieldController = TextEditingController();
   TextEditingController _newPasswordFieldController = TextEditingController();
   TextEditingController _reNewPasswordFieldController = TextEditingController();
-  var spinkit;
+
   ChangePasswordModel changePasswordModel;
 
   @override
   void initState() {
     // registerUser();
-    spinkit = SpinKitWave(
-      size: 40,
-      itemBuilder: (BuildContext context, int index) {
-        return DecoratedBox(
-          decoration: BoxDecoration(
-            color: index.isEven
-                ? CColors.missonPrimaryColor
-                : CColors.missonMediumGrey,
-          ),
-        );
-      },
-    );
+
 
     getString(sharedPref.userToken).then((value) {
       auth = value;

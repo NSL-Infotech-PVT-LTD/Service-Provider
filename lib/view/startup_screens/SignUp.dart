@@ -61,7 +61,7 @@ class _SignUpState extends State<SignUp> {
   var addresses;
   bool isLoading = false;
   String postalCode;
-  var spinkit;
+
   Position position;
   bool islocationAvailible = false;
   LocationPermission permission;
@@ -162,18 +162,7 @@ class _SignUpState extends State<SignUp> {
     super.initState();
 
 
-    spinkit = SpinKitWave(
-      size: 35,
-      itemBuilder: (BuildContext context, int index) {
-        return DecoratedBox(
-          decoration: BoxDecoration(
-            color: index.isEven
-                ? CColors.missonPrimaryColor
-                : CColors.missonMediumGrey,
-          ),
-        );
-      },
-    );
+
     _selectedRadioValue = radioList.elementAt(0);
 
     // _determinePosition().then((value) {

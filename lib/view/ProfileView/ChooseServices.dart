@@ -29,7 +29,7 @@ class _ChooseServicesState extends State<ChooseServices> {
   List<Asset> images = List<Asset>();
   String _error;
   bool isLoadingData = true;
-  var spinkit;
+
   final _formKey = GlobalKey<FormState>();
 
   ListOfServicesModel listOfServicesModel;
@@ -38,18 +38,7 @@ String auth="";
   void initState() {
     // registerUser();
 
-    spinkit = SpinKitWave(
-      size: 40,
-      itemBuilder: (BuildContext context, int index) {
-        return DecoratedBox(
-          decoration: BoxDecoration(
-            color: index.isEven
-                ? CColors.missonPrimaryColor
-                : CColors.missonMediumGrey,
-          ),
-        );
-      },
-    );
+
     getString(sharedPref.userToken).then((value) {
       auth = value;
 

@@ -42,7 +42,7 @@ class _PackageScreenState extends State<PackageScreen> {
   String deviceTok = 'iu';
   var height = AppBar().preferredSize.height;
   LoginUserModel loginUserModel;
-  var spinkit;
+
   bool isLoading = false;
   bool isShown = true;
 
@@ -50,18 +50,7 @@ class _PackageScreenState extends State<PackageScreen> {
   void initState() {
     // TODO: implement initState
     super.initState();
-    spinkit = SpinKitWave(
-      size: 40,
-      itemBuilder: (BuildContext context, int index) {
-        return DecoratedBox(
-          decoration: BoxDecoration(
-            color: index.isEven
-                ? CColors.missonPrimaryColor
-                : CColors.missonMediumGrey,
-          ),
-        );
-      },
-    );
+
   }
 
   @override

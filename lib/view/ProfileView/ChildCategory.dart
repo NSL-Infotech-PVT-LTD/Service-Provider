@@ -28,7 +28,7 @@ class _ChildCategoryState extends State<ChildCategory> {
   bool loading = true;
   bool isSaveApiLoading = false;
   List<int> selectedCategories = [];
-  var spinkit;
+
 
   cateList({@required String auth}) async {
     isConnectedToInternet().then((internet) {
@@ -71,18 +71,7 @@ class _ChildCategoryState extends State<ChildCategory> {
   @override
   void initState() {
     print("parentId" + widget.parentId.toString());
-    spinkit = SpinKitWave(
-      size: 40,
-      itemBuilder: (BuildContext context, int index) {
-        return DecoratedBox(
-          decoration: BoxDecoration(
-            color: index.isEven
-                ? CColors.missonPrimaryColor
-                : CColors.missonMediumGrey,
-          ),
-        );
-      },
-    );
+
     setState(() {
       loading = true;
     });

@@ -97,6 +97,7 @@ class _ChatScreenState extends State<ChatScreen> {
   //     print(localMessagesList.length);
   //   });
   // }
+  List<Data> myListname;
   @override
   void initState() {
     // TODO: implement initState
@@ -117,10 +118,14 @@ class _ChatScreenState extends State<ChatScreen> {
               .getHistoryOfChat(auth: _auth, reciverId: widget.receiverId)
               .then((value) {
             chatHistoryModel = value;
-            chatHistoryModel.data.chat.data =
-                chatHistoryModel.data.chat.data.reversed;
+
+            // chatHistoryModel.data.chat.data =
+            // ;
           }).whenComplete(() {
-            chatHistoryModel.data.chat.data.forEach((element) {
+            List<Datum> list = chatHistoryModel.data.chat.data;
+            list.sort((a,b)=>a.localMessageId.compareTo(b.localMessageId));
+            list.forEach((element) {
+
               print("QWERTY ${element.toJson()}");
               listOfMessage.add(
                 ChatMessage(
@@ -186,14 +191,14 @@ class _ChatScreenState extends State<ChatScreen> {
           builder: (context, snapshot) {
             if (snapshot.data != null) {
               _messageDemoDart = messageDemoDartFromJson(snapshot.data);
-
+print("SNAPSHOT ${snapshot.toString()}");
               if (_messageDemoDart.senderId.toString() == widget.receiverId) {
                 listOfMessage.add(ChatMessage(
                     text: _messageDemoDart.message,
                     user: ChatUser(
 
                         name: _messageDemoDart.senderName,
-                        avatar: _messageDemoDart.receiverImage,
+                        avatar: _messageDemoDart.senderImage,
                         uid: _messageDemoDart.senderId.toString())));
               }
 
@@ -214,6 +219,9 @@ class _ChatScreenState extends State<ChatScreen> {
                     key: _chatViewKey,
                     inverted: false,
                     onSend: (value) {
+                      // value.createdAt=DateTime.now().millisecondsSinceEpoch.toString();
+
+                      print("CREATE ${value.toJson()}");
                       _sendMessage(value);
                     },
                     sendOnEnter: true,

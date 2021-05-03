@@ -258,23 +258,12 @@ class _EditProfileState extends State<EditProfile> {
   bool isLoadingData = true;
   bool isLoadingApi = false;
   String auth;
-  var spinkit;
+
   GetProfileDataModel getProfileDataModel;
 
   @override
   void initState() {
-    spinkit = SpinKitWave(
-      size: 40,
-      itemBuilder: (BuildContext context, int index) {
-        return DecoratedBox(
-          decoration: BoxDecoration(
-            color: index.isEven
-                ? CColors.missonPrimaryColor
-                : CColors.missonMediumGrey,
-          ),
-        );
-      },
-    );
+
 
     // registerUser();
 
