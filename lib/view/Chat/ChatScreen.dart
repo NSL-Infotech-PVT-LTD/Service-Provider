@@ -1,20 +1,15 @@
-import 'dart:async';
 import 'dart:io';
 
 import 'package:dash_chat/dash_chat.dart';
 import 'package:flutter/material.dart';
-import 'package:image_picker/image_picker.dart';
 import 'package:misson_tasker/model/ApiCaller.dart';
 import 'package:misson_tasker/utils/CColors.dart';
-import 'package:misson_tasker/utils/StringsPath.dart';
 import 'package:misson_tasker/utils/local_data.dart';
 import 'package:misson_tasker/view/Chat/ChatModels/ChatHistoryModel.dart';
 import 'package:misson_tasker/view/Chat/ChatModels/MessageDemo.dart';
 import 'package:misson_tasker/view/startup_screens/SplashScreen.dart';
-import 'package:web_socket_channel/io.dart';
+import 'package:url_launcher/url_launcher.dart';
 import 'package:web_socket_channel/web_socket_channel.dart';
-
-import 'ChatModels/DashChat2.dart';
 
 class ChatScreen extends StatefulWidget {
   final String reciverName;
@@ -99,6 +94,7 @@ class _ChatScreenState extends State<ChatScreen> {
   // }
   List<Data> myListname;
   @override
+  var urlData;
   void initState() {
     // TODO: implement initState
     super.initState();
@@ -150,7 +146,8 @@ class _ChatScreenState extends State<ChatScreen> {
 
     print("revicer id : ${widget.receiverId}");
   }
-
+  void _launchURL() async =>
+      await canLaunch(urlData) ? await launch(urlData) : throw 'Could not launch $urlData';
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -216,6 +213,26 @@ print("SNAPSHOT ${snapshot.toString()}");
             return isLoading == true
                 ? Center(child: CircularProgressIndicator())
                 : DashChat(
+              parsePatterns: <MatchText>[
+                MatchText(
+                    type: ParsedType.URL,
+                    onTap: (String value) {
+                      print("URL URL URL URL ");
+
+                     urlData=value;
+                     _launchURL();
+
+                    }
+                ),
+                // MatchText(
+                //     pattern: r"\B#+([\w]+)\b",
+                //     style: TextStyle(
+                //       color: Colors.pink,
+                //       fontSize: 24,
+                //     ),
+                //     onTap: (String value) {}
+                // ),
+              ],
                     key: _chatViewKey,
                     inverted: false,
                     onSend: (value) {
@@ -235,6 +252,7 @@ print("SNAPSHOT ${snapshot.toString()}");
                         hintText: "Add message here..."),
                     dateFormat: DateFormat('yyyy-MMM-dd'),
                     timeFormat: DateFormat('HH:mm'),
+
                     messages: listOfMessage,
                     showUserAvatar: false,
                     showAvatarForEveryMessage: false,
