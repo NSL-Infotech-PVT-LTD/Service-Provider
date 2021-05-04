@@ -258,7 +258,7 @@ class _ChatListScreenState extends State<ChatListScreen> {
                                         "${authId != listChatUserModel.data.list.elementAt(index).senderId.toString() ? listChatUserModel.data.list.elementAt(index).senderName : listChatUserModel.data.list.elementAt(index).receiverName}",
                                     subtitle:
                                         "${listChatUserModel.data.list.elementAt(index).message}",
-                                    numberOfMessages: 2),
+                                    numberOfMessages: listChatUserModel.data.list.elementAt(index).replyCount),
                               ),
                             );
                           },
@@ -329,6 +329,7 @@ class _ChatListScreenState extends State<ChatListScreen> {
                             color: CColors.missonMediumGrey,
                             fontWeight: FontWeight.w100,
                             fontFamily: "Product"),
+                        maxLines: 1, overflow: TextOverflow.ellipsis,
                       ),
                     ],
                   ),
@@ -338,7 +339,7 @@ class _ChatListScreenState extends State<ChatListScreen> {
                   padding: const EdgeInsets.all(8.0),
                   child: Badge(
                     badgeContent: Text(
-                      '3',
+                      '$numberOfMessages',
                       style: TextStyle(
                           fontSize: ScreenConfig.fontSizeSmall,
                           color: CColors.missonNormalWhiteColor,

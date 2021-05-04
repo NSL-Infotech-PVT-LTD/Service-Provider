@@ -25,73 +25,9 @@ class SettingPage extends StatefulWidget {
 
 class _SettingPageState extends State<SettingPage> {
   bool isLoading = true;
-  String _fullName = "Loading....";
-  String _email = "Loading..";
-  String _number = "Loading..";
-  String _location = "Loading..";
-  String _postal = "Loading..";
 
-  // void registerUser() async {
-  //   isConnectedToInternet().then((internet) {
-  //     if (internet != null && internet) {
-  //       // showProgress(context, "Please wait.....");
-  //       //print('Device Token $deviceTok');
-  //       // Map<String, String> parms ={
-  //       //   name:_fullNameController.text,
-  //       //   email:_emailAddressFieldController.text,
-  //       //   password:_passwordFieldController.text,
-  //       //   device_type:"ios",
-  //       //   deviceToken:"test",
-  //       //   mobile:_phoneNumberController.text,
-  //       //   gender:"male",
-  //       //   //image:
-  //       //   postalCode:_postalCodeController.text,
-  //       // };
-  //       //  print("$parms");
-  //
-  //       getString(userAuth).then((value) {
-  //
-  //         getProfile(value).then((response) {
-  //
-  //           if (response.status) {
-  //             print(response.status.toString());
-  //             setState(() {
-  //               _fullName = response.data.user.name != null
-  //                   ? response.data.user.name
-  //                   : "No data found";
-  //               _email = response.data.user.email != null
-  //                   ? response.data.user.email
-  //                   : "No data found";
-  //               _number = response.data.user.mobile != null
-  //                   ? response.data.user.mobile
-  //                   : "No data found";
-  //               _location = response.data.user.location != null
-  //                   ? response.data.user.location
-  //                   : "No data found";
-  //               _postal = "12345";
-  //               isLoading = false;
-  //             });
-  //             //setString(userAuth, "Bearer " + response.data.token);
-  //             // pushAndRemoveUntilFun(context,MainScreen());
-  //           } else {
-  //
-  //             setState(() {
-  //               isLoading = false;
-  //             });
-  //
-  //             if (!response.status) {
-  //               print(response.error.toString());
-  //
-  //             }
-  //           }
-  //         });
-  //       });
-  //     } else {
-  //       //  showDialogBox(context, internetError, pleaseCheckInternet);
-  //       // dismissDialog(context);
-  //     }
-  //   });
-  // }
+
+
   String auth = "";
   GetProfileDataModel getProfileDataModel;
   bool isLoadingData = true;
@@ -111,11 +47,7 @@ class _SettingPageState extends State<SettingPage> {
         setState(() {
           isLoadingData = false;
 
-          _fullName = getProfileDataModel.data.user.name;
-          _email = getProfileDataModel.data.user.email;
-          _number = getProfileDataModel.data.user.mobile;
-          _location = getProfileDataModel.data.user.location;
-          _postal = getProfileDataModel.data.user.postalCode;
+
         });
       });
     });

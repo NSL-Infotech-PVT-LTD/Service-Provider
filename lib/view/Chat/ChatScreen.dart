@@ -181,8 +181,8 @@ class _ChatScreenState extends State<ChatScreen> {
                       print("CREATE ${value.toJson()}");
                       _sendMessage(value);
                     },
-                    sendOnEnter: true,
-                    textInputAction: TextInputAction.send,
+                    sendOnEnter: false,
+                    textInputAction: TextInputAction.newline,
                     user: ChatUser(
                       name: "$appUserName",
                       uid: "$appUserId",
