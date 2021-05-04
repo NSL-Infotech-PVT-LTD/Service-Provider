@@ -37,64 +37,11 @@ class _ChatScreenState extends State<ChatScreen> {
   String appUserId;
   String appUserName;
 
-  // final channel2 = IOWebSocketChannel.connect('ws://23.20.179.178:8080/');
-  // final ChatUser user = ChatUser(
-  //   name: "Fayeed",
-  //   firstName: "Fayeed",
-  //   lastName: "Pawaskar",
-  //   uid: "12345678",
-  //   avatar: "https://www.wrappixel.com/ampleadmin/assets/images/users/4.jpg",
-  // );
-
-  // final ChatUser otherUser = ChatUser(
-  //   name: "Mrfatty",
-  //   uid: "25649654",
-  // );
-
-  // List<ChatMessage> localMessagesList = [];
-
-  // @override
-  // void initState() {
-  //   super.initState();
-  // }
-
-  // void onSend(ChatMessage message) async {
-  //   var now = (new DateTime.now()).millisecondsSinceEpoch;
-  //   var model = messageDemoDartToJson(MessageDemoDart(
-  //       localMessageId: now.toString(),
-  //       senderId: int.parse("5"),
-  //       receiverId: int.parse("1"),
-  //       senderName: "Prince",
-  //       receiverName: "Pallavi",
-  //       message: message,
-  //       type: "text",
-  //       createdAt: DateTime.now(),
-  //       deviceType: Platform.isIOS ? "ios" : "android"));
-  //   print("Send model $model ------");
-  //   widget.channel.sink.add(
-  //     model,
-  //   );
-  //
-  //   // print(message.toJson());
-  //   // var documentReference = Firestore.instance
-  //   //     .collection('localMessagesList')
-  //   //     .document(DateTime.now().millisecondsSinceEpoch.toString());
-  //   //
-  //   // await Firestore.instance.runTransaction((transaction) async {
-  //   //   await transaction.set(
-  //   //     documentReference,
-  //   //     message.toJson(),
-  //   //   );
-  //   // });
-  //   setState(() {
-  //     // localMessagesList = [...localMessagesList, message];
-  //     localMessagesList.add(message);
-  //     print(localMessagesList.length);
-  //   });
-  // }
   List<Data> myListname;
   @override
   var urlData;
+  ScrollController _scrollController = ScrollController();
+
   void initState() {
     // TODO: implement initState
     super.initState();
@@ -114,19 +61,19 @@ class _ChatScreenState extends State<ChatScreen> {
               .getHistoryOfChat(auth: _auth, reciverId: widget.receiverId)
               .then((value) {
             chatHistoryModel = value;
-
-            // chatHistoryModel.data.chat.data =
-            // ;
           }).whenComplete(() {
             List<Datum> list = chatHistoryModel.data.chat.data;
-            list.sort((a,b)=>a.localMessageId.compareTo(b.localMessageId));
+            list.sort((a, b) => a.localMessageId.compareTo(b.localMessageId));
             list.forEach((element) {
-
-              print("QWERTY ${element.toJson()}");
+              // print(element.createdAt.timeZoneOffset.inMilliseconds);
+              // print(element.createdAt.timeZoneOffset);
+              // print(
+              //     "${element.message}   ${element.createdAt} VVVV ${(element.createdAt.millisecondsSinceEpoch +element.createdAt.timeZoneOffset.inMilliseconds)}    ${DateTime.fromMillisecondsSinceEpoch((element.createdAt.millisecondsSinceEpoch +element.createdAt.timeZoneOffset.inMilliseconds))}");
               listOfMessage.add(
                 ChatMessage(
-                  text: element.message,
-                  createdAt: element.createdAt,
+                  text: element.message.replaceAll("\n", ""),
+                  // createdAt: element.createdAt,
+                  createdAt: DateTime.fromMillisecondsSinceEpoch((element.createdAt.millisecondsSinceEpoch +element.createdAt.timeZoneOffset.inMilliseconds)),
                   user: ChatUser(
                     name: element.senderName,
                     avatar: element.senderImage,
@@ -139,6 +86,13 @@ class _ChatScreenState extends State<ChatScreen> {
             setState(() {
               isLoading = false;
             });
+          }).whenComplete(() {
+            Future.delayed(Duration(seconds: 1), () {
+              _scrollController.animateTo(
+                  _scrollController.position.maxScrollExtent,
+                  duration: Duration(milliseconds: 500),
+                  curve: Curves.fastOutSlowIn);
+            });
           });
         });
       });
@@ -146,8 +100,11 @@ class _ChatScreenState extends State<ChatScreen> {
 
     print("revicer id : ${widget.receiverId}");
   }
-  void _launchURL() async =>
-      await canLaunch(urlData) ? await launch(urlData) : throw 'Could not launch $urlData';
+
+  void _launchURL() async => await canLaunch(urlData)
+      ? await launch(urlData)
+      : throw 'Could not launch $urlData';
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -188,12 +145,12 @@ class _ChatScreenState extends State<ChatScreen> {
           builder: (context, snapshot) {
             if (snapshot.data != null) {
               _messageDemoDart = messageDemoDartFromJson(snapshot.data);
-print("SNAPSHOT ${snapshot.toString()}");
+              print("TIME ${_messageDemoDart.createdAt}");
+              print("SNAPSHOT ${snapshot.toString()}");
               if (_messageDemoDart.senderId.toString() == widget.receiverId) {
                 listOfMessage.add(ChatMessage(
                     text: _messageDemoDart.message,
                     user: ChatUser(
-
                         name: _messageDemoDart.senderName,
                         avatar: _messageDemoDart.senderImage,
                         uid: _messageDemoDart.senderId.toString())));
@@ -201,38 +158,21 @@ print("SNAPSHOT ${snapshot.toString()}");
 
               print("sdfdssdds ${snapshot.data}"); //Palvai send message
             }
-            // if (!snapshot.hasData) {
-            //   return Center(
-            //     child: CircularProgressIndicator(
-            //       valueColor: AlwaysStoppedAnimation<Color>(
-            //         Theme.of(context).primaryColor,
-            //       ),
-            //     ),
-            //   );
-            // } else {
+
             return isLoading == true
-                ? Center(child: CircularProgressIndicator())
+                ? Center(child: spinkit)
                 : DashChat(
-              parsePatterns: <MatchText>[
-                MatchText(
-                    type: ParsedType.URL,
-                    onTap: (String value) {
-                      print("URL URL URL URL ");
+                    scrollController: _scrollController,
+                    parsePatterns: <MatchText>[
+                      MatchText(
+                          type: ParsedType.URL,
+                          onTap: (String value) {
+                            print("URL URL URL URL ");
 
-                     urlData=value;
-                     _launchURL();
-
-                    }
-                ),
-                // MatchText(
-                //     pattern: r"\B#+([\w]+)\b",
-                //     style: TextStyle(
-                //       color: Colors.pink,
-                //       fontSize: 24,
-                //     ),
-                //     onTap: (String value) {}
-                // ),
-              ],
+                            urlData = value;
+                            _launchURL();
+                          }),
+                    ],
                     key: _chatViewKey,
                     inverted: false,
                     onSend: (value) {
@@ -244,7 +184,6 @@ print("SNAPSHOT ${snapshot.toString()}");
                     sendOnEnter: true,
                     textInputAction: TextInputAction.send,
                     user: ChatUser(
-                   
                       name: "$appUserName",
                       uid: "$appUserId",
                     ),
@@ -252,7 +191,6 @@ print("SNAPSHOT ${snapshot.toString()}");
                         hintText: "Add message here..."),
                     dateFormat: DateFormat('yyyy-MMM-dd'),
                     timeFormat: DateFormat('HH:mm'),
-
                     messages: listOfMessage,
                     showUserAvatar: false,
                     showAvatarForEveryMessage: false,
@@ -272,240 +210,16 @@ print("SNAPSHOT ${snapshot.toString()}");
                       border: Border.all(width: 0.0),
                       color: Colors.white,
                     ),
-                    // onQuickReply: (Reply reply) {
-                    //   setState(() {
-                    //     localMessagesList.add(ChatMessage(
-                    //         text: reply.value, createdAt: DateTime.now(), user: user));
-                    //
-                    //     localMessagesList = [...localMessagesList];
-                    //   });
-                    //
-                    //   Timer(Duration(milliseconds: 300), () {
-                    //     _chatViewKey.currentState.scrollController
-                    //       ..animateTo(
-                    //         _chatViewKey
-                    //             .currentState.scrollController.position.maxScrollExtent,
-                    //         curve: Curves.easeOut,
-                    //         duration: const Duration(milliseconds: 300),
-                    //       );
-                    //
-                    //     // if (i == 0) {
-                    //     //   systemMessage();
-                    //     //   Timer(Duration(milliseconds: 600), () {
-                    //     //     systemMessage();
-                    //     //   });
-                    //     // } else {
-                    //     //   systemMessage();
-                    //     // }
-                    //   });
-                    // },
                     onLoadEarlier: () {
                       print("laoding...");
                     },
                     shouldShowLoadEarlier: false,
                     showTraillingBeforeSend: true,
-                    // trailing: <Widget>[
-                    //   IconButton(
-                    //     icon: Icon(Icons.photo),
-                    //     onPressed: () async {
-                    //       // File result = await ImagePicker.pickImage(
-                    //       //   source: ImageSource.gallery,
-                    //       //   imageQuality: 80,
-                    //       //   maxHeight: 400,
-                    //       //   maxWidth: 400,
-                    //       // );
-                    //
-                    //       // if (result != null) {
-                    //       //   final StorageReference storageRef =
-                    //       //   FirebaseStorage.instance.ref().child("chat_images");
-                    //       //
-                    //       //   StorageUploadTask uploadTask = storageRef.putFile(
-                    //       //     result,
-                    //       //     StorageMetadata(
-                    //       //       contentType: 'image/jpg',
-                    //       //     ),
-                    //       //   );
-                    //       //   StorageTaskSnapshot download =
-                    //       //   await uploadTask.onComplete;
-                    //       //
-                    //       //   String url = await download.ref.getDownloadURL();
-                    //       //
-                    //       //   ChatMessage message =
-                    //       //   ChatMessage(text: "", user: user, image: url);
-                    //       //
-                    //       //   var documentReference = Firestore.instance
-                    //       //       .collection('messages')
-                    //       //       .document(DateTime.now()
-                    //       //       .millisecondsSinceEpoch
-                    //       //       .toString());
-                    //       //
-                    //       //   Firestore.instance.runTransaction((transaction) async {
-                    //       //     await transaction.set(
-                    //       //       documentReference,
-                    //       //       message.toJson(),
-                    //       //     );
-                    //       //   });
-                    //       // }
-                    //     },
-                    //   )
-                    // ],
                   );
-            // }
-            // else {
-            // List<DocumentSnapshot> items = snapshot.data.documents;
-            // var localMessagesList =
-            // items.map((i) => ChatMessage.fromJson(i.data)).toList();
-            // return DashChat2(
-            //   key: _chatViewKey,
-            //   inverted: false,
-            //   onSend: onSend,
-            //   sendOnEnter: true,
-            //   textInputAction: TextInputAction.send,
-            //   user: user,
-            //   inputDecoration:
-            //       InputDecoration.collapsed(hintText: "Add message here..."),
-            //   dateFormat: DateFormat('yyyy-MMM-dd'),
-            //   timeFormat: DateFormat('HH:mm'),
-            //   messages: localMessagesList,
-            //   showUserAvatar: false,
-            //   showAvatarForEveryMessage: false,
-            //   scrollToBottom: true,
-            //   onPressAvatar: (ChatUser user) {
-            //     print("OnPressAvatar: ${user.name}");
-            //   },
-            //   onLongPressAvatar: (ChatUser user) {
-            //     print("OnLongPressAvatar: ${user.name}");
-            //   },
-            //   inputMaxLines: 5,
-            //   messageContainerPadding: EdgeInsets.only(left: 5.0, right: 5.0),
-            //   alwaysShowSend: true,
-            //   inputTextStyle: TextStyle(fontSize: 16.0),
-            //   inputContainerStyle: BoxDecoration(
-            //     border: Border.all(width: 0.0),
-            //     color: Colors.white,
-            //   ),
-            //   // onQuickReply: (Reply reply) {
-            //   //   setState(() {
-            //   //     localMessagesList.add(ChatMessage(
-            //   //         text: reply.value, createdAt: DateTime.now(), user: user));
-            //   //
-            //   //     localMessagesList = [...localMessagesList];
-            //   //   });
-            //   //
-            //   //   Timer(Duration(milliseconds: 300), () {
-            //   //     _chatViewKey.currentState.scrollController
-            //   //       ..animateTo(
-            //   //         _chatViewKey
-            //   //             .currentState.scrollController.position.maxScrollExtent,
-            //   //         curve: Curves.easeOut,
-            //   //         duration: const Duration(milliseconds: 300),
-            //   //       );
-            //   //
-            //   //     // if (i == 0) {
-            //   //     //   systemMessage();
-            //   //     //   Timer(Duration(milliseconds: 600), () {
-            //   //     //     systemMessage();
-            //   //     //   });
-            //   //     // } else {
-            //   //     //   systemMessage();
-            //   //     // }
-            //   //   });
-            //   // },
-            //   onLoadEarlier: () {
-            //     print("laoding...");
-            //   },
-            //   shouldShowLoadEarlier: false,
-            //   showTraillingBeforeSend: true,
-            //   trailing: <Widget>[
-            //     IconButton(
-            //       icon: Icon(Icons.photo),
-            //       onPressed: () async {
-            //         // File result = await ImagePicker.pickImage(
-            //         //   source: ImageSource.gallery,
-            //         //   imageQuality: 80,
-            //         //   maxHeight: 400,
-            //         //   maxWidth: 400,
-            //         // );
-            //
-            //         // if (result != null) {
-            //         //   final StorageReference storageRef =
-            //         //   FirebaseStorage.instance.ref().child("chat_images");
-            //         //
-            //         //   StorageUploadTask uploadTask = storageRef.putFile(
-            //         //     result,
-            //         //     StorageMetadata(
-            //         //       contentType: 'image/jpg',
-            //         //     ),
-            //         //   );
-            //         //   StorageTaskSnapshot download =
-            //         //   await uploadTask.onComplete;
-            //         //
-            //         //   String url = await download.ref.getDownloadURL();
-            //         //
-            //         //   ChatMessage message =
-            //         //   ChatMessage(text: "", user: user, image: url);
-            //         //
-            //         //   var documentReference = Firestore.instance
-            //         //       .collection('messages')
-            //         //       .document(DateTime.now()
-            //         //       .millisecondsSinceEpoch
-            //         //       .toString());
-            //         //
-            //         //   Firestore.instance.runTransaction((transaction) async {
-            //         //     await transaction.set(
-            //         //       documentReference,
-            //         //       message.toJson(),
-            //         //     );
-            //         //   });
-            //         // }
-            //       },
-            //     )
-            //   ],
-            // );
-            // }
           }),
     );
   }
 
-  // TextEditingController _controller = TextEditingController();
-  //
-  // @override
-  // Widget build(BuildContext context) {
-  //   return Scaffold(
-  //     appBar: AppBar(
-  //       title: Text("dsfdsf"),
-  //     ),
-  //     body: Padding(
-  //       padding: const EdgeInsets.all(20.0),
-  //       child: Column(
-  //         crossAxisAlignment: CrossAxisAlignment.start,
-  //         children: <Widget>[
-  //           Form(
-  //             child: TextFormField(
-  //               controller: _controller,
-  //               decoration: InputDecoration(labelText: 'Send a message'),
-  //             ),
-  //           ),
-  //           StreamBuilder(
-  //             stream: widget.channel.stream,
-  //             builder: (context, snapshot) {
-  //               return Padding(
-  //                 padding: const EdgeInsets.symmetric(vertical: 24.0),
-  //                 child: Text(snapshot.hasData ? '${snapshot.data}' : ''),
-  //               );
-  //             },
-  //           )
-  //         ],
-  //       ),
-  //     ),
-  //     floatingActionButton: FloatingActionButton(
-  //       onPressed: _sendMessage,
-  //       tooltip: 'Send message',
-  //       child: Icon(Icons.send),
-  //     ), // This trailing comma makes auto-formatting nicer for build methods.
-  //   );
-  // }
-  //
   void _sendMessage(ChatMessage message) async {
     // if (_controller.text.isNotEmpty) {
 
@@ -527,8 +241,6 @@ print("SNAPSHOT ${snapshot.toString()}");
     widget.channel.sink.add(
       model,
     );
-
-    // widget.channel.sink.add(_controller.text);
   }
 
   @override

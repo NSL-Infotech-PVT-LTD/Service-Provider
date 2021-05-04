@@ -88,7 +88,7 @@ String auth="";
 
     List<Asset> resultList;
     String error;
-
+    double sizeInMb=0.0;
     try {
       resultList = await MultiImagePicker.pickImages(
         maxImages: 6,
@@ -101,7 +101,39 @@ String auth="";
     // files = [];
     for (Asset asset in resultList) {
       final path = await FlutterAbsolutePath.getAbsolutePath(asset.identifier);
-      files.add(File(path));
+      int sizeInBytes = File(path).lengthSync();
+      sizeInMb  = sizeInMb+sizeInBytes / (1024 * 1024);
+
+      print("SIZE IN MB $sizeInMb");
+      // files.add(File(path));
+      if (sizeInMb <= 10.0) {
+        files.add(File(path));
+
+      } else {
+        resultList.clear();
+        showCupertinoDialog(
+          context: context,
+          builder: (BuildContext context) {
+            return CupertinoAlertDialog(
+              title: Text('Info'),
+              content: Text('Please select images of total size of 10mb'),
+              actions: [
+                CupertinoDialogAction(
+                  child: Text('OK'),
+                  onPressed: () {
+                    Navigator.pop(context);
+                    // NavMe().NavPushReplaceFadeIn(LoginPage());
+                    // Navigator.pushReplacement(context, MaterialPageRoute(builder: (_)=> LoginPage()));
+                  },
+                ),
+              ],
+            );
+          },
+        );
+
+
+
+      }
     }
     // If the widget was removed from the tree while the asynchronous platform
     // message was in flight, we want to discard the reply rather than calling

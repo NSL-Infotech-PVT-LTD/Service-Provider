@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:misson_tasker/utils/CColors.dart';
 import 'package:misson_tasker/utils/NavMe.dart';
 import 'package:misson_tasker/utils/ScreenConfig.dart';
@@ -23,7 +24,21 @@ class MyDrawer extends StatefulWidget {
 
 class _MyDrawerState extends State<MyDrawer> {
   // static String username = "";
+   getSharedPref(widget) {
 
+    getString(sharedPref.userNetworkImage).then((value) {
+      widget.ImageUrl=value;
+
+      print("123 $value");
+    });
+    getString(sharedPref.userName).then((value) {
+      widget.username = value;
+
+      print("123 $value");
+    }).whenComplete(() {setState(() {
+
+    });});
+  }
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -56,7 +71,9 @@ class _MyDrawerState extends State<MyDrawer> {
                           child: Text("${widget.username}",
                               style: TextStyle(
                                   color: CColors.missonNormalWhiteColor,
-                                  fontSize: ScreenConfig.fontSizeXlarge)),
+                                  fontSize: ScreenConfig.fontSizeXlarge),
+                              maxLines: 2,
+                              overflow: TextOverflow.ellipsis),
                         ),
                         Padding(
                           padding: const EdgeInsets.symmetric(vertical: 4.0),
@@ -71,7 +88,14 @@ class _MyDrawerState extends State<MyDrawer> {
                         ),
                         InkWell(
                           onTap: () {
-                            NavMe().NavPushLeftToRight(EditProfile());
+                            // NavMe().NavPushLeftToRight(EditProfile());
+
+                            Get.to(EditProfile(),
+                                    transition: Transition.leftToRightWithFade,
+                                    duration: Duration(milliseconds: 400))
+                                .then((value) {
+                              getSharedPref(widget);
+                            });
                           },
                           child: Text(
                             "Edit Profile",
@@ -231,7 +255,7 @@ class _MyDrawerState extends State<MyDrawer> {
                   // Update the state of the app
                   // ...
                   // Then close the MyDrawer
-                 NavMe().NavPushLeftToRight(SettingPage());
+                  NavMe().NavPushLeftToRight(SettingPage());
                 },
               ),
               SizedBox(

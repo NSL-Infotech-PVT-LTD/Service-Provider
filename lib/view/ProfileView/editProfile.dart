@@ -229,6 +229,21 @@ class _EditProfileState extends State<EditProfile> {
               _number.text = _profileDataModel.data.user.mobile;
               _location.text = _profileDataModel.data.user.location;
               _postal.text = _profileDataModel.data.user.postalCode;
+
+              setString(sharedPref.userEmail, _profileDataModel.data.user.email);
+
+              // setString(sharedPref.userToken, _profileDataModel.data.token);
+              setString(sharedPref.userName, _profileDataModel.data.user.name);
+              setString(sharedPref.userLocation, _profileDataModel.data.user.location);
+              setString(
+                  sharedPref.userPhoneNumber, _profileDataModel.data.user.mobile);
+              setString(sharedPref.userDefaultImage, avatar1);
+              setString(
+                  sharedPref.userNetworkImage, _profileDataModel.data.user.image);
+              setString(
+                  sharedPref.userId, _profileDataModel.data.user.id.toString());
+
+
             });
           })
           .whenComplete(() {

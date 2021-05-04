@@ -287,6 +287,8 @@ class ApiCaller {
     request.headers['Authorization'] = "Bearer " + auth;
     request.fields.addAll(params);
     // print(updateUrl.toString());
+
+
     if (listFile.length > 0) {
       for (int i = 0; i < listFile.length; i++) {
         http.MultipartFile multipartFile = await http.MultipartFile.fromPath(
@@ -534,7 +536,7 @@ class ApiCaller {
         'Content-Type': 'application/json; charset=UTF-8',
         'Authorization': "Bearer " + auth
       },
-      body: jsonEncode(<String, dynamic>{'receiver_id': "$reciverId", "limit": "200"}),
+      body: jsonEncode(<String, dynamic>{'receiver_id': "$reciverId", "limit": "1000"}),
     );
 
     if (response.statusCode == 200 || response.statusCode == 422) {

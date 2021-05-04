@@ -143,13 +143,16 @@ class _ChatListScreenState extends State<ChatListScreen> {
           title: Column(
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              Text(
-                "Messages",
-                textAlign: TextAlign.left,
-                style: TextStyle(
-                    fontSize: ScreenConfig.fontSizeXlarge,
-                    color: CColors.textColor,
-                    fontFamily: "Product"),
+              Padding(
+                padding:EdgeInsets.only(top:8.0),
+                child: Text(
+                  "Messages",
+                  textAlign: TextAlign.left,
+                  style: TextStyle(
+                      fontSize: ScreenConfig.fontSizeXhlarge,
+                      color: CColors.textColor,
+                      fontFamily: "Product"),
+                ),
               ),
             ],
           ),
@@ -201,61 +204,66 @@ class _ChatListScreenState extends State<ChatListScreen> {
                       height: 40,
                     ),
                     Expanded(
-                      child: ListView.builder(
-                        itemBuilder: (context, index) {
-                          return InkWell(
-                            onTap: () {
-                              // NavMe().NavPushLeftToRight(ChatScreen(
-                              //     // title:
-                              //     //     "${messageDemoDart.data.list.elementAt(index).senderName}",
-                              //     // image: messageDemoDart.data.list
-                              //     //             .elementAt(index)
-                              //     //             .senderImage ==
-                              //     //         null
-                              //     //     ? " "
-                              //     //     : "${messageDemoDart.data.list.elementAt(index).senderImage}",
-                              //     // receiverId:
-                              //     //     "${messageDemoDart.data.list.elementAt(index).senderId}",
-                              //     // channel: IOWebSocketChannel.connect(
-                              //     //     "ws://23.20.179.178:8080/")
-                              //
-                              // ));
+                      child: Container( color: CColors.missonLightGrey,
+                        child: ListView.builder(
+                          itemBuilder: (context, index) {
+                            return InkWell(
+                              onTap: () {
+                                // NavMe().NavPushLeftToRight(ChatScreen(
+                                //     // title:
+                                //     //     "${messageDemoDart.data.list.elementAt(index).senderName}",
+                                //     // image: messageDemoDart.data.list
+                                //     //             .elementAt(index)
+                                //     //             .senderImage ==
+                                //     //         null
+                                //     //     ? " "
+                                //     //     : "${messageDemoDart.data.list.elementAt(index).senderImage}",
+                                //     // receiverId:
+                                //     //     "${messageDemoDart.data.list.elementAt(index).senderId}",
+                                //     // channel: IOWebSocketChannel.connect(
+                                //     //     "ws://23.20.179.178:8080/")
+                                //
+                                // ));
 
-                              Get.to(
-                                      ChatScreen(
-                                          reciverName:
-                                              "${authId != listChatUserModel.data.list.elementAt(index).senderId.toString() ? listChatUserModel.data.list.elementAt(index).senderName : listChatUserModel.data.list.elementAt(index).receiverName}",
-                                          image:
-                                              "${(authId != listChatUserModel.data.list.elementAt(index).senderId.toString() ? (listChatUserModel.data.list.elementAt(index).senderImage) : (listChatUserModel.data.list.elementAt(index).receiverImage)) == null ? " " : authId != listChatUserModel.data.list.elementAt(index).senderId.toString() ? (listChatUserModel.data.list.elementAt(index).senderImage) : (listChatUserModel.data.list.elementAt(index).receiverImage)}",
-                                          receiverId:
-                                              "${authId != listChatUserModel.data.list.elementAt(index).senderId.toString() ? listChatUserModel.data.list.elementAt(index).senderId : listChatUserModel.data.list.elementAt(index).receiverId}",
-                                          channel: IOWebSocketChannel.connect(
-                                              "ws://23.20.179.178:8080/")),
-                                      transition:
-                                          Transition.leftToRightWithFade,
-                                      duration: Duration(milliseconds: 400))
-                                  .then((value) => initState());
-                              // NavMe().NavPushLeftToRight(ChatScreen(
-                              //     reciverName:
-                              //         "${authId != listChatUserModel.data.list.elementAt(index).senderId.toString() ? listChatUserModel.data.list.elementAt(index).senderName : listChatUserModel.data.list.elementAt(index).receiverName}",
-                              //     image:                                     "${(authId != listChatUserModel.data.list.elementAt(index).senderId.toString() ? (listChatUserModel.data.list.elementAt(index).senderImage) : (listChatUserModel.data.list.elementAt(index).receiverImage)) == null ? " " : authId != listChatUserModel.data.list.elementAt(index).senderId.toString() ? (listChatUserModel.data.list.elementAt(index).senderImage) : (listChatUserModel.data.list.elementAt(index).receiverImage)}",
-                              //
-                              //     receiverId:
-                              //         "${authId != listChatUserModel.data.list.elementAt(index).senderId.toString() ? listChatUserModel.data.list.elementAt(index).senderId : listChatUserModel.data.list.elementAt(index).receiverId}",
-                              //     channel: IOWebSocketChannel.connect(
-                              //         "ws://23.20.179.178:8080/")));
-                            },
-                            child: MyChatListView(
-                                imageUrl:
-                                    "${(authId != listChatUserModel.data.list.elementAt(index).senderId.toString() ? (listChatUserModel.data.list.elementAt(index).senderImage) : (listChatUserModel.data.list.elementAt(index).receiverImage)) == null ? " " : authId != listChatUserModel.data.list.elementAt(index).senderId.toString() ? (listChatUserModel.data.list.elementAt(index).senderImage) : (listChatUserModel.data.list.elementAt(index).receiverImage)}",
-                                name:
-                                    "${authId != listChatUserModel.data.list.elementAt(index).senderId.toString() ? listChatUserModel.data.list.elementAt(index).senderName : listChatUserModel.data.list.elementAt(index).receiverName}",
-                                subtitle:
-                                    "${listChatUserModel.data.list.elementAt(index).message}",
-                                numberOfMessages: 2),
-                          );
-                        },
-                        itemCount: listChatUserModel.data.list.length,
+                                Get.to(
+                                        ChatScreen(
+                                            reciverName:
+                                                "${authId != listChatUserModel.data.list.elementAt(index).senderId.toString() ? listChatUserModel.data.list.elementAt(index).senderName : listChatUserModel.data.list.elementAt(index).receiverName}",
+                                            image:
+                                                "${(authId != listChatUserModel.data.list.elementAt(index).senderId.toString() ? (listChatUserModel.data.list.elementAt(index).senderImage) : (listChatUserModel.data.list.elementAt(index).receiverImage)) == null ? " " : authId != listChatUserModel.data.list.elementAt(index).senderId.toString() ? (listChatUserModel.data.list.elementAt(index).senderImage) : (listChatUserModel.data.list.elementAt(index).receiverImage)}",
+                                            receiverId:
+                                                "${authId != listChatUserModel.data.list.elementAt(index).senderId.toString() ? listChatUserModel.data.list.elementAt(index).senderId : listChatUserModel.data.list.elementAt(index).receiverId}",
+                                            channel: IOWebSocketChannel.connect(
+                                                "ws://23.20.179.178:8080/")),
+                                        transition:
+                                            Transition.leftToRightWithFade,
+                                        duration: Duration(milliseconds: 400))
+                                    .then((value) => initState());
+                                // NavMe().NavPushLeftToRight(ChatScreen(
+                                //     reciverName:
+                                //         "${authId != listChatUserModel.data.list.elementAt(index).senderId.toString() ? listChatUserModel.data.list.elementAt(index).senderName : listChatUserModel.data.list.elementAt(index).receiverName}",
+                                //     image:                                     "${(authId != listChatUserModel.data.list.elementAt(index).senderId.toString() ? (listChatUserModel.data.list.elementAt(index).senderImage) : (listChatUserModel.data.list.elementAt(index).receiverImage)) == null ? " " : authId != listChatUserModel.data.list.elementAt(index).senderId.toString() ? (listChatUserModel.data.list.elementAt(index).senderImage) : (listChatUserModel.data.list.elementAt(index).receiverImage)}",
+                                //
+                                //     receiverId:
+                                //         "${authId != listChatUserModel.data.list.elementAt(index).senderId.toString() ? listChatUserModel.data.list.elementAt(index).senderId : listChatUserModel.data.list.elementAt(index).receiverId}",
+                                //     channel: IOWebSocketChannel.connect(
+                                //         "ws://23.20.179.178:8080/")));
+                              },
+                              child: Padding(
+                                padding: const EdgeInsets.only(left:8.0, right: 8.0),
+                                child: MyChatListView(
+                                    imageUrl:
+                                        "${(authId != listChatUserModel.data.list.elementAt(index).senderId.toString() ? (listChatUserModel.data.list.elementAt(index).senderImage) : (listChatUserModel.data.list.elementAt(index).receiverImage)) == null ? " " : authId != listChatUserModel.data.list.elementAt(index).senderId.toString() ? (listChatUserModel.data.list.elementAt(index).senderImage) : (listChatUserModel.data.list.elementAt(index).receiverImage)}",
+                                    name:
+                                        "${authId != listChatUserModel.data.list.elementAt(index).senderId.toString() ? listChatUserModel.data.list.elementAt(index).senderName : listChatUserModel.data.list.elementAt(index).receiverName}",
+                                    subtitle:
+                                        "${listChatUserModel.data.list.elementAt(index).message}",
+                                    numberOfMessages: 2),
+                              ),
+                            );
+                          },
+                          itemCount: listChatUserModel.data.list.length,
+                        ),
                       ),
                     )
                   ],
@@ -272,75 +280,81 @@ class _ChatListScreenState extends State<ChatListScreen> {
       int numberOfMessages}) {
     print("dsfdssdf $imageUrl");
 
-    return Column(
-      children: [
-        Divider(
-          height: 1,
-        ),
-        Padding(
-          padding: const EdgeInsets.all(8.0),
-          child: Container(
-              child: Row(
-            children: [
-              SizedBox(
-                width: 5,
-              ),
-              imageUrl == " "
-                  ? Image.asset(
-                      avatar1,
-                      height: 50,
-                    )
-                  : CircleAvatar(
-                      backgroundImage: NetworkImage(imageUrl),
-                      radius: 25,
-                    ),
-              SizedBox(
-                width: 15,
-              ),
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    "$name",
-                    textAlign: TextAlign.center,
-                    style: TextStyle(
-                        fontSize: ScreenConfig.fontSizelarge,
-                        color: CColors.textColor,
-                        fontWeight: FontWeight.bold,
-                        fontFamily: "Product"),
-                  ),
-                  Text(
-                    "$subtitle",
-                    textAlign: TextAlign.center,
-                    style: TextStyle(
-                        fontSize: ScreenConfig.fontSizeSmall,
-                        color: CColors.missonMediumGrey,
-                        fontWeight: FontWeight.w100,
-                        fontFamily: "Product"),
-                  ),
-                ],
-              ),
-              Spacer(),
-              Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Badge(
-                  badgeContent: Text(
-                    '3',
-                    style: TextStyle(
-                        fontSize: ScreenConfig.fontSizeSmall,
-                        color: CColors.missonNormalWhiteColor,
-                        fontWeight: FontWeight.w100,
-                        fontFamily: "Product"),
-                  ),
-                  badgeColor: Colors.green.shade200,
-                  // child: Icon(Icons.settings),
+    return Card(
+      child: Column(
+        children: [
+          Divider(
+            height: 1,
+          ),
+          Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Container(
+                child: Row(
+              children: [
+                SizedBox(
+                  width: 5,
                 ),
-              )
-            ],
-          )),
-        ),
-        // Divider(height: 1,),
-      ],
+                imageUrl == " "
+                    ? Image.asset(
+                        avatar1,
+                        height: 60,
+                      )
+                    : CircleAvatar(
+                        backgroundImage: NetworkImage(imageUrl),
+                        radius: 30,
+                      ),
+                SizedBox(
+                  width: 15,
+                ),
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        "$name",
+                        textAlign: TextAlign.center,
+                        style: TextStyle(
+                            fontSize: ScreenConfig.fontSizelarge,
+                            color: CColors.textColor,
+                            fontWeight: FontWeight.bold,
+                            fontFamily: "Product"),
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
+                      ),
+                      Text(
+                        "$subtitle",
+                        textAlign: TextAlign.center,
+                        style: TextStyle(
+                            fontSize: ScreenConfig.fontSizeSmall,
+                            color: CColors.missonMediumGrey,
+                            fontWeight: FontWeight.w100,
+                            fontFamily: "Product"),
+                      ),
+                    ],
+                  ),
+                ),
+                Spacer(),
+                Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Badge(
+                    badgeContent: Text(
+                      '3',
+                      style: TextStyle(
+                          fontSize: ScreenConfig.fontSizeSmall,
+                          color: CColors.missonNormalWhiteColor,
+                          fontWeight: FontWeight.w100,
+                          fontFamily: "Product"),
+                    ),
+                    badgeColor: Colors.green.shade200,
+                    // child: Icon(Icons.settings),
+                  ),
+                )
+              ],
+            )),
+          ),
+          // Divider(height: 1,),
+        ],
+      ),
     );
   }
 }

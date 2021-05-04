@@ -427,7 +427,7 @@ class _MissionRequestState extends State<MissionRequest> {
                                               return CupertinoAlertDialog(
                                                 title: Text('Alert'),
                                                 content: Text(
-                                                    '${changeJobStatusModel.data.message}'),
+                                                    'Job Decline successfully '),
                                                 actions: [
                                                   CupertinoDialogAction(
                                                     child: Text('OK'),

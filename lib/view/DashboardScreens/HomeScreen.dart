@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:get/get.dart';
 import 'package:misson_tasker/model/ApiCaller.dart';
 import 'package:misson_tasker/model/api_models/GetProfileDataModel.dart';
 import 'package:misson_tasker/model/api_models/MissionRequestModel.dart';
@@ -18,33 +19,62 @@ class HomeScreen extends StatefulWidget {
   final GetProfileDataModel getProfileDataModel;
   final MissionRequestModel missionRequest;
 
-  const HomeScreen({@required this.getProfileDataModel, @required this.missionRequest});
-
+  const HomeScreen(
+      {@required this.getProfileDataModel, @required this.missionRequest});
 
   @override
   _HomeScreenState createState() => _HomeScreenState();
 }
 
+
 class _HomeScreenState extends State<HomeScreen> {
-
-
   GlobalKey<ScaffoldState> _drawerKey = GlobalKey();
+  void getSharedPref(widget) {
+    getString(sharedPref.userLocation).then((value) {
+      widget.getProfileDataModel.data.user.location = value;
+
+      print("123 $value");
+    });
+    getString(sharedPref.userNetworkImage).then((value) {
+      widget.getProfileDataModel.data.user.image = value;
+
+      print("123 $value");
+    });
+    getString(sharedPref.userName).then((value) {
+      widget.getProfileDataModel.data.user.name = value;
+
+      print("123 $value");
+    }).whenComplete(() {
+
+      setState(() {
+
+      });
+
+    });
+  }
 
 
   @override
   @override
   Widget build(BuildContext context) {
-
     print("YEH ====> ${widget.missionRequest.toJson()}");
 
     return Scaffold(
       key: _drawerKey,
+      onDrawerChanged: (isOpened) {
+        print(isOpened);
+        if(isOpened==false)
+          {
+            getSharedPref(widget);
+          }
+
+      },
       drawer: Drawer(
           // Add a ListView to the drawer. This ensures the user can scroll
           // through the options in the drawer if there isn't enough vertical
           // space to fit everything.
           child: MyDrawer(
-        username:widget.getProfileDataModel.data.user.name ,
+        username: widget.getProfileDataModel.data.user.name,
         ImageUrl: widget.getProfileDataModel == null ||
                 widget.getProfileDataModel.data == null ||
                 widget.getProfileDataModel.data.user == null ||
@@ -59,6 +89,7 @@ class _HomeScreenState extends State<HomeScreen> {
         leading: InkWell(
           onTap: () {
             _drawerKey.currentState.openDrawer();
+
           },
           child: Padding(
             padding: const EdgeInsets.all(18.0),
@@ -89,8 +120,15 @@ class _HomeScreenState extends State<HomeScreen> {
             padding: EdgeInsets.only(right: 16.0),
             child: InkWell(
               onTap: () {
-                NavMe().NavPushLeftToRight(BusinessProfile());
-
+                // NavMe().NavPushLeftToRight(BusinessProfile());
+                Get.to(BusinessProfile(),
+                        transition: Transition.leftToRightWithFade,
+                        duration: Duration(milliseconds: 400))
+                    .then((value) {
+                  getSharedPref(widget);
+                }).whenComplete(() {
+                  setState(() {});
+                });
               },
               child: CircleAvatar(
                 backgroundColor: CColors.missonGrey,
@@ -198,38 +236,36 @@ class _HomeScreenState extends State<HomeScreen> {
                       height: 170,
                       width: ScreenConfig.screenWidth,
                       color: CColors.backgroundRed,
-                      child:  ListView.builder(
-                              itemBuilder: (context, index) {
-
-                                return Padding(
-                                  padding: const EdgeInsets.symmetric(
-                                      vertical: 20.0, horizontal: 10),
-                                  child: InkWell(
-                                    onTap: () {
-                                      NavMe().NavPushLeftToRight(MissionRequest(
-                                        id: widget.missionRequest.data.data
-                                            .elementAt(index)
-                                            .id
-                                            .toString(),
-                                      ));
-                                    },
-                                    child: customTile(
-                                        heading:
-                                            "${widget.missionRequest.data.data.elementAt(index).title}",
-                                        // heading: "sdf",
-                                        subheading:
-                                            "${widget.missionRequest.data.data.elementAt(index).startTime.split(":").elementAt(0)}: ${widget.missionRequest.data.data.elementAt(index).startTime.split(":").elementAt(1)}, ${getWeekDay(widget.missionRequest.data.data.elementAt(index).startDate.weekday)}, ${widget.missionRequest.data.data.elementAt(index).startDate.day} ${getMonth(widget.missionRequest.data.data.elementAt(index).startDate.month)}",
-                                        lines: "Mission details",
-                                        bottomLineColor: CColors.missonRed,
-                                        tileColor:
-                                            CColors.missonNormalWhiteColor),
-                                  ),
-                                );
+                      child: ListView.builder(
+                        itemBuilder: (context, index) {
+                          return Padding(
+                            padding: const EdgeInsets.symmetric(
+                                vertical: 20.0, horizontal: 10),
+                            child: InkWell(
+                              onTap: () {
+                                NavMe().NavPushLeftToRight(MissionRequest(
+                                  id: widget.missionRequest.data.data
+                                      .elementAt(index)
+                                      .id
+                                      .toString(),
+                                ));
                               },
-                              itemCount: widget.missionRequest.data.data.length,
-                              // itemCount: 1,
-                              scrollDirection: Axis.horizontal,
-                            )),
+                              child: customTile(
+                                  heading:
+                                      "${widget.missionRequest.data.data.elementAt(index).title}",
+                                  // heading: "sdf",
+                                  subheading:
+                                      "${widget.missionRequest.data.data.elementAt(index).startTime.split(":").elementAt(0)}: ${widget.missionRequest.data.data.elementAt(index).startTime.split(":").elementAt(1)}, ${getWeekDay(widget.missionRequest.data.data.elementAt(index).startDate.weekday)}, ${widget.missionRequest.data.data.elementAt(index).startDate.day} ${getMonth(widget.missionRequest.data.data.elementAt(index).startDate.month)}",
+                                  lines: "Mission details",
+                                  bottomLineColor: CColors.missonRed,
+                                  tileColor: CColors.missonNormalWhiteColor),
+                            ),
+                          );
+                        },
+                        itemCount: widget.missionRequest.data.data.length,
+                        // itemCount: 1,
+                        scrollDirection: Axis.horizontal,
+                      )),
                   ListTile(
                     dense: true,
 
