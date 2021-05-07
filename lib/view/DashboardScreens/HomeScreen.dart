@@ -243,6 +243,8 @@ class _HomeScreenState extends State<HomeScreen> {
                                 vertical: 20.0, horizontal: 10),
                             child: InkWell(
                               onTap: () {
+
+
                                 NavMe().NavPushLeftToRight(MissionRequest(
                                   id: widget.missionRequest.data.data
                                       .elementAt(index)

@@ -36,7 +36,6 @@ class _ChatListScreenState extends State<ChatListScreen> {
 
   // MessageDemoDart messageDemoDart;
   ListChatUserModel listChatUserModel;
-  var spinkit;
 
   @override
   void initState() {
@@ -51,7 +50,6 @@ class _ChatListScreenState extends State<ChatListScreen> {
         _getChatList();
       });
     });
-
 
     // TODO: implement initState
     super.initState();
@@ -144,7 +142,7 @@ class _ChatListScreenState extends State<ChatListScreen> {
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               Padding(
-                padding:EdgeInsets.only(top:8.0),
+                padding: EdgeInsets.only(top: 8.0),
                 child: Text(
                   "Messages",
                   textAlign: TextAlign.left,
@@ -203,69 +201,99 @@ class _ChatListScreenState extends State<ChatListScreen> {
                     SizedBox(
                       height: 40,
                     ),
-                    Expanded(
-                      child: Container( color: CColors.missonLightGrey,
-                        child: ListView.builder(
-                          itemBuilder: (context, index) {
-                            return InkWell(
-                              onTap: () {
-                                // NavMe().NavPushLeftToRight(ChatScreen(
-                                //     // title:
-                                //     //     "${messageDemoDart.data.list.elementAt(index).senderName}",
-                                //     // image: messageDemoDart.data.list
-                                //     //             .elementAt(index)
-                                //     //             .senderImage ==
-                                //     //         null
-                                //     //     ? " "
-                                //     //     : "${messageDemoDart.data.list.elementAt(index).senderImage}",
-                                //     // receiverId:
-                                //     //     "${messageDemoDart.data.list.elementAt(index).senderId}",
-                                //     // channel: IOWebSocketChannel.connect(
-                                //     //     "ws://23.20.179.178:8080/")
-                                //
-                                // ));
-
-                                Get.to(
-                                        ChatScreen(
-                                            reciverName:
-                                                "${authId != listChatUserModel.data.list.elementAt(index).senderId.toString() ? listChatUserModel.data.list.elementAt(index).senderName : listChatUserModel.data.list.elementAt(index).receiverName}",
-                                            image:
-                                                "${(authId != listChatUserModel.data.list.elementAt(index).senderId.toString() ? (listChatUserModel.data.list.elementAt(index).senderImage) : (listChatUserModel.data.list.elementAt(index).receiverImage)) == null ? " " : authId != listChatUserModel.data.list.elementAt(index).senderId.toString() ? (listChatUserModel.data.list.elementAt(index).senderImage) : (listChatUserModel.data.list.elementAt(index).receiverImage)}",
-                                            receiverId:
-                                                "${authId != listChatUserModel.data.list.elementAt(index).senderId.toString() ? listChatUserModel.data.list.elementAt(index).senderId : listChatUserModel.data.list.elementAt(index).receiverId}",
-                                            channel: IOWebSocketChannel.connect(
-                                                "ws://23.20.179.178:8080/")),
-                                        transition:
-                                            Transition.leftToRightWithFade,
-                                        duration: Duration(milliseconds: 400))
-                                    .then((value) => initState());
-                                // NavMe().NavPushLeftToRight(ChatScreen(
-                                //     reciverName:
-                                //         "${authId != listChatUserModel.data.list.elementAt(index).senderId.toString() ? listChatUserModel.data.list.elementAt(index).senderName : listChatUserModel.data.list.elementAt(index).receiverName}",
-                                //     image:                                     "${(authId != listChatUserModel.data.list.elementAt(index).senderId.toString() ? (listChatUserModel.data.list.elementAt(index).senderImage) : (listChatUserModel.data.list.elementAt(index).receiverImage)) == null ? " " : authId != listChatUserModel.data.list.elementAt(index).senderId.toString() ? (listChatUserModel.data.list.elementAt(index).senderImage) : (listChatUserModel.data.list.elementAt(index).receiverImage)}",
-                                //
-                                //     receiverId:
-                                //         "${authId != listChatUserModel.data.list.elementAt(index).senderId.toString() ? listChatUserModel.data.list.elementAt(index).senderId : listChatUserModel.data.list.elementAt(index).receiverId}",
-                                //     channel: IOWebSocketChannel.connect(
-                                //         "ws://23.20.179.178:8080/")));
-                              },
-                              child: Padding(
-                                padding: const EdgeInsets.only(left:8.0, right: 8.0),
-                                child: MyChatListView(
-                                    imageUrl:
-                                        "${(authId != listChatUserModel.data.list.elementAt(index).senderId.toString() ? (listChatUserModel.data.list.elementAt(index).senderImage) : (listChatUserModel.data.list.elementAt(index).receiverImage)) == null ? " " : authId != listChatUserModel.data.list.elementAt(index).senderId.toString() ? (listChatUserModel.data.list.elementAt(index).senderImage) : (listChatUserModel.data.list.elementAt(index).receiverImage)}",
-                                    name:
-                                        "${authId != listChatUserModel.data.list.elementAt(index).senderId.toString() ? listChatUserModel.data.list.elementAt(index).senderName : listChatUserModel.data.list.elementAt(index).receiverName}",
-                                    subtitle:
-                                        "${listChatUserModel.data.list.elementAt(index).message}",
-                                    numberOfMessages: listChatUserModel.data.list.elementAt(index).replyCount),
+                    listChatUserModel.data.list.isEmpty
+                        ? Container(margin: EdgeInsets.all(8), height: 75,
+                            child: Card(
+                              child: Center(
+                                child: Text(
+                                  "There is no chat available right now ",
+                                  textAlign: TextAlign.center,
+                                  style: TextStyle(
+                                      fontSize: ScreenConfig.fontSizelarge,
+                                      color: CColors.missonGrey,
+                                      fontWeight: FontWeight.bold,
+                                      fontFamily: "Product"),
+                                  maxLines: 1,
+                                  overflow: TextOverflow.ellipsis,
+                                ),
                               ),
-                            );
-                          },
-                          itemCount: listChatUserModel.data.list.length,
-                        ),
-                      ),
-                    )
+                            ),
+                          )
+                        : Expanded(
+                            child: Container(
+                              color: CColors.missonLightGrey,
+                              child: ListView.builder(
+                                itemBuilder: (context, index) {
+                                  return InkWell(
+                                    onTap: () {
+                                      // NavMe().NavPushLeftToRight(ChatScreen(
+                                      //     // title:
+                                      //     //     "${messageDemoDart.data.list.elementAt(index).senderName}",
+                                      //     // image: messageDemoDart.data.list
+                                      //     //             .elementAt(index)
+                                      //     //             .senderImage ==
+                                      //     //         null
+                                      //     //     ? " "
+                                      //     //     : "${messageDemoDart.data.list.elementAt(index).senderImage}",
+                                      //     // receiverId:
+                                      //     //     "${messageDemoDart.data.list.elementAt(index).senderId}",
+                                      //     // channel: IOWebSocketChannel.connect(
+                                      //     //     "ws://23.20.179.178:8080/")
+                                      //
+                                      // ));
+
+                                      Get.to(
+                                              ChatScreen(
+                                                  reciverName:
+                                                      "${authId != listChatUserModel.data.list.elementAt(index).senderId.toString() ? listChatUserModel.data.list.elementAt(index).senderName : listChatUserModel.data.list.elementAt(index).receiverName}",
+                                                  image:
+                                                      "${(authId != listChatUserModel.data.list.elementAt(index).senderId.toString() ? (listChatUserModel.data.list.elementAt(index).senderImage) : (listChatUserModel.data.list.elementAt(index).receiverImage)) == null ? " " : authId != listChatUserModel.data.list.elementAt(index).senderId.toString() ? (listChatUserModel.data.list.elementAt(index).senderImage) : (listChatUserModel.data.list.elementAt(index).receiverImage)}",
+                                                  receiverId:
+                                                      "${authId != listChatUserModel.data.list.elementAt(index).senderId.toString() ? listChatUserModel.data.list.elementAt(index).senderId : listChatUserModel.data.list.elementAt(index).receiverId}",
+                                                  channel: IOWebSocketChannel
+                                                      .connect(
+                                                          "ws://23.20.179.178:8080/")),
+                                              transition: Transition
+                                                  .leftToRightWithFade,
+                                              duration:
+                                                  Duration(milliseconds: 400))
+                                          .then((value) => initState());
+                                      // NavMe().NavPushLeftToRight(ChatScreen(
+                                      //     reciverName:
+                                      //         "${authId != listChatUserModel.data.list.elementAt(index).senderId.toString() ? listChatUserModel.data.list.elementAt(index).senderName : listChatUserModel.data.list.elementAt(index).receiverName}",
+                                      //     image:                                     "${(authId != listChatUserModel.data.list.elementAt(index).senderId.toString() ? (listChatUserModel.data.list.elementAt(index).senderImage) : (listChatUserModel.data.list.elementAt(index).receiverImage)) == null ? " " : authId != listChatUserModel.data.list.elementAt(index).senderId.toString() ? (listChatUserModel.data.list.elementAt(index).senderImage) : (listChatUserModel.data.list.elementAt(index).receiverImage)}",
+                                      //
+                                      //     receiverId:
+                                      //         "${authId != listChatUserModel.data.list.elementAt(index).senderId.toString() ? listChatUserModel.data.list.elementAt(index).senderId : listChatUserModel.data.list.elementAt(index).receiverId}",
+                                      //     channel: IOWebSocketChannel.connect(
+                                      //         "ws://23.20.179.178:8080/")));
+                                    },
+                                    child: Padding(
+                                      padding: const EdgeInsets.only(
+                                          left: 8.0, right: 8.0),
+                                      child: MyChatListView(
+                                          imageUrl:
+                                              "${(authId != listChatUserModel.data.list.elementAt(index).senderId.toString() ? (listChatUserModel.data.list.elementAt(index).senderImage) : (listChatUserModel.data.list.elementAt(index).receiverImage)) == null ? " " : authId != listChatUserModel.data.list.elementAt(index).senderId.toString() ? (listChatUserModel.data.list.elementAt(index).senderImage) : (listChatUserModel.data.list.elementAt(index).receiverImage)}",
+                                          name:
+                                              "${authId != listChatUserModel.data.list.elementAt(index).senderId.toString() ? listChatUserModel.data.list.elementAt(index).senderName : listChatUserModel.data.list.elementAt(index).receiverName}",
+                                          subtitle:
+                                              "${listChatUserModel.data.list.elementAt(index).message}",
+                                          numberOfMessages: listChatUserModel
+                                              .data.list
+                                              .elementAt(index)
+                                              .isReadCount,
+                                        showBadge: listChatUserModel
+                                            .data.list
+                                            .elementAt(index)
+                                            .isReadProvider==0 ?true:false
+                                      ),
+                                    ),
+                                  );
+                                },
+                                itemCount: listChatUserModel.data.list.length,
+                              ),
+                            ),
+                          )
                   ],
                 ),
               ),
@@ -277,7 +305,9 @@ class _ChatListScreenState extends State<ChatListScreen> {
       {@required String name,
       @required String subtitle,
       @required imageUrl,
-      int numberOfMessages}) {
+      int numberOfMessages,
+      bool showBadge
+      }) {
     print("dsfdssdf $imageUrl");
 
     return Card(
@@ -329,7 +359,8 @@ class _ChatListScreenState extends State<ChatListScreen> {
                             color: CColors.missonMediumGrey,
                             fontWeight: FontWeight.w100,
                             fontFamily: "Product"),
-                        maxLines: 1, overflow: TextOverflow.ellipsis,
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
                       ),
                     ],
                   ),
@@ -337,17 +368,20 @@ class _ChatListScreenState extends State<ChatListScreen> {
                 Spacer(),
                 Padding(
                   padding: const EdgeInsets.all(8.0),
-                  child: Badge(
-                    badgeContent: Text(
-                      '$numberOfMessages',
-                      style: TextStyle(
-                          fontSize: ScreenConfig.fontSizeSmall,
-                          color: CColors.missonNormalWhiteColor,
-                          fontWeight: FontWeight.w100,
-                          fontFamily: "Product"),
+                  child: Visibility(
+                    visible: showBadge,
+                    child: Badge(
+                      badgeContent: Text(
+                        '$numberOfMessages',
+                        style: TextStyle(
+                            fontSize: ScreenConfig.fontSizeSmall,
+                            color: CColors.missonNormalWhiteColor,
+                            fontWeight: FontWeight.w100,
+                            fontFamily: "Product"),
+                      ),
+                      badgeColor: Colors.green.shade200,
+                      // child: Icon(Icons.settings),
                     ),
-                    badgeColor: Colors.green.shade200,
-                    // child: Icon(Icons.settings),
                   ),
                 )
               ],

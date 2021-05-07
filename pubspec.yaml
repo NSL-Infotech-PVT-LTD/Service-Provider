@@ -48,6 +48,9 @@ dependencies:
   web_socket_channel: ^1.1.0
   dash_chat: ^1.1.15
   url_launcher: ^6.0.3
+  animations: ^2.0.0
+  sliding_up_panel: ^2.0.0+1
+  qr_code_scanner: ^0.4.0
 
 
 

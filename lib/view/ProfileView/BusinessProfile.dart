@@ -236,7 +236,11 @@ class _BusinessProfileState extends State<BusinessProfile> {
                   ),
                   title: InkWell(
                     onTap: () {
-                      NavMe().NavPushLeftToRight(UserProfile());
+                      // NavMe().NavPushLeftToRight(UserProfile()).then((value) {});
+
+                      Get.to(UserProfile(),
+                          transition: Transition.leftToRightWithFade,
+                          duration: Duration(milliseconds: 400)).then((value) => initState());
                     },
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,

@@ -21,6 +21,12 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
 
         primarySwatch: Colors.blue,
+      ).copyWith(
+        pageTransitionsTheme: const PageTransitionsTheme(
+          builders: <TargetPlatform, PageTransitionsBuilder>{
+            TargetPlatform.android: ZoomPageTransitionsBuilder(),
+          },
+        ),
       ),
       home: SplashScreen(),
     );
