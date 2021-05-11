@@ -13,22 +13,26 @@ class ListChatUserModel {
     this.status,
     this.code,
     this.data,
+    this.error,
   });
 
   bool status;
   int code;
   Data data;
+  String error;
 
   factory ListChatUserModel.fromJson(Map<String, dynamic> json) => ListChatUserModel(
     status: json["status"],
     code: json["code"],
     data: Data.fromJson(json["data"]),
+    error: json["error"],
   );
 
   Map<String, dynamic> toJson() => {
     "status": status,
     "code": code,
     "data": data.toJson(),
+    "error": error,
   };
 }
 

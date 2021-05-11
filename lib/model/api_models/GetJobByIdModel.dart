@@ -22,7 +22,10 @@ class GetJobByIdModel {
   factory GetJobByIdModel.fromJson(Map<String, dynamic> json) => GetJobByIdModel(
     status: json["status"],
     code: json["code"],
-    data: Data.fromJson(json["data"]),
+    data: json["data"] != null &&
+        (json["data"] as Map<String, dynamic>).isNotEmpty
+        ? Data.fromJson(json["data"])
+        : null,
   );
 
   Map<String, dynamic> toJson() => {
