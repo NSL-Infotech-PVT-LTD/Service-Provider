@@ -34,6 +34,7 @@ class GetProfileDataModel {
     "status": status,
     "code": code,
     "error": error,
+    if(data!=null)
     "data": data.toJson(),
   };
 }

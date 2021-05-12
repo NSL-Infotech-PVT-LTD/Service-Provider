@@ -1,3 +1,5 @@
+import 'dart:collection';
+
 import 'package:badges/badges.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
@@ -71,10 +73,12 @@ class _ChatListScreenState extends State<ChatListScreen> {
           setState(() {
             _loading = false;
           });
-          if (listChatUserModel.status && listChatUserModel.data != null) {
+          if (listChatUserModel != null &&
+              listChatUserModel.status &&
+              listChatUserModel.data != null) {
             chatList = listChatUserModel.data.list;
             // chatList.every((element) { print("${element.toJson()}");} );
-
+//issue resolved?
           }
         });
 
@@ -178,7 +182,7 @@ class _ChatListScreenState extends State<ChatListScreen> {
           //   )
           // ],
         ),
-        body: listChatUserModel == null
+        body: listChatUserModel == null && listChatUserModel.isBlank
             ? Center(child: spinkit)
             : Container(
                 color: CColors.missonNormalWhiteColor,
@@ -201,8 +205,10 @@ class _ChatListScreenState extends State<ChatListScreen> {
                     SizedBox(
                       height: 40,
                     ),
-                    listChatUserModel.data.list.isEmpty
-                        ? Container(margin: EdgeInsets.all(8), height: 75,
+                    listChatUserModel == null || !listChatUserModel.status?
+                        Container(
+                            margin: EdgeInsets.all(8),
+                            height: 75,
                             child: Card(
                               child: Center(
                                 child: Text(
@@ -282,11 +288,12 @@ class _ChatListScreenState extends State<ChatListScreen> {
                                               .data.list
                                               .elementAt(index)
                                               .isReadCount,
-                                        showBadge: listChatUserModel
-                                            .data.list
-                                            .elementAt(index)
-                                            .isReadProvider==0 ?true:false
-                                      ),
+                                          showBadge: listChatUserModel.data.list
+                                                      .elementAt(index)
+                                                      .isReadProvider ==
+                                                  0
+                                              ? true
+                                              : false),
                                     ),
                                   );
                                 },
@@ -306,8 +313,7 @@ class _ChatListScreenState extends State<ChatListScreen> {
       @required String subtitle,
       @required imageUrl,
       int numberOfMessages,
-      bool showBadge
-      }) {
+      bool showBadge}) {
     print("dsfdssdf $imageUrl");
 
     return Card(

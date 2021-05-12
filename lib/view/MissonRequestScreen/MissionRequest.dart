@@ -3161,6 +3161,7 @@ class _MissionRequestState extends State<MissionRequest> {
                             title: Text('Alert'),
                             content: Text('Do you want to finish mission ?'),
                             actions: [
+
                               CupertinoDialogAction(
                                 child: showDialogLoader == false
                                     ? Text('Yes')
