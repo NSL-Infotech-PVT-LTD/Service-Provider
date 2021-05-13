@@ -321,6 +321,13 @@ class _ChatListScreenState extends State<ChatListScreen> {
         children: [
           Divider(
             height: 1,
+
+
+
+
+
+
+
           ),
           Padding(
             padding: const EdgeInsets.all(8.0),

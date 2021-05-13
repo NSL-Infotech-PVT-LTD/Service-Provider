@@ -285,289 +285,368 @@ class _HomeScreenState extends State<HomeScreen> {
       case 1:
         {
           return SingleChildScrollView(
-            child: widget.missionRequest.data.data.length == 0
-                ? Center(
-                    child: Container(
-                      child: Text("No Data"),
-                    ),
-                  )
-                : Padding(
-                    padding: const EdgeInsets.only(top: 16.0, right: 16.0),
-                    child: Column(
+            child: Padding(
+              padding: const EdgeInsets.only(top: 16.0, right: 16.0),
+              child: Column(
+                children: [
+                  ListTile(
+                    dense: true,
+
+                    title: Row(
                       children: [
-                        ListTile(
-                          dense: true,
-
-                          title: Row(
-                            children: [
-                              Text(
-                                "Mission Request",
-                                style: TextStyle(
-                                    fontSize: ScreenConfig.fontSizeMedium),
-                              ),
-                              Spacer(),
-                              Text(
-                                "View All",
-                                style: TextStyle(
-                                    fontSize: ScreenConfig.fontSizeSmall),
-                              ),
-                            ],
-                          ),
-                          subtitle: Text(
-                            "Customer waiting for your response.",
-                            style:
-                                TextStyle(fontSize: ScreenConfig.fontSizeSmall),
-                          ),
-                          // trailing: Padding(
-                          //   padding: EdgeInsets.only(right: 8.0, top: 16.0),
-                          //   child: Column(
-                          //     mainAxisAlignment: MainAxisAlignment.start,
-                          //     children: [
-                          //
-                          //
-                          //     ],
-                          //   ),
-                          // ),
+                        Text(
+                          "Mission Request",
+                          style:
+                              TextStyle(fontSize: ScreenConfig.fontSizeMedium),
                         ),
-                        Container(
-                            height: 170,
-                            width: ScreenConfig.screenWidth,
-                            color: CColors.backgroundRed,
-                            child: widget.missionRequest.data.data.isEmpty
-                                ? Center(
-                                    child: Container(
-                                      child:
-                                          Text("No Mission Request to show "),
-                                    ),
-                                  )
-                                : ListView.builder(
-                                    itemBuilder: (context, index) {
-                                      return Padding(
-                                        padding: const EdgeInsets.symmetric(
-                                            vertical: 20.0, horizontal: 10),
-                                        child: InkWell(
-                                          onTap: () {
-                                            // NavMe().NavPushLeftToRight(MissionRequest(
-                                            //   id: widget.missionRequest.data.data
-                                            //       .elementAt(index)
-                                            //       .id
-                                            //       .toString(),
-                                            // ));
-
-                                            Get.to(
-                                                    MissionRequest(
-                                                      id: widget.missionRequest
-                                                          .data.data
-                                                          .elementAt(index)
-                                                          .id
-                                                          .toString(),
-                                                    ),
-                                                    transition: Transition
-                                                        .leftToRightWithFade,
-                                                    duration: Duration(
-                                                        milliseconds: 400))
-                                                .then((value) => initState());
-                                          },
-                                          child: customTile(
-                                              heading:
-                                                  "${widget.missionRequest.data.data.elementAt(index).title}",
-                                              // heading: "sdf",
-                                              subheading:
-                                                  "${widget.missionRequest.data.data.elementAt(index).startTime.split(":").elementAt(0)}: ${widget.missionRequest.data.data.elementAt(index).startTime.split(":").elementAt(1)}, ${getWeekDay(widget.missionRequest.data.data.elementAt(index).startDate.weekday)}, ${widget.missionRequest.data.data.elementAt(index).startDate.day} ${getMonth(widget.missionRequest.data.data.elementAt(index).startDate.month)}",
-                                              lines: "Mission details",
-                                              bottomLineColor:
-                                                  CColors.missonRed,
-                                              tileColor: CColors
-                                                  .missonNormalWhiteColor),
-                                        ),
-                                      );
-                                    },
-                                    itemCount:
-                                        widget.missionRequest.data.data.length,
-                                    // itemCount: 1,
-                                    scrollDirection: Axis.horizontal,
-                                  )),
-                        ListTile(
-                          dense: true,
-
-                          title: Row(
-                            children: [
-                              Text(
-                                "Mission Started",
-                                style: TextStyle(
-                                    fontSize: ScreenConfig.fontSizeMedium),
-                              ),
-                              Spacer(),
-                              Text(
-                                "View All",
-                                style: TextStyle(
-                                    fontSize: ScreenConfig.fontSizeSmall),
-                              ),
-                            ],
-                          ),
-                          subtitle: Text(
-                            "All the best! Do it perfectly.",
-                            style:
-                                TextStyle(fontSize: ScreenConfig.fontSizeSmall),
-                          ),
-                          // trailing: Padding(
-                          //   padding: EdgeInsets.only(right: 8.0, top: 16.0),
-                          //   child: Column(
-                          //     mainAxisAlignment: MainAxisAlignment.start,
-                          //     children: [
-                          //
-                          //
-                          //     ],
-                          //   ),
-                          // ),
+                        Spacer(),
+                        Text(
+                          "View All",
+                          style:
+                              TextStyle(fontSize: ScreenConfig.fontSizeSmall),
                         ),
-                        Container(
-                            height: 200,
-                            width: ScreenConfig.screenWidth,
-                            color: CColors.backgroundyellow,
-                            child: isLoadingData == true
-                                ? Center(child: spinkit)
-                                : ListView.builder(
-                                    itemBuilder: (context, index) {
-                                      return InkWell(
-                                        onTap: () {
-                                          // NavMe().NavPushLeftToRight(MissionRequest(
-                                          //   id: missionRequestModelOnGoing.data.data
-                                          //       .elementAt(index)
-                                          //       .id
-                                          //       .toString(),
-                                          // ));
-
-                                          Get.to(
-                                                  MissionRequest(
-                                                    id: missionRequestModelOnGoing
-                                                        .data.data
-                                                        .elementAt(index)
-                                                        .id
-                                                        .toString(),
-                                                  ),
-                                                  transition: Transition
-                                                      .leftToRightWithFade,
-                                                  duration: Duration(
-                                                      milliseconds: 400))
-                                              .then((value) => initState());
-                                        },
-                                        child: Padding(
-                                          padding: const EdgeInsets.symmetric(
-                                              vertical: 10.0, horizontal: 10),
-                                          child: customTile2(
-                                              heading:
-                                                  "${missionRequestModelOnGoing.data.data.elementAt(index).title}",
-                                              subheading:
-                                                  "${missionRequestModelOnGoing.data.data.elementAt(index).startTime.split(":").elementAt(0)}: ${missionRequestModelOnGoing.data.data.elementAt(index).startTime.split(":").elementAt(1)}, ${getWeekDay(missionRequestModelOnGoing.data.data.elementAt(index).startDate.weekday)}, ${missionRequestModelOnGoing.data.data.elementAt(index).startDate.day} ${getMonth(missionRequestModelOnGoing.data.data.elementAt(index).startDate.month)}",
-                                              lines: "Mission details",
-                                              backgroundColor:
-                                                  CColors.backgroundRed,
-                                              bottomWidget: SvgPicture.asset(
-                                                  yellowClockLogo),
-                                              bottomLineColor:
-                                                  CColors.missonYellow,
-                                              tileColor: CColors
-                                                  .missonNormalWhiteColor),
-                                        ),
-                                      );
-                                    },
-                                    itemCount: missionRequestModelOnGoing
-                                        .data.data.length,
-                                    scrollDirection: Axis.horizontal,
-                                  )),
-                        ListTile(
-                          dense: true,
-
-                          title: Row(
-                            children: [
-                              Text(
-                                "Mission Confirmed",
-                                style: TextStyle(
-                                    fontSize: ScreenConfig.fontSizeMedium),
-                              ),
-                              Spacer(),
-                              Text(
-                                "View All",
-                                style: TextStyle(
-                                    fontSize: ScreenConfig.fontSizeSmall),
-                              ),
-                            ],
-                          ),
-                          subtitle: Text(
-                            "See your  recent Confirmed work",
-                            style:
-                                TextStyle(fontSize: ScreenConfig.fontSizeSmall),
-                          ),
-                          // trailing: Padding(
-                          //   padding: EdgeInsets.only(right: 8.0, top: 16.0),
-                          //   child: Column(
-                          //     mainAxisAlignment: MainAxisAlignment.start,
-                          //     children: [
-                          //
-                          //
-                          //     ],
-                          //   ),
-                          // ),
-                        ),
-                        Container(
-                            height: 200,
-                            width: ScreenConfig.screenWidth,
-                            color: CColors.backgroundgreen,
-                            child: isConfirmedList == true
-                                ? Center(child: spinkit)
-                                : missionRequestModelConfirmed.data.data.isEmpty
-                                    ? Center(
-                                        child: Text("There is nothing to show"))
-                                    : ListView.builder(
-                                        itemBuilder: (context, index) {
-                                          return Padding(
-                                            padding: const EdgeInsets.symmetric(
-                                                vertical: 10.0, horizontal: 10),
-                                            child: InkWell(
-                                              onTap: () {
-                                                Get.to(
-                                                        MissionRequest(
-                                                          id: missionRequestModelOnGoing
-                                                              .data.data
-                                                              .elementAt(index)
-                                                              .id
-                                                              .toString(),
-                                                        ),
-                                                        transition: Transition
-                                                            .leftToRightWithFade,
-                                                        duration: Duration(
-                                                            milliseconds: 400))
-                                                    .then(
-                                                        (value) => initState());
-                                              },
-                                              child: Expanded(
-                                                child: customTile2(
-                                                    heading:
-                                                        "${missionRequestModelConfirmed.data.data.elementAt(index).title}",
-                                                    subheading:
-                                                        "${missionRequestModelConfirmed.data.data.elementAt(index).startTime.split(":").elementAt(0)}: ${missionRequestModelOnGoing.data.data.elementAt(index).startTime.split(":").elementAt(1)}, ${getWeekDay(missionRequestModelOnGoing.data.data.elementAt(index).startDate.weekday)}, ${missionRequestModelOnGoing.data.data.elementAt(index).startDate.day} ${getMonth(missionRequestModelOnGoing.data.data.elementAt(index).startDate.month)}",
-                                                    lines: "Mission details",
-                                                    backgroundColor:
-                                                        CColors.backgroundRed,
-                                                    bottomWidget:
-                                                        SvgPicture.asset(
-                                                            yellowClockLogo),
-                                                    bottomLineColor:
-                                                        CColors.missonYellow,
-                                                    tileColor: CColors
-                                                        .missonNormalWhiteColor),
-                                              ),
-                                            ),
-                                          );
-                                        },
-                                        itemCount: missionRequestModelConfirmed
-                                            .data.data.length,
-                                        scrollDirection: Axis.horizontal,
-                                      )),
                       ],
                     ),
+                    subtitle: Text(
+                      "Customer waiting for your response.",
+                      style: TextStyle(fontSize: ScreenConfig.fontSizeSmall),
+                    ),
+                    // trailing: Padding(
+                    //   padding: EdgeInsets.only(right: 8.0, top: 16.0),
+                    //   child: Column(
+                    //     mainAxisAlignment: MainAxisAlignment.start,
+                    //     children: [
+                    //
+                    //
+                    //     ],
+                    //   ),
+                    // ),
                   ),
+                  Container(
+                      height: 170,
+                      width: ScreenConfig.screenWidth,
+                      color: CColors.backgroundRed,
+                      child: widget.missionRequest.data.data.isEmpty
+                          ? Center(
+                              child: Container(
+                                child: Text("No Mission Request to show "),
+                              ),
+                            )
+                          : ListView.builder(
+                              itemBuilder: (context, index) {
+                                return Padding(
+                                  padding: const EdgeInsets.symmetric(
+                                      vertical: 20.0, horizontal: 10),
+                                  child: InkWell(
+                                    onTap: () {
+                                      // NavMe().NavPushLeftToRight(MissionRequest(
+                                      //   id: widget.missionRequest.data.data
+                                      //       .elementAt(index)
+                                      //       .id
+                                      //       .toString(),
+                                      // ));
+
+                                      Get.to(
+                                              MissionRequest(
+                                                id: widget
+                                                    .missionRequest.data.data
+                                                    .elementAt(index)
+                                                    .id
+                                                    .toString(),
+                                              ),
+                                              transition: Transition
+                                                  .leftToRightWithFade,
+                                              duration:
+                                                  Duration(milliseconds: 400))
+                                          .then((value) => initState());
+                                    },
+                                    child: customTile(
+                                        heading:
+                                            "${widget.missionRequest.data.data.elementAt(index).title}",
+                                        // heading: "sdf",
+                                        subheading:
+                                            "${widget.missionRequest.data.data.elementAt(index).startTime.split(":").elementAt(0)}: ${widget.missionRequest.data.data.elementAt(index).startTime.split(":").elementAt(1)}, ${getWeekDay(widget.missionRequest.data.data.elementAt(index).startDate.weekday)}, ${widget.missionRequest.data.data.elementAt(index).startDate.day} ${getMonth(widget.missionRequest.data.data.elementAt(index).startDate.month)}",
+                                        lines: "Mission details",
+                                        bottomLineColor: CColors.missonRed,
+                                        tileColor:
+                                            CColors.missonNormalWhiteColor),
+                                  ),
+                                );
+                              },
+                              itemCount: widget.missionRequest.data.data.length,
+                              // itemCount: 1,
+                              scrollDirection: Axis.horizontal,
+                            )),
+                  ListTile(
+                    dense: true,
+
+                    title: Row(
+                      children: [
+                        Text(
+                          "Mission Started",
+                          style:
+                              TextStyle(fontSize: ScreenConfig.fontSizeMedium),
+                        ),
+                        Spacer(),
+                        Text(
+                          "View All",
+                          style:
+                              TextStyle(fontSize: ScreenConfig.fontSizeSmall),
+                        ),
+                      ],
+                    ),
+                    subtitle: Text(
+                      "All the best! Do it perfectly.",
+                      style: TextStyle(fontSize: ScreenConfig.fontSizeSmall),
+                    ),
+                    // trailing: Padding(
+                    //   padding: EdgeInsets.only(right: 8.0, top: 16.0),
+                    //   child: Column(
+                    //     mainAxisAlignment: MainAxisAlignment.start,
+                    //     children: [
+                    //
+                    //
+                    //     ],
+                    //   ),
+                    // ),
+                  ),
+                  Container(
+                      height: 200,
+                      width: ScreenConfig.screenWidth,
+                      color: CColors.backgroundyellow,
+                      child: isLoadingData == true
+                          ? Center(child: spinkit)
+                          : missionRequestModelOnGoing.data.data.isEmpty
+                              ? Center(child: Text("There is nothing to show"))
+                              : ListView.builder(
+                                  itemBuilder: (context, index) {
+                                    return InkWell(
+                                      onTap: () {
+                                        // NavMe().NavPushLeftToRight(MissionRequest(
+                                        //   id: missionRequestModelOnGoing.data.data
+                                        //       .elementAt(index)
+                                        //       .id
+                                        //       .toString(),
+                                        // ));
+
+                                        Get.to(
+                                                MissionRequest(
+                                                  id: missionRequestModelOnGoing
+                                                      .data.data
+                                                      .elementAt(index)
+                                                      .id
+                                                      .toString(),
+                                                ),
+                                                transition: Transition
+                                                    .leftToRightWithFade,
+                                                duration:
+                                                    Duration(milliseconds: 400))
+                                            .then((value) => initState());
+                                      },
+                                      child: Padding(
+                                        padding: const EdgeInsets.symmetric(
+                                            vertical: 10.0, horizontal: 10),
+                                        child: customTile2(
+                                            heading:
+                                                "${missionRequestModelOnGoing.data.data.elementAt(index).title}",
+                                            subheading:
+                                                "${missionRequestModelOnGoing.data.data.elementAt(index).startTime.split(":").elementAt(0)}: ${missionRequestModelOnGoing.data.data.elementAt(index).startTime.split(":").elementAt(1)}, ${getWeekDay(missionRequestModelOnGoing.data.data.elementAt(index).startDate.weekday)}, ${missionRequestModelOnGoing.data.data.elementAt(index).startDate.day} ${getMonth(missionRequestModelOnGoing.data.data.elementAt(index).startDate.month)}",
+                                            lines: "Mission details",
+                                            backgroundColor:
+                                                CColors.backgroundRed,
+                                            bottomWidget: SvgPicture.asset(
+                                                yellowClockLogo),
+                                            bottomLineColor:
+                                                CColors.missonYellow,
+                                            tileColor:
+                                                CColors.missonNormalWhiteColor),
+                                      ),
+                                    );
+                                  },
+                                  itemCount: missionRequestModelOnGoing
+                                      .data.data.length,
+                                  scrollDirection: Axis.horizontal,
+                                )),
+                  // ListTile(
+                  //   dense: true,
+                  //
+                  //   title: Row(
+                  //     children: [
+                  //       Text(
+                  //         "Mission Confirmed",
+                  //         style:
+                  //             TextStyle(fontSize: ScreenConfig.fontSizeMedium),
+                  //       ),
+                  //       Spacer(),
+                  //       Text(
+                  //         "View All",
+                  //         style:
+                  //             TextStyle(fontSize: ScreenConfig.fontSizeSmall),
+                  //       ),
+                  //     ],
+                  //   ),
+                  //   subtitle: Text(
+                  //     "See your  recent Confirmed work",
+                  //     style: TextStyle(fontSize: ScreenConfig.fontSizeSmall),
+                  //   ),
+                  //   // trailing: Padding(
+                  //   //   padding: EdgeInsets.only(right: 8.0, top: 16.0),
+                  //   //   child: Column(
+                  //   //     mainAxisAlignment: MainAxisAlignment.start,
+                  //   //     children: [
+                  //   //
+                  //   //
+                  //   //     ],
+                  //   //   ),
+                  //   // ),
+                  // ),
+                  // Container(
+                  //     height: 200,
+                  //     width: ScreenConfig.screenWidth,
+                  //     color: CColors.backgroundgreen,
+                  //     child: isConfirmedList == true
+                  //         ? Center(child: spinkit)
+                  //         : missionRequestModelConfirmed.data.data.isEmpty
+                  //             ? Center(child: Text("There is nothing to show"))
+                  //             : ListView.builder(
+                  //                 itemBuilder: (context, index) {
+                  //                   return Padding(
+                  //                     padding: const EdgeInsets.symmetric(
+                  //                         vertical: 10.0, horizontal: 10),
+                  //                     child: InkWell(
+                  //                       onTap: () {
+                  //                         Get.to(
+                  //                                 MissionRequest(
+                  //                                   id: missionRequestModelConfirmed
+                  //                                       .data.data
+                  //                                       .elementAt(index)
+                  //                                       .id
+                  //                                       .toString(),
+                  //                                 ),
+                  //                                 transition: Transition
+                  //                                     .leftToRightWithFade,
+                  //                                 duration: Duration(
+                  //                                     milliseconds: 400))
+                  //                             .then((value) => initState());
+                  //                       },
+                  //                       child: customTile2(
+                  //                           heading:
+                  //                               "${missionRequestModelConfirmed.data.data.elementAt(index).title}",
+                  //                           subheading:
+                  //                               "${missionRequestModelConfirmed.data.data.elementAt(index).startTime.split(":").elementAt(0)}: ${missionRequestModelOnGoing.data.data.elementAt(index).startTime.split(":").elementAt(1)}, ${getWeekDay(missionRequestModelOnGoing.data.data.elementAt(index).startDate.weekday)}, ${missionRequestModelOnGoing.data.data.elementAt(index).startDate.day} ${getMonth(missionRequestModelOnGoing.data.data.elementAt(index).startDate.month)}",
+                  //                           lines: "Mission details",
+                  //                           backgroundColor:
+                  //                               CColors.backgroundRed,
+                  //                           bottomWidget: SvgPicture.asset(
+                  //                               yellowClockLogo),
+                  //                           bottomLineColor:
+                  //                               CColors.missonYellow,
+                  //                           tileColor:
+                  //                               CColors.missonNormalWhiteColor),
+                  //                     ),
+                  //                   );
+                  //                 },
+                  //                 // itemCount:
+                  //                 //     widget.missionRequest.data.data.length,
+                  //                 itemCount: 3,
+                  //                 scrollDirection: Axis.horizontal,
+                  //               )),
+                  ListTile(
+                    dense: true,
+
+                    title: Row(
+                      children: [
+                        Text(
+                          "Mission Confrimed",
+                          style:
+                              TextStyle(fontSize: ScreenConfig.fontSizeMedium),
+                        ),
+                        Spacer(),
+                        Text(
+                          "View All",
+                          style:
+                              TextStyle(fontSize: ScreenConfig.fontSizeSmall),
+                        ),
+                      ],
+                    ),
+                    subtitle: Text(
+                      "All the best! Do it perfectly.",
+                      style: TextStyle(fontSize: ScreenConfig.fontSizeSmall),
+                    ),
+                    // trailing: Padding(
+                    //   padding: EdgeInsets.only(right: 8.0, top: 16.0),
+                    //   child: Column(
+                    //     mainAxisAlignment: MainAxisAlignment.start,
+                    //     children: [
+                    //
+                    //
+                    //     ],
+                    //   ),
+                    // ),
+                  ),
+                  Container(
+                      height: 200,
+                      width: ScreenConfig.screenWidth,
+                      color: CColors.backgroundyellow,
+                      child: isLoadingData == true
+                          ? Center(child: spinkit)
+                          : missionRequestModelOnGoing.data.data.isEmpty
+                              ? Center(child: Text("There is nothing to show"))
+                              : ListView.builder(
+                                  itemBuilder: (context, index) {
+                                    return InkWell(
+                                      onTap: () {
+                                        // NavMe().NavPushLeftToRight(MissionRequest(
+                                        //   id: missionRequestModelOnGoing.data.data
+                                        //       .elementAt(index)
+                                        //       .id
+                                        //       .toString(),
+                                        // ));
+
+                                        Get.to(
+                                                MissionRequest(
+                                                  id: missionRequestModelConfirmed
+                                                      .data.data
+                                                      .elementAt(index)
+                                                      .id
+                                                      .toString(),
+                                                ),
+                                                transition: Transition
+                                                    .leftToRightWithFade,
+                                                duration:
+                                                    Duration(milliseconds: 400))
+                                            .then((value) => initState());
+                                      },
+                                      child: Padding(
+                                        padding: const EdgeInsets.symmetric(
+                                            vertical: 10.0, horizontal: 10),
+                                        child: customTile2(
+                                            heading:
+                                                "${missionRequestModelConfirmed.data.data.elementAt(index).title}",
+                                            subheading:"",
+                                                // "${missionRequestModelConfirmed.data.data.elementAt(index).startTime.split(":").elementAt(0)}: ${missionRequestModelOnGoing.data.data.elementAt(index).startTime.split(":").elementAt(1)}, ${getWeekDay(missionRequestModelOnGoing.data.data.elementAt(index).startDate.weekday)}, ${missionRequestModelOnGoing.data.data.elementAt(index).startDate.day} ${getMonth(missionRequestModelOnGoing.data.data.elementAt(index).startDate.month)}",
+                                            lines: "Mission details",
+                                            backgroundColor:
+                                                CColors.backgroundRed,
+                                            bottomWidget: SvgPicture.asset(
+                                                yellowClockLogo),
+                                            bottomLineColor:
+                                                CColors.missonYellow,
+                                            tileColor:
+                                                CColors.missonNormalWhiteColor),
+                                      ),
+                                    );
+                                  },
+                                  itemCount: missionRequestModelConfirmed
+                                          .data.data.isEmpty
+                                      ? 0
+                                      : missionRequestModelConfirmed
+                                          .data.data.length,
+                                  scrollDirection: Axis.horizontal,
+                                )),
+                ],
+              ),
+            ),
           );
         }
         break;
@@ -891,3 +970,40 @@ class _HomeScreenState extends State<HomeScreen> {
     }
   }
 }
+// return Padding(
+// // padding: const EdgeInsets.symmetric(
+// // vertical: 10.0, horizontal: 10),
+// // child: InkWell(
+// // onTap: () {
+// // Get.to(
+// // MissionRequest(
+// // id: missionRequestModelConfirmed
+// //     .data.data
+// //     .elementAt(index)
+// //     .id
+// //     .toString(),
+// // ),
+// // transition: Transition
+// //     .leftToRightWithFade,
+// // duration: Duration(
+// // milliseconds: 400))
+// //     .then(
+// // (value) => initState());
+// // },
+// // child: customTile2(
+// // heading:
+// // "${missionRequestModelConfirmed.data.data.elementAt(index).title}",
+// // subheading:
+// // "${missionRequestModelConfirmed.data.data.elementAt(index).startTime.split(":").elementAt(0)}: ${missionRequestModelOnGoing.data.data.elementAt(index).startTime.split(":").elementAt(1)}, ${getWeekDay(missionRequestModelOnGoing.data.data.elementAt(index).startDate.weekday)}, ${missionRequestModelOnGoing.data.data.elementAt(index).startDate.day} ${getMonth(missionRequestModelOnGoing.data.data.elementAt(index).startDate.month)}",
+// // lines: "Mission details",
+// // backgroundColor:
+// // CColors.backgroundRed,
+// // bottomWidget:
+// // SvgPicture.asset(
+// // yellowClockLogo),
+// // bottomLineColor:
+// // CColors.missonYellow,
+// // tileColor: CColors
+// //     .missonNormalWhiteColor),
+// // ),
+// // );
