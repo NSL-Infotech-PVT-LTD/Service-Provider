@@ -20,6 +20,62 @@ import 'package:misson_tasker/view/startup_screens/Drawer.dart';
 import 'package:misson_tasker/view/DashboardScreens/HomeScreen.dart';
 import 'package:misson_tasker/view/startup_screens/SplashScreen.dart';
 
+MissionRequestModel missionUpcoming;
+MissionRequestModel missionInProgress;
+MissionRequestModel missionCompleted;
+MissionRequestModel missionCancelled;
+
+bool isMissionUpcomingLoading = true;
+bool isMissionInProgressLoading = true;
+bool isMissionCompleteLoading = true;
+bool isMissionCancelledLoading = true;
+
+Future jobListFun({String auth, status, type, String lat, String lang}) async {
+  print("HEEEELLLLLL");
+  isConnectedToInternet().then(
+    (internet) {
+      if (internet != null && internet) {
+        // print("HEEEELLLLLL");
+        // Map<String, String> parms = {
+        //   "limit": "1000",
+        //   "job_status": status,
+        //   "job_type": type,
+        // };
+        ApiCaller()
+            .missionRequest(
+                jobType: type,
+                auth: auth,
+                jobStatus: status,
+                latitude: lat,
+                longitude: lang)
+            .then((value) {
+          if (value.status = true) {
+            if (status != null && status == "accepted") {
+              missionUpcoming = value;
+            } else if (status != null && status == "processing") {
+              missionInProgress = value;
+            } else if (status != null && status == "completed") {
+              missionCompleted = value;
+            } else if (status != null && status == "rejected") {
+              missionCancelled = value;
+            } else {}
+          }
+        }).whenComplete(() {
+          if (status != null && status == "accepted") {
+            isMissionInProgressLoading = true;
+          } else if (status != null && status == "processing") {
+            isMissionInProgressLoading = true;
+          } else if (status != null && status == "completed") {
+            isMissionCompleteLoading = true;
+          } else if (status != null && status == "rejected") {
+            isMissionCancelledLoading = true;
+          } else {}
+        });
+      }
+    },
+  );
+}
+
 class Dashboard extends StatefulWidget {
   @override
   _DashboardState createState() => _DashboardState();
@@ -38,7 +94,6 @@ class _DashboardState extends State<Dashboard> {
 
   @override
   void initState() {
-
     getString(sharedPref.userToken).then((value) {
       auth = value;
 
@@ -53,6 +108,7 @@ class _DashboardState extends State<Dashboard> {
           _location = getProfileDataModel.data.user.location;
           ApiCaller()
               .missionRequest(
+                  jobType: "direct",
                   auth: auth,
                   latitude: getProfileDataModel.data.user.latitude,
                   longitude: getProfileDataModel.data.user.longitude,
@@ -67,14 +123,29 @@ class _DashboardState extends State<Dashboard> {
         });
       });
     });
-    // getString(sharedPref.userToken).then((value) {
-    //   auth = value;
-    //
-    //   print("123 $value");
-    // }).whenComplete(() {
-    //
-    // });
-    // TODO: implement initState
+
+
+
+
+    ApiCaller().getProfileData(auth: auth).then((value) {
+      getProfileDataModel = value;
+    }).whenComplete(() {
+      setState(() {
+        jobListFun(
+            auth: auth,
+            type: "all",
+            lat: getProfileDataModel.data.user.latitude,
+            lang: getProfileDataModel.data.user.longitude,
+            status: "accepted")
+            .whenComplete(() {
+          setState(() {
+            print(" ARIGATO ${missionUpcoming.toJson()}");
+          });
+        });
+      });
+    });
+
+
     super.initState();
     getString(sharedPref.userName).then((value) {
       username = value;
@@ -91,9 +162,15 @@ class _DashboardState extends State<Dashboard> {
         getProfileDataModel: getProfileDataModel,
         missionRequest: missionRequest,
       ),
-      MissionExploreScreen(),
-      ChatListScreen(getProfileDataModel: getProfileDataModel,),
-      MissionStatusScreen()
+      MissionExploreScreen(
+        getProfileDataModel: getProfileDataModel,
+      ),
+      ChatListScreen(
+        getProfileDataModel: getProfileDataModel,
+      ),
+      MissionStatusScreen(
+        getProfileDataModel: getProfileDataModel,
+      )
     ];
 
     return Scaffold(

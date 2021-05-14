@@ -46,6 +46,7 @@ final String tickLogo="assets/svg_assets/tick_logo.svg";
 final String qrScanSmall="assets/svg_assets/qr_scan_small.svg";
 final String crossLogo="assets/svg_assets/crossIcon.svg";
 final String qrBorderLogo="assets/svg_assets/qr_border.svg";
+final String searchIcon="assets/svg_assets/search_icon.svg";
 
 
 //<=============================PNG IMAGES=========================>

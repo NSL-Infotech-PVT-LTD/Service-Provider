@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "63954593835",
+    "project_id": "missiontasker",
+    "storage_bucket": "missiontasker.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:63954593835:android:fa03d4a105ce14510c226e",
+        "android_client_info": {
+          "package_name": "com.misson.misson_tasker"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "63954593835-ou6rld41ijb3dot7ejesrql1lmn7e096.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.misson.misson_tasker",
+            "certificate_hash": "b4f38e7ce874e155f93fb03fd0399c9fdf4c79eb"
+          }
+        },
+        {
+          "client_id": "63954593835-9c9ugo3k48pcscua4iaqtehioeksk8c1.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCf2RKfP1NIzpSLslCky3m4TCBm_J-jK0A"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "63954593835-9c9ugo3k48pcscua4iaqtehioeksk8c1.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

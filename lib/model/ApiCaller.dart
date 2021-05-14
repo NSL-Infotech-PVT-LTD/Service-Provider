@@ -288,7 +288,6 @@ class ApiCaller {
     request.fields.addAll(params);
     // print(updateUrl.toString());
 
-
     if (listFile.length > 0) {
       for (int i = 0; i < listFile.length; i++) {
         http.MultipartFile multipartFile = await http.MultipartFile.fromPath(
@@ -431,6 +430,7 @@ class ApiCaller {
 
   Future<MissionRequestModel> missionRequest(
       {String auth,
+      String jobType,
       String latitude,
       String longitude,
       String jobStatus}) async {
@@ -442,7 +442,7 @@ class ApiCaller {
         'Authorization': "Bearer " + auth
       },
       body: jsonEncode(<String, dynamic>{
-        'job_type': "direct",
+        'job_type': "$jobType",
         'latitude': "$latitude",
         'longitude': "$longitude",
         "job_status": jobStatus,
@@ -536,7 +536,8 @@ class ApiCaller {
         'Content-Type': 'application/json; charset=UTF-8',
         'Authorization': "Bearer " + auth
       },
-      body: jsonEncode(<String, dynamic>{'receiver_id': "$reciverId", "limit": "1000"}),
+      body: jsonEncode(
+          <String, dynamic>{'receiver_id': "$reciverId", "limit": "1000"}),
     );
 
     if (response.statusCode == 200 || response.statusCode == 422) {
@@ -548,8 +549,6 @@ class ApiCaller {
           "THERE IS AN ERROR INT THE TERMS AND CONDITION API WITH STATUS CODE ${response.statusCode}");
     }
   }
-
-
 }
 
 Future<bool> isConnectedToInternet() async {

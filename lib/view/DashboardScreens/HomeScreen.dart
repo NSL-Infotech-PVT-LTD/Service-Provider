@@ -15,6 +15,8 @@ import 'package:misson_tasker/view/ProfileView/BusinessProfile.dart';
 import 'package:misson_tasker/view/startup_screens/Drawer.dart';
 import 'package:misson_tasker/view/startup_screens/SplashScreen.dart';
 
+
+
 class HomeScreen extends StatefulWidget {
   GetProfileDataModel getProfileDataModel;
   MissionRequestModel missionRequest;
@@ -47,10 +49,11 @@ class _HomeScreenState extends State<HomeScreen> {
 
       ApiCaller()
           .missionRequest(
-              auth: _auth,
-              latitude: widget.getProfileDataModel.data.user.latitude,
-              longitude: widget.getProfileDataModel.data.user.longitude,
-              jobStatus: "pending")
+          auth: _auth,
+          jobType: "direct",
+          latitude: widget.getProfileDataModel.data.user.latitude,
+          longitude: widget.getProfileDataModel.data.user.longitude,
+          jobStatus: "pending")
           .then((value) {
         widget.missionRequest = value;
       }).whenComplete(() {
@@ -69,10 +72,11 @@ class _HomeScreenState extends State<HomeScreen> {
 
       ApiCaller()
           .missionRequest(
-              auth: _auth,
-              latitude: widget.getProfileDataModel.data.user.latitude,
-              longitude: widget.getProfileDataModel.data.user.longitude,
-              jobStatus: "processing")
+          auth: _auth,
+          jobType: "direct",
+          latitude: widget.getProfileDataModel.data.user.latitude,
+          longitude: widget.getProfileDataModel.data.user.longitude,
+          jobStatus: "processing")
           .then((value) {
         missionRequestModelOnGoing = value;
       }).whenComplete(() {
@@ -90,10 +94,11 @@ class _HomeScreenState extends State<HomeScreen> {
 
       ApiCaller()
           .missionRequest(
-              auth: _auth,
-              latitude: widget.getProfileDataModel.data.user.latitude,
-              longitude: widget.getProfileDataModel.data.user.longitude,
-              jobStatus: "confirmed")
+          auth: _auth,
+          jobType: "direct",
+          latitude: widget.getProfileDataModel.data.user.latitude,
+          longitude: widget.getProfileDataModel.data.user.longitude,
+          jobStatus: "confirmed")
           .then((value) {
         missionRequestModelConfirmed = value;
         print("DFDSJNSDKJSDF ${missionRequestModelConfirmed.toJson()}");
@@ -147,98 +152,98 @@ class _HomeScreenState extends State<HomeScreen> {
 
     return widget.missionRequest == null || widget.getProfileDataModel == null
         ? Scaffold(
-            body: Center(
-              child: spinkit,
-            ),
-          )
+      body: Center(
+        child: spinkit,
+      ),
+    )
         : Scaffold(
-            key: _drawerKey,
-            onDrawerChanged: (isOpened) {
-              print(isOpened);
-              if (isOpened == false) {
-                getSharedPref(widget);
-              }
-            },
-            drawer: Drawer(
-                // Add a ListView to the drawer. This ensures the user can scroll
-                // through the options in the drawer if there isn't enough vertical
-                // space to fit everything.
-                child: MyDrawer(
-              username: widget.getProfileDataModel.data.user.name,
-              ImageUrl: widget.getProfileDataModel == null ||
+      key: _drawerKey,
+      onDrawerChanged: (isOpened) {
+        print(isOpened);
+        if (isOpened == false) {
+          getSharedPref(widget);
+        }
+      },
+      drawer: Drawer(
+        // Add a ListView to the drawer. This ensures the user can scroll
+        // through the options in the drawer if there isn't enough vertical
+        // space to fit everything.
+          child: MyDrawer(
+            username: widget.getProfileDataModel.data.user.name,
+            ImageUrl: widget.getProfileDataModel == null ||
+                widget.getProfileDataModel.data == null ||
+                widget.getProfileDataModel.data.user == null ||
+                widget.getProfileDataModel.data.user.image == null
+                ? null
+                : widget.getProfileDataModel.data.user.image,
+          )),
+      appBar: AppBar(
+        elevation: 0,
+        backgroundColor: CColors.missonNormalWhiteColor,
+        titleSpacing: -1.0,
+        leading: InkWell(
+          onTap: () {
+            _drawerKey.currentState.openDrawer();
+          },
+          child: Padding(
+            padding: const EdgeInsets.all(18.0),
+            child: SvgPicture.asset(drawerIcon),
+          ),
+        ),
+        title: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(
+              "current location",
+              textAlign: TextAlign.left,
+              style: TextStyle(
+                  fontSize: ScreenConfig.fontSizeSmall,
+                  color: CColors.textColor),
+            ),
+            Text(
+              "${widget.getProfileDataModel.data.user.location}",
+              style: TextStyle(
+                  fontSize: ScreenConfig.fontSizeMedium,
+                  color: CColors.textColor),
+              textAlign: TextAlign.left,
+            ),
+          ],
+        ),
+        actions: [
+          Padding(
+            padding: EdgeInsets.only(right: 16.0),
+            child: InkWell(
+              onTap: () {
+                // NavMe().NavPushLeftToRight(BusinessProfile());
+                Get.to(BusinessProfile(),
+                    transition: Transition.leftToRightWithFade,
+                    duration: Duration(milliseconds: 400))
+                    .then((value) {
+                  getSharedPref(widget);
+                }).whenComplete(() {
+                  setState(() {});
+                });
+              },
+              child: CircleAvatar(
+                backgroundColor: CColors.missonGrey,
+                // radius: ,
+                child: CircleAvatar(
+                  backgroundImage: widget.getProfileDataModel == null ||
                       widget.getProfileDataModel.data == null ||
                       widget.getProfileDataModel.data.user == null ||
-                      widget.getProfileDataModel.data.user.image == null
-                  ? null
-                  : widget.getProfileDataModel.data.user.image,
-            )),
-            appBar: AppBar(
-              elevation: 0,
-              backgroundColor: CColors.missonNormalWhiteColor,
-              titleSpacing: -1.0,
-              leading: InkWell(
-                onTap: () {
-                  _drawerKey.currentState.openDrawer();
-                },
-                child: Padding(
-                  padding: const EdgeInsets.all(18.0),
-                  child: SvgPicture.asset(drawerIcon),
+                      widget.getProfileDataModel.data.user.image ==
+                          null
+                      ? AssetImage(avatar1)
+                      : NetworkImage(
+                      "${widget.getProfileDataModel.data.user.image}"),
                 ),
               ),
-              title: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    "current location",
-                    textAlign: TextAlign.left,
-                    style: TextStyle(
-                        fontSize: ScreenConfig.fontSizeSmall,
-                        color: CColors.textColor),
-                  ),
-                  Text(
-                    "${widget.getProfileDataModel.data.user.location}",
-                    style: TextStyle(
-                        fontSize: ScreenConfig.fontSizeMedium,
-                        color: CColors.textColor),
-                    textAlign: TextAlign.left,
-                  ),
-                ],
-              ),
-              actions: [
-                Padding(
-                  padding: EdgeInsets.only(right: 16.0),
-                  child: InkWell(
-                    onTap: () {
-                      // NavMe().NavPushLeftToRight(BusinessProfile());
-                      Get.to(BusinessProfile(),
-                              transition: Transition.leftToRightWithFade,
-                              duration: Duration(milliseconds: 400))
-                          .then((value) {
-                        getSharedPref(widget);
-                      }).whenComplete(() {
-                        setState(() {});
-                      });
-                    },
-                    child: CircleAvatar(
-                      backgroundColor: CColors.missonGrey,
-                      // radius: ,
-                      child: CircleAvatar(
-                        backgroundImage: widget.getProfileDataModel == null ||
-                                widget.getProfileDataModel.data == null ||
-                                widget.getProfileDataModel.data.user == null ||
-                                widget.getProfileDataModel.data.user.image ==
-                                    null
-                            ? AssetImage(avatar1)
-                            : NetworkImage(
-                                "${widget.getProfileDataModel.data.user.image}"),
-                      ),
-                    ),
-                  ),
-                )
-              ],
             ),
-            body: currentView(1),
-          );
+          )
+        ],
+      ),
+      body: currentView(1),
+    );
   }
 
   Widget currentView(int state) {
@@ -297,13 +302,13 @@ class _HomeScreenState extends State<HomeScreen> {
                         Text(
                           "Mission Request",
                           style:
-                              TextStyle(fontSize: ScreenConfig.fontSizeMedium),
+                          TextStyle(fontSize: ScreenConfig.fontSizeMedium),
                         ),
                         Spacer(),
                         Text(
                           "View All",
                           style:
-                              TextStyle(fontSize: ScreenConfig.fontSizeSmall),
+                          TextStyle(fontSize: ScreenConfig.fontSizeSmall),
                         ),
                       ],
                     ),
@@ -328,55 +333,78 @@ class _HomeScreenState extends State<HomeScreen> {
                       color: CColors.backgroundRed,
                       child: widget.missionRequest.data.data.isEmpty
                           ? Center(
-                              child: Container(
-                                child: Text("No Mission Request to show "),
-                              ),
-                            )
+                        child: Container(
+                          child: Text("No Mission Request to show "),
+                        ),
+                      )
                           : ListView.builder(
-                              itemBuilder: (context, index) {
-                                return Padding(
-                                  padding: const EdgeInsets.symmetric(
-                                      vertical: 20.0, horizontal: 10),
-                                  child: InkWell(
-                                    onTap: () {
-                                      // NavMe().NavPushLeftToRight(MissionRequest(
-                                      //   id: widget.missionRequest.data.data
-                                      //       .elementAt(index)
-                                      //       .id
-                                      //       .toString(),
-                                      // ));
+                        itemBuilder: (context, index) {
+                          return Padding(
+                            padding: const EdgeInsets.symmetric(
+                                vertical: 20.0, horizontal: 10),
+                            child: InkWell(
+                              onTap: () {
+                                // NavMe().NavPushLeftToRight(MissionRequest(
+                                //   id: widget.missionRequest.data.data
+                                //       .elementAt(index)
+                                //       .id
+                                //       .toString(),
+                                // ));
 
-                                      Get.to(
-                                              MissionRequest(
-                                                id: widget
-                                                    .missionRequest.data.data
-                                                    .elementAt(index)
-                                                    .id
-                                                    .toString(),
-                                              ),
-                                              transition: Transition
-                                                  .leftToRightWithFade,
-                                              duration:
-                                                  Duration(milliseconds: 400))
-                                          .then((value) => initState());
-                                    },
-                                    child: customTile(
-                                        heading:
-                                            "${widget.missionRequest.data.data.elementAt(index).title}",
-                                        // heading: "sdf",
-                                        subheading:
-                                            "${widget.missionRequest.data.data.elementAt(index).startTime.split(":").elementAt(0)}: ${widget.missionRequest.data.data.elementAt(index).startTime.split(":").elementAt(1)}, ${getWeekDay(widget.missionRequest.data.data.elementAt(index).startDate.weekday)}, ${widget.missionRequest.data.data.elementAt(index).startDate.day} ${getMonth(widget.missionRequest.data.data.elementAt(index).startDate.month)}",
-                                        lines: "Mission details",
-                                        bottomLineColor: CColors.missonRed,
-                                        tileColor:
-                                            CColors.missonNormalWhiteColor),
-                                  ),
-                                );
+                                Get.to(
+                                    MissionRequest(
+                                      id: widget
+                                          .missionRequest.data.data
+                                          .elementAt(index)
+                                          .id
+                                          .toString(),
+                                    ),
+                                    transition: Transition
+                                        .leftToRightWithFade,
+                                    duration:
+                                    Duration(milliseconds: 400))
+                                    .then((value) => initState());
                               },
-                              itemCount: widget.missionRequest.data.data.length,
-                              // itemCount: 1,
-                              scrollDirection: Axis.horizontal,
-                            )),
+                              child: customTile(
+                                  heading:
+                                  "${widget.missionRequest.data.data
+                                      .elementAt(index)
+                                      .title}",
+                                  // heading: "sdf",
+                                  subheading:
+                                  "${widget.missionRequest.data.data
+                                      .elementAt(index)
+                                      .startTime
+                                      .split(":")
+                                      .elementAt(0)}: ${widget.missionRequest
+                                      .data.data
+                                      .elementAt(index)
+                                      .startTime
+                                      .split(":")
+                                      .elementAt(1)}, ${getWeekDay(
+                                      widget.missionRequest.data.data
+                                          .elementAt(index)
+                                          .startDate
+                                          .weekday)}, ${widget.missionRequest
+                                      .data.data
+                                      .elementAt(index)
+                                      .startDate
+                                      .day} ${getMonth(
+                                      widget.missionRequest.data.data
+                                          .elementAt(index)
+                                          .startDate
+                                          .month)}",
+                                  lines: "Mission details",
+                                  bottomLineColor: CColors.missonRed,
+                                  tileColor:
+                                  CColors.missonNormalWhiteColor),
+                            ),
+                          );
+                        },
+                        itemCount: widget.missionRequest.data.data.length,
+                        // itemCount: 1,
+                        scrollDirection: Axis.horizontal,
+                      )),
                   ListTile(
                     dense: true,
 
@@ -385,13 +413,13 @@ class _HomeScreenState extends State<HomeScreen> {
                         Text(
                           "Mission Started",
                           style:
-                              TextStyle(fontSize: ScreenConfig.fontSizeMedium),
+                          TextStyle(fontSize: ScreenConfig.fontSizeMedium),
                         ),
                         Spacer(),
                         Text(
                           "View All",
                           style:
-                              TextStyle(fontSize: ScreenConfig.fontSizeSmall),
+                          TextStyle(fontSize: ScreenConfig.fontSizeSmall),
                         ),
                       ],
                     ),
@@ -417,56 +445,80 @@ class _HomeScreenState extends State<HomeScreen> {
                       child: isLoadingData == true
                           ? Center(child: spinkit)
                           : missionRequestModelOnGoing.data.data.isEmpty
-                              ? Center(child: Text("There is nothing to show"))
-                              : ListView.builder(
-                                  itemBuilder: (context, index) {
-                                    return InkWell(
-                                      onTap: () {
-                                        // NavMe().NavPushLeftToRight(MissionRequest(
-                                        //   id: missionRequestModelOnGoing.data.data
-                                        //       .elementAt(index)
-                                        //       .id
-                                        //       .toString(),
-                                        // ));
+                          ? Center(child: Text("There is nothing to show"))
+                          : ListView.builder(
+                        itemBuilder: (context, index) {
+                          return InkWell(
+                            onTap: () {
+                              // NavMe().NavPushLeftToRight(MissionRequest(
+                              //   id: missionRequestModelOnGoing.data.data
+                              //       .elementAt(index)
+                              //       .id
+                              //       .toString(),
+                              // ));
 
-                                        Get.to(
-                                                MissionRequest(
-                                                  id: missionRequestModelOnGoing
-                                                      .data.data
-                                                      .elementAt(index)
-                                                      .id
-                                                      .toString(),
-                                                ),
-                                                transition: Transition
-                                                    .leftToRightWithFade,
-                                                duration:
-                                                    Duration(milliseconds: 400))
-                                            .then((value) => initState());
-                                      },
-                                      child: Padding(
-                                        padding: const EdgeInsets.symmetric(
-                                            vertical: 10.0, horizontal: 10),
-                                        child: customTile2(
-                                            heading:
-                                                "${missionRequestModelOnGoing.data.data.elementAt(index).title}",
-                                            subheading:
-                                                "${missionRequestModelOnGoing.data.data.elementAt(index).startTime.split(":").elementAt(0)}: ${missionRequestModelOnGoing.data.data.elementAt(index).startTime.split(":").elementAt(1)}, ${getWeekDay(missionRequestModelOnGoing.data.data.elementAt(index).startDate.weekday)}, ${missionRequestModelOnGoing.data.data.elementAt(index).startDate.day} ${getMonth(missionRequestModelOnGoing.data.data.elementAt(index).startDate.month)}",
-                                            lines: "Mission details",
-                                            backgroundColor:
-                                                CColors.backgroundRed,
-                                            bottomWidget: SvgPicture.asset(
-                                                yellowClockLogo),
-                                            bottomLineColor:
-                                                CColors.missonYellow,
-                                            tileColor:
-                                                CColors.missonNormalWhiteColor),
-                                      ),
-                                    );
-                                  },
-                                  itemCount: missionRequestModelOnGoing
-                                      .data.data.length,
-                                  scrollDirection: Axis.horizontal,
-                                )),
+                              Get.to(
+                                  MissionRequest(
+                                    id: missionRequestModelOnGoing
+                                        .data.data
+                                        .elementAt(index)
+                                        .id
+                                        .toString(),
+                                  ),
+                                  transition: Transition
+                                      .leftToRightWithFade,
+                                  duration:
+                                  Duration(milliseconds: 400))
+                                  .then((value) => initState());
+                            },
+                            child: Padding(
+                              padding: const EdgeInsets.symmetric(
+                                  vertical: 10.0, horizontal: 10),
+                              child: customTile2(
+                                  heading:
+                                  "${missionRequestModelOnGoing.data.data
+                                      .elementAt(index)
+                                      .title}",
+                                  subheading:
+                                  "${missionRequestModelOnGoing.data.data
+                                      .elementAt(index)
+                                      .startTime
+                                      .split(":")
+                                      .elementAt(
+                                      0)}: ${missionRequestModelOnGoing.data
+                                      .data
+                                      .elementAt(index)
+                                      .startTime
+                                      .split(":")
+                                      .elementAt(1)}, ${getWeekDay(
+                                      missionRequestModelOnGoing.data.data
+                                          .elementAt(index)
+                                          .startDate
+                                          .weekday)}, ${missionRequestModelOnGoing
+                                      .data.data
+                                      .elementAt(index)
+                                      .startDate
+                                      .day} ${getMonth(
+                                      missionRequestModelOnGoing.data.data
+                                          .elementAt(index)
+                                          .startDate
+                                          .month)}",
+                                  lines: "Mission details",
+                                  backgroundColor:
+                                  CColors.backgroundRed,
+                                  bottomWidget: SvgPicture.asset(
+                                      yellowClockLogo),
+                                  bottomLineColor:
+                                  CColors.missonYellow,
+                                  tileColor:
+                                  CColors.missonNormalWhiteColor),
+                            ),
+                          );
+                        },
+                        itemCount: missionRequestModelOnGoing
+                            .data.data.length,
+                        scrollDirection: Axis.horizontal,
+                      )),
                   // ListTile(
                   //   dense: true,
                   //
@@ -559,13 +611,13 @@ class _HomeScreenState extends State<HomeScreen> {
                         Text(
                           "Mission Confrimed",
                           style:
-                              TextStyle(fontSize: ScreenConfig.fontSizeMedium),
+                          TextStyle(fontSize: ScreenConfig.fontSizeMedium),
                         ),
                         Spacer(),
                         Text(
                           "View All",
                           style:
-                              TextStyle(fontSize: ScreenConfig.fontSizeSmall),
+                          TextStyle(fontSize: ScreenConfig.fontSizeSmall),
                         ),
                       ],
                     ),
@@ -591,59 +643,61 @@ class _HomeScreenState extends State<HomeScreen> {
                       child: isLoadingData == true
                           ? Center(child: spinkit)
                           : missionRequestModelOnGoing.data.data.isEmpty
-                              ? Center(child: Text("There is nothing to show"))
-                              : ListView.builder(
-                                  itemBuilder: (context, index) {
-                                    return InkWell(
-                                      onTap: () {
-                                        // NavMe().NavPushLeftToRight(MissionRequest(
-                                        //   id: missionRequestModelOnGoing.data.data
-                                        //       .elementAt(index)
-                                        //       .id
-                                        //       .toString(),
-                                        // ));
+                          ? Center(child: Text("There is nothing to show"))
+                          : ListView.builder(
+                        itemBuilder: (context, index) {
+                          return InkWell(
+                            onTap: () {
+                              // NavMe().NavPushLeftToRight(MissionRequest(
+                              //   id: missionRequestModelOnGoing.data.data
+                              //       .elementAt(index)
+                              //       .id
+                              //       .toString(),
+                              // ));
 
-                                        Get.to(
-                                                MissionRequest(
-                                                  id: missionRequestModelConfirmed
-                                                      .data.data
-                                                      .elementAt(index)
-                                                      .id
-                                                      .toString(),
-                                                ),
-                                                transition: Transition
-                                                    .leftToRightWithFade,
-                                                duration:
-                                                    Duration(milliseconds: 400))
-                                            .then((value) => initState());
-                                      },
-                                      child: Padding(
-                                        padding: const EdgeInsets.symmetric(
-                                            vertical: 10.0, horizontal: 10),
-                                        child: customTile2(
-                                            heading:
-                                                "${missionRequestModelConfirmed.data.data.elementAt(index).title}",
-                                            subheading:"",
-                                                // "${missionRequestModelConfirmed.data.data.elementAt(index).startTime.split(":").elementAt(0)}: ${missionRequestModelOnGoing.data.data.elementAt(index).startTime.split(":").elementAt(1)}, ${getWeekDay(missionRequestModelOnGoing.data.data.elementAt(index).startDate.weekday)}, ${missionRequestModelOnGoing.data.data.elementAt(index).startDate.day} ${getMonth(missionRequestModelOnGoing.data.data.elementAt(index).startDate.month)}",
-                                            lines: "Mission details",
-                                            backgroundColor:
-                                                CColors.backgroundRed,
-                                            bottomWidget: SvgPicture.asset(
-                                                yellowClockLogo),
-                                            bottomLineColor:
-                                                CColors.missonYellow,
-                                            tileColor:
-                                                CColors.missonNormalWhiteColor),
-                                      ),
-                                    );
-                                  },
-                                  itemCount: missionRequestModelConfirmed
-                                          .data.data.isEmpty
-                                      ? 0
-                                      : missionRequestModelConfirmed
-                                          .data.data.length,
-                                  scrollDirection: Axis.horizontal,
-                                )),
+                              Get.to(
+                                  MissionRequest(
+                                    id: missionRequestModelConfirmed
+                                        .data.data
+                                        .elementAt(index)
+                                        .id
+                                        .toString(),
+                                  ),
+                                  transition: Transition
+                                      .leftToRightWithFade,
+                                  duration:
+                                  Duration(milliseconds: 400))
+                                  .then((value) => initState());
+                            },
+                            child: Padding(
+                              padding: const EdgeInsets.symmetric(
+                                  vertical: 10.0, horizontal: 10),
+                              child: customTile2(
+                                  heading:
+                                  "${missionRequestModelConfirmed.data.data
+                                      .elementAt(index)
+                                      .title}",
+                                  subheading: "",
+                                  // "${missionRequestModelConfirmed.data.data.elementAt(index).startTime.split(":").elementAt(0)}: ${missionRequestModelOnGoing.data.data.elementAt(index).startTime.split(":").elementAt(1)}, ${getWeekDay(missionRequestModelOnGoing.data.data.elementAt(index).startDate.weekday)}, ${missionRequestModelOnGoing.data.data.elementAt(index).startDate.day} ${getMonth(missionRequestModelOnGoing.data.data.elementAt(index).startDate.month)}",
+                                  lines: "Mission details",
+                                  backgroundColor:
+                                  CColors.backgroundRed,
+                                  bottomWidget: SvgPicture.asset(
+                                      yellowClockLogo),
+                                  bottomLineColor:
+                                  CColors.missonYellow,
+                                  tileColor:
+                                  CColors.missonNormalWhiteColor),
+                            ),
+                          );
+                        },
+                        itemCount: missionRequestModelConfirmed
+                            .data.data.isEmpty
+                            ? 0
+                            : missionRequestModelConfirmed
+                            .data.data.length,
+                        scrollDirection: Axis.horizontal,
+                      )),
                 ],
               ),
             ),
@@ -659,12 +713,11 @@ class _HomeScreenState extends State<HomeScreen> {
     }
   }
 
-  Widget customTile(
-      {String heading,
-      String subheading,
-      String lines,
-      Color bottomLineColor,
-      Color tileColor}) {
+  Widget customTile({String heading,
+    String subheading,
+    String lines,
+    Color bottomLineColor,
+    Color tileColor}) {
     return Container(
       width: ScreenConfig.screenWidth * 0.70,
       color: tileColor,
@@ -677,7 +730,7 @@ class _HomeScreenState extends State<HomeScreen> {
               flex: 4,
               child: Padding(
                 padding:
-                    const EdgeInsets.only(left: 8.0, right: 8.0, top: 10.0),
+                const EdgeInsets.only(left: 8.0, right: 8.0, top: 10.0),
                 child: Text(
                   heading,
                   style: TextStyle(
@@ -727,14 +780,13 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 
-  Widget customTile2(
-      {String heading,
-      String subheading,
-      String lines,
-      Color bottomLineColor,
-      Color tileColor,
-      Color backgroundColor,
-      Widget bottomWidget}) {
+  Widget customTile2({String heading,
+    String subheading,
+    String lines,
+    Color bottomLineColor,
+    Color tileColor,
+    Color backgroundColor,
+    Widget bottomWidget}) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
