@@ -1,20 +1,57 @@
 {
   "project_info": {
-    "project_number": "63954593835",
-    "project_id": "missiontasker",
-    "storage_bucket": "missiontasker.appspot.com"
+    "project_number": "602108000838",
+    "project_id": "missionuser-309209",
+    "storage_bucket": "missionuser-309209.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:63954593835:android:fa03d4a105ce14510c226e",
+        "mobilesdk_app_id": "1:602108000838:android:74e9e33142bc9e73c36847",
+        "android_client_info": {
+          "package_name": "com.mission.missionapp"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "602108000838-bcj1eqjm89kt5uc90rhfhe7k2iu6mpo4.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.mission.missionapp",
+            "certificate_hash": "95757cd9c59ca0adb37f54890db7ba33fe849f6a"
+          }
+        },
+        {
+          "client_id": "602108000838-nvjhvltj838vjfo7lqnhqg1bhfgmdgdb.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCOogNYjlHnX40iFKNTPuXD0E4tiVj3EFI"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "602108000838-nvjhvltj838vjfo7lqnhqg1bhfgmdgdb.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:602108000838:android:24631421d7c797cbc36847",
         "android_client_info": {
           "package_name": "com.misson.misson_tasker"
         }
       },
       "oauth_client": [
         {
-          "client_id": "63954593835-ou6rld41ijb3dot7ejesrql1lmn7e096.apps.googleusercontent.com",
+          "client_id": "602108000838-dkb3l82glurm7qtiorfg50hqi6oh4tee.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
             "package_name": "com.misson.misson_tasker",
@@ -22,20 +59,20 @@
           }
         },
         {
-          "client_id": "63954593835-9c9ugo3k48pcscua4iaqtehioeksk8c1.apps.googleusercontent.com",
+          "client_id": "602108000838-nvjhvltj838vjfo7lqnhqg1bhfgmdgdb.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyCf2RKfP1NIzpSLslCky3m4TCBm_J-jK0A"
+          "current_key": "AIzaSyCOogNYjlHnX40iFKNTPuXD0E4tiVj3EFI"
         }
       ],
       "services": {
         "appinvite_service": {
           "other_platform_oauth_client": [
             {
-              "client_id": "63954593835-9c9ugo3k48pcscua4iaqtehioeksk8c1.apps.googleusercontent.com",
+              "client_id": "602108000838-nvjhvltj838vjfo7lqnhqg1bhfgmdgdb.apps.googleusercontent.com",
               "client_type": 3
             }
           ]

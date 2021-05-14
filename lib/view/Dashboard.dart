@@ -126,24 +126,24 @@ class _DashboardState extends State<Dashboard> {
 
 
 
-
-    ApiCaller().getProfileData(auth: auth).then((value) {
-      getProfileDataModel = value;
-    }).whenComplete(() {
-      setState(() {
-        jobListFun(
-            auth: auth,
-            type: "all",
-            lat: getProfileDataModel.data.user.latitude,
-            lang: getProfileDataModel.data.user.longitude,
-            status: "accepted")
-            .whenComplete(() {
-          setState(() {
-            print(" ARIGATO ${missionUpcoming.toJson()}");
-          });
-        });
-      });
-    });
+    //
+    // ApiCaller().getProfileData(auth: auth).then((value) {
+    //   getProfileDataModel = value;
+    // }).whenComplete(() {
+    //   setState(() {
+    //     jobListFun(
+    //         auth: auth,
+    //         type: "all",
+    //         lat: getProfileDataModel.data.user.latitude,
+    //         lang: getProfileDataModel.data.user.longitude,
+    //         status: "accepted")
+    //         .whenComplete(() {
+    //       setState(() {
+    //         print(" ARIGATO ${missionUpcoming.toJson()}");
+    //       });
+    //     });
+    //   });
+    // });
 
 
     super.initState();

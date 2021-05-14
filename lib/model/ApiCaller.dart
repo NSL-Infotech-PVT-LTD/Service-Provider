@@ -116,7 +116,7 @@ class ApiCaller {
     } else {
       print("QWERTY ${response.body}");
       print(
-          "THERE IS AN ERROR INT THE GET PROFILE DATA API WITH STATUS CODE ${response.statusCode}");
+          "THERE IS AN ERROR IN THE GET PROFILE DATA API WITH STATUS CODE ${response.statusCode}");
     }
   }
 
@@ -141,7 +141,7 @@ class ApiCaller {
     } else {
       print("QWERTY ${response.body}");
       print(
-          "THERE IS AN ERROR INT THE GET PROFILE DATA API WITH STATUS CODE ${response.statusCode}");
+          "THERE IS AN ERROR IN doNotificationToggle API WITH STATUS CODE ${response.statusCode}");
     }
   }
 
@@ -164,7 +164,7 @@ class ApiCaller {
     } else {
       print("QWERTY ${response.body}");
       print(
-          "THERE IS AN ERROR INT THE GET PROFILE DATA API WITH STATUS CODE ${response.statusCode}");
+          "THERE IS AN ERROR IN getServiceList API WITH STATUS CODE ${response.statusCode}");
     }
   }
 
