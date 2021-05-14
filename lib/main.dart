@@ -71,8 +71,8 @@ class _MyAppState extends State<MyApp> {
 
   @override
   void initState() {
-    final fbm = FirebaseMessaging();
-    fbm.requestNotificationPermissions();
+    // final fbm = FirebaseMessaging();
+    // fbm.requestNotificationPermissions();
     var initialzationSettingsAndroid =
     AndroidInitializationSettings('@mipmap/ic_launcher');
     var initializationSettings =
