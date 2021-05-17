@@ -10,6 +10,7 @@ import 'package:misson_tasker/model/api_models/LoginUserModel.dart';
 import 'package:misson_tasker/utils/local_data.dart';
 import 'package:misson_tasker/view/Dashboard.dart';
 
+import '../../main.dart';
 import '../../utils/CColors.dart';
 import '../../utils/CColors.dart';
 import '../../utils/NavMe.dart';
@@ -51,12 +52,13 @@ class _LoginPageState extends State<LoginPage> {
   @override
   Widget build(BuildContext context) {
     void login() async {
+      print("12345 $fcmToken");
       ApiCaller()
           .loginUser(
               email: _emailAddressFieldController.text,
               password: _passwordFieldController.text,
               deviceType: "android",
-              deviceToken: "asdfsdfgdsgds")
+              deviceToken: fcmToken.isBlank?"$fcmToken":"fgfdg")
           .then((value) => loginUserModel = value)
           .whenComplete(() {
         if (loginUserModel != null &&

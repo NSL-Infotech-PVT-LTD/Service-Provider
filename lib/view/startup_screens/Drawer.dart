@@ -1,6 +1,8 @@
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:misson_tasker/TokenMonitor.dart';
 import 'package:misson_tasker/utils/CColors.dart';
 import 'package:misson_tasker/utils/NavMe.dart';
 import 'package:misson_tasker/utils/ScreenConfig.dart';
@@ -24,10 +26,14 @@ class MyDrawer extends StatefulWidget {
 
 class _MyDrawerState extends State<MyDrawer> {
   // static String username = "";
-   getSharedPref(widget) {
+  var data;
 
+
+
+
+  getSharedPref(widget) {
     getString(sharedPref.userNetworkImage).then((value) {
-      widget.ImageUrl=value;
+      widget.ImageUrl = value;
 
       print("123 $value");
     });
@@ -35,10 +41,11 @@ class _MyDrawerState extends State<MyDrawer> {
       widget.username = value;
 
       print("123 $value");
-    }).whenComplete(() {setState(() {
-
-    });});
+    }).whenComplete(() {
+      setState(() {});
+    });
   }
+
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -227,7 +234,9 @@ class _MyDrawerState extends State<MyDrawer> {
                   // Update the state of the app
                   // ...
                   // Then close the MyDrawer
-                  Navigator.pop(context);
+               //   getFcmToken();
+
+                  // Navigator.pop(context);
                 },
               ),
               SizedBox(
@@ -319,7 +328,8 @@ class _MyDrawerState extends State<MyDrawer> {
                 },
               ),
             ],
-          )
+          ),
+
         ],
       ),
     );

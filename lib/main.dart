@@ -21,10 +21,15 @@ Future _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
   await Firebase.initializeApp();
   print('A bg message just showed up : ${message.messageId}');
 }
+//check kri
+//ok
+String fcmToken;
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
+  fcmToken = await FirebaseMessaging.instance.getToken();// token etho lainda peya aa mai  //eh token laina pai aa mai but crash fix ho geya
+print("====================> $fcmToken");
   FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
   await flutterLocalNotificationsPlugin
       .resolvePlatformSpecificImplementation<
@@ -34,7 +39,7 @@ Future<void> main() async {
   await FirebaseMessaging.instance.setForegroundNotificationPresentationOptions(
     alert: true,
     badge: true,
-    sound: true,
+    sound: true,//sory  hr gya c ki result bnya  result null anda but screen crash nehi ho rhi oye hoye chl function dikha
   );
   runApp(MyApp());
 }
@@ -49,20 +54,11 @@ class MyApp extends StatefulWidget {
 class _MyAppState extends State<MyApp> {
   var token;
 
-  // String token;
-  getToken() async {
-    token = await FirebaseMessaging.instance.getToken();
-    setState(() {
-      token = token;
-    });
-    print(token);
-  }
-
   @override
   void initState() {
     // final fbm = FirebaseMessaging();
     // fbm.requestNotificationPermissions();
-
+print("CHECK $token");
     FirebaseMessaging.onMessage.listen((RemoteMessage message) {
       RemoteNotification notification = message.notification;
       AndroidNotification android = message.notification?.android;
@@ -89,26 +85,26 @@ class _MyAppState extends State<MyApp> {
       RemoteNotification notification = message.notification;
       AndroidNotification android = message.notification?.android;
       if (notification != null && android != null) {
-        showDialog(
-            context: context,
-            builder: (_) {
-              return AlertDialog(
-                title: Text(notification.title),
-                content: SingleChildScrollView(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [Text(notification.body)],
-                  ),
-                ),
-              );
-            });
+      message.data.forEach((key, value) {
+        print("$key    fd;vmdfldf     $value" );
+      });
+        // showDialog(
+        //     context: context,
+        //     builder: (_) {
+        //       return AlertDialog(
+        //         title: Text(notification.title),
+        //         content: SingleChildScrollView(
+        //           child: Column(
+        //             crossAxisAlignment: CrossAxisAlignment.start,
+        //             children: [Text(notification.body)],
+        //           ),
+        //         ),
+        //       );
+        //     });
       }
     });
     // getToken();
 
-    // FirebaseMessaging.instance
-    //     .getToken()
-    //     .then((value) => print(" fdkjlvndflvndfdflkndf $value"));
     super.initState();
   }
 
