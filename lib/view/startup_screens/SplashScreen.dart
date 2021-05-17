@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -50,6 +51,7 @@ class _SplashScreenState extends State<SplashScreen> {
       },
     );
     // clearedShared();
+
     Timer.periodic(Duration(seconds: 3), (timer) {
       print(timer.toString() + "!!!!");
 
@@ -86,6 +88,7 @@ class _SplashScreenState extends State<SplashScreen> {
 
   @override
   Widget build(BuildContext context) {
+    // print("111111 $token");
     ScreenConfig().init(context);
     return SafeArea(
       child: Scaffold(
