@@ -58,7 +58,7 @@ class _LoginPageState extends State<LoginPage> {
               email: _emailAddressFieldController.text,
               password: _passwordFieldController.text,
               deviceType: "android",
-              deviceToken: fcmToken.isBlank?"$fcmToken":"fgfdg")
+              deviceToken: !fcmToken.isBlank?"$fcmToken":"No Token is here")
           .then((value) => loginUserModel = value)
           .whenComplete(() {
         if (loginUserModel != null &&

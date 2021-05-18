@@ -3,18 +3,15 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:misson_tasker/model/ApiCaller.dart';
 import 'package:misson_tasker/model/api_models/GetProfileDataModel.dart';
 import 'package:misson_tasker/utils/CColors.dart';
-import 'package:misson_tasker/utils/NavMe.dart';
 import 'package:misson_tasker/utils/ScreenConfig.dart';
-import 'package:misson_tasker/utils/SharedStrings.dart';
 import 'package:misson_tasker/utils/StringsPath.dart';
 import 'package:misson_tasker/utils/local_data.dart';
 import 'package:misson_tasker/view/startup_screens/SplashScreen.dart';
 
-import 'editProfile.dart';
 
 class NotificationScreen extends StatefulWidget {
   @override
-  _NotificationScreenState createState() => _NotificationScreenState();
+   _NotificationScreenState createState() => _NotificationScreenState();
 }
 
 class _NotificationScreenState extends State<NotificationScreen> {

@@ -21,6 +21,7 @@ Future _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
   await Firebase.initializeApp();
   print('A bg message just showed up : ${message.messageId}');
 }
+
 //check kri
 //ok
 String fcmToken;
@@ -28,8 +29,8 @@ String fcmToken;
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
-  fcmToken = await FirebaseMessaging.instance.getToken();// token etho lainda peya aa mai  //eh token laina pai aa mai but crash fix ho geya
-print("====================> $fcmToken");
+  fcmToken = await FirebaseMessaging.instance.getToken();
+  print("====================> $fcmToken");
   FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
   await flutterLocalNotificationsPlugin
       .resolvePlatformSpecificImplementation<
@@ -39,7 +40,7 @@ print("====================> $fcmToken");
   await FirebaseMessaging.instance.setForegroundNotificationPresentationOptions(
     alert: true,
     badge: true,
-    sound: true,//sory  hr gya c ki result bnya  result null anda but screen crash nehi ho rhi oye hoye chl function dikha
+    sound: true,
   );
   runApp(MyApp());
 }
@@ -58,7 +59,7 @@ class _MyAppState extends State<MyApp> {
   void initState() {
     // final fbm = FirebaseMessaging();
     // fbm.requestNotificationPermissions();
-print("CHECK $token");
+    print("CHECK $token");
     FirebaseMessaging.onMessage.listen((RemoteMessage message) {
       RemoteNotification notification = message.notification;
       AndroidNotification android = message.notification?.android;
@@ -77,17 +78,20 @@ print("CHECK $token");
                 icon: '@mipmap/ic_launcher',
               ),
             ));
+
+
+        print("==============> YYYYYYYYYYYYYYYY ${message.data}");
       }
     });
 
     FirebaseMessaging.onMessageOpenedApp.listen((RemoteMessage message) {
-      print('A new onMessageOpenedApp event was published!');
+      print('A new onMessageOpenedApp event was published! $message  cgbgfngffhgh');
       RemoteNotification notification = message.notification;
       AndroidNotification android = message.notification?.android;
       if (notification != null && android != null) {
-      message.data.forEach((key, value) {
-        print("$key    fd;vmdfldf     $value" );
-      });
+        message.data.forEach((key, value) {
+          print("$key    fd;vmdfldf     $value");
+        });
         // showDialog(
         //     context: context,
         //     builder: (_) {

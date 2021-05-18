@@ -43,8 +43,9 @@ class _MissionStatusScreenState extends State<MissionStatusScreen> {
             ),
           ),
           appBar: myCustomAppBar(
-            titleHeading: "MissionExplore",
-            titleSubHeading: "You can search for the mission you\nwant to do",
+            titleHeading: "Mission Status",
+            titleSubHeading:
+                "You can check status of your Mission\nposted by customer",
             tabBarList: [
               Text("Upcoming"),
               Text("In-progress"),
