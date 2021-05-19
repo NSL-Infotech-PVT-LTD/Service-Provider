@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -79,13 +81,14 @@ class _MyAppState extends State<MyApp> {
               ),
             ));
 
-
         print("==============> YYYYYYYYYYYYYYYY ${message.data}");
+        // print("==============> YYYYYYYYYYYYYYYY ${jsonEncode(message)}");
       }
     });
 
     FirebaseMessaging.onMessageOpenedApp.listen((RemoteMessage message) {
-      print('A new onMessageOpenedApp event was published! $message  cgbgfngffhgh');
+      print(
+          'A new onMessageOpenedApp event was published! $message  cgbgfngffhgh');
       RemoteNotification notification = message.notification;
       AndroidNotification android = message.notification?.android;
       if (notification != null && android != null) {
@@ -99,7 +102,7 @@ class _MyAppState extends State<MyApp> {
         //         title: Text(notification.title),
         //         content: SingleChildScrollView(
         //           child: Column(
-        //             crossAxisAlignment: CrossAxisAlignment.start,
+        //             crossAxisAlignment: C```````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````           rossAxisAlignment.start,
         //             children: [Text(notification.body)],
         //           ),
         //         ),
