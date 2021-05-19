@@ -44,7 +44,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
       print("123 $value");
     }).whenComplete(() {
-      isRequestList = false;
+      // isRequestList = false;
 
       ApiCaller()
           .missionRequest(
@@ -67,7 +67,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
       print("123 $value");
     }).whenComplete(() {
-      isLoadingData = false;
+      // isLoadingData = false;
 
       ApiCaller()
           .missionRequest(
@@ -89,7 +89,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
       print("123 $value");
     }).whenComplete(() {
-      isLoadingData = false;
+      // isLoadingData = false;
 
       ApiCaller()
           .missionRequest(

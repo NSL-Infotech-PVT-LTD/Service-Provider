@@ -1,11 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:get/get.dart';
+import 'package:misson_tasker/model/ApiCaller.dart';
 import 'package:misson_tasker/model/api_models/GetProfileDataModel.dart';
+import 'package:misson_tasker/model/api_models/MissionRequestModel.dart';
 import 'package:misson_tasker/utils/CColors.dart';
 import 'package:misson_tasker/utils/CustomAppBar.dart';
 import 'package:misson_tasker/utils/ScreenConfig.dart';
 import 'package:misson_tasker/utils/StringsPath.dart';
+import 'package:misson_tasker/utils/local_data.dart';
+import 'package:misson_tasker/view/MissonRequestScreen/MissionRequest.dart';
 import 'package:misson_tasker/view/startup_screens/Drawer.dart';
+import 'package:misson_tasker/view/startup_screens/SplashScreen.dart';
 
 class MissionExploreScreen extends StatefulWidget {
   // final MissionRequestModel missionRequest;
@@ -21,7 +27,56 @@ class MissionExploreScreen extends StatefulWidget {
 class _MissionExploreScreenState extends State<MissionExploreScreen> {
   GlobalKey<ScaffoldState> _drawerKey = GlobalKey();
   String _auth = "";
-  String authId;
+
+  bool isPosted = true;
+  bool isRequested = true;
+
+  MissionRequestModel posted;
+  MissionRequestModel requested;
+
+  String auth;
+
+  @override
+  void initState() {
+    getString(sharedPref.userToken).then((value) {
+      _auth = value;
+
+      print("123 $value");
+    }).whenComplete(() {
+      // isUpcommingLoading = false;
+
+      ApiCaller()
+          .missionRequest(
+              auth: _auth,
+              jobType: "direct",
+              latitude: widget.getProfileDataModel.data.user.latitude,
+              longitude: widget.getProfileDataModel.data.user.longitude,
+              jobStatus: "accepted")
+          .then((value) {
+        posted = value;
+      }).whenComplete(() {
+        setState(() {
+          isPosted = false;
+        });
+      });
+      ApiCaller()
+          .missionRequest(
+              auth: _auth,
+              jobType: "post",
+              latitude: widget.getProfileDataModel.data.user.latitude,
+              longitude: widget.getProfileDataModel.data.user.longitude,
+              jobStatus: "accepted")
+          .then((value) {
+        requested = value;
+      }).whenComplete(() {
+        setState(() {
+          isRequested = false;
+        });
+      });
+      // TODO: implement initState
+      super.initState();
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -127,8 +182,14 @@ class _MissionExploreScreenState extends State<MissionExploreScreen> {
             child: TabBarView(
               children: [
                 // Icon(Icons.directions_car),
-                showList(),
-              showList()
+                isPosted == true
+                    ? Center(child: spinkit)
+                    : showList(obj: posted),
+                isRequested == true
+                    ? Center(
+                        child: spinkit,
+                      )
+                    : showList(obj: requested)
               ],
             ),
           ),
@@ -137,7 +198,7 @@ class _MissionExploreScreenState extends State<MissionExploreScreen> {
     );
   }
 
-  Widget showList() {
+  Widget showList({MissionRequestModel obj}) {
     return Column(
       children: [
         Container(
@@ -161,12 +222,37 @@ class _MissionExploreScreenState extends State<MissionExploreScreen> {
               return Padding(
                 padding:
                     const EdgeInsets.symmetric(vertical: 2.0, horizontal: 8.0),
-                child: containerBox(
-                    context, "4566", "This is heading", "2", () {},
-                    miles: 6.5, type: "1 day ago", statusData: "123"),
+                child: obj.data.data.isEmpty
+                    ? Center(child: Text("There is no data to show"))
+                    : containerBox(
+                        context,
+                        "${obj.data.data.elementAt(index).id}",
+                        "${obj.data.data.elementAt(index).title}",
+                        "2",
+                        () {
+
+                          Get.to(
+                              MissionRequest(
+                                id: obj
+                                    .data.data
+                                    .elementAt(index)
+                                    .id
+                                    .toString(),
+                              ),
+                              transition: Transition
+                                  .leftToRightWithFade,
+                              duration:
+                              Duration(milliseconds: 400))
+                              .then((value) => initState());
+
+                        },
+                        obj: obj,
+                        miles: obj.data.data.elementAt(index).distanceMiles,
+                        type: "1 day ago",
+                        statusData: "123"),
               );
             },
-            itemCount: 10,
+            itemCount:obj.data.data.isEmpty ?1: obj.data.data.length,
           ),
         ),
       ],
@@ -174,7 +260,7 @@ class _MissionExploreScreenState extends State<MissionExploreScreen> {
   }
 
   Widget containerBox(context, ref, description, title, function,
-      {visibleStatus, statusData, miles, type}) {
+      {MissionRequestModel obj, visibleStatus, statusData, miles, type}) {
     return Container(
       height: ScreenConfig.screenHeight * 0.25,
       width: ScreenConfig.screenWidth * 0.90,
@@ -348,9 +434,7 @@ class _MissionExploreScreenState extends State<MissionExploreScreen> {
           Align(
               alignment: Alignment.bottomRight,
               child: FlatButton(
-                onPressed: () {
-                  // navigatorPushFun(context, function);
-                },
+                onPressed:function,
                 child: Text(
                   "View More +",
                   style: TextStyle(color: Colors.white, fontSize: 14),

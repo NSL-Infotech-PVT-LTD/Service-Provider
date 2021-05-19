@@ -1,80 +1,73 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:misson_tasker/model/ApiCaller.dart';
 import 'package:misson_tasker/model/api_models/GetProfileDataModel.dart';
 import 'package:misson_tasker/model/api_models/MissionRequestModel.dart';
 import 'package:misson_tasker/utils/CColors.dart';
-import 'package:misson_tasker/utils/NavMe.dart';
-import 'package:misson_tasker/utils/ScreenConfig.dart';
 import 'package:misson_tasker/utils/StringsPath.dart';
 import 'package:misson_tasker/utils/local_data.dart';
 import 'package:misson_tasker/view/DashboardScreens/ChatListScreen.dart';
 import 'package:misson_tasker/view/DashboardScreens/MissionExploreScreen.dart';
 import 'package:misson_tasker/view/DashboardScreens/MissionStatusScreen.dart';
-import 'package:misson_tasker/view/MissonRequestScreen/MissionRequest.dart';
-import 'package:misson_tasker/view/ProfileView/BusinessProfile.dart';
-import 'package:misson_tasker/view/ProfileView/UserProfile.dart';
-import 'package:misson_tasker/view/startup_screens/Drawer.dart';
 import 'package:misson_tasker/view/DashboardScreens/HomeScreen.dart';
 import 'package:misson_tasker/view/startup_screens/SplashScreen.dart';
 
-MissionRequestModel missionUpcoming;
-MissionRequestModel missionInProgress;
-MissionRequestModel missionCompleted;
-MissionRequestModel missionCancelled;
+// MissionRequestModel missionUpcoming;
+// MissionRequestModel missionInProgress;
+// MissionRequestModel missionCompleted;
+// MissionRequestModel missionCancelled;
 
-bool isMissionUpcomingLoading = true;
-bool isMissionInProgressLoading = true;
-bool isMissionCompleteLoading = true;
-bool isMissionCancelledLoading = true;
+// bool isMissionUpcomingLoading = true;
+// bool isMissionInProgressLoading = true;
+// bool isMissionCompleteLoading = true;
+// bool isMissionCancelledLoading = true;
 
-Future jobListFun({String auth, status, type, String lat, String lang}) async {
-  print("HEEEELLLLLL");
-  isConnectedToInternet().then(
-    (internet) {
-      if (internet != null && internet) {
-        // print("HEEEELLLLLL");
-        // Map<String, String> parms = {
-        //   "limit": "1000",
-        //   "job_status": status,
-        //   "job_type": type,
-        // };
-        ApiCaller()
-            .missionRequest(
-                jobType: type,
-                auth: auth,
-                jobStatus: status,
-                latitude: lat,
-                longitude: lang)
-            .then((value) {
-          if (value.status = true) {
-            if (status != null && status == "accepted") {
-              missionUpcoming = value;
-            } else if (status != null && status == "processing") {
-              missionInProgress = value;
-            } else if (status != null && status == "completed") {
-              missionCompleted = value;
-            } else if (status != null && status == "rejected") {
-              missionCancelled = value;
-            } else {}
-          }
-        }).whenComplete(() {
-          if (status != null && status == "accepted") {
-            isMissionInProgressLoading = true;
-          } else if (status != null && status == "processing") {
-            isMissionInProgressLoading = true;
-          } else if (status != null && status == "completed") {
-            isMissionCompleteLoading = true;
-          } else if (status != null && status == "rejected") {
-            isMissionCancelledLoading = true;
-          } else {}
-        });
-      }
-    },
-  );
-}
+// Future jobListFun({String auth, status, type, String lat, String lang}) async {
+//   print("HEEEELLLLLL");
+//   isConnectedToInternet().then(
+//     (internet) {
+//       if (internet != null && internet) {
+//         // print("HEEEELLLLLL");
+//         // Map<String, String> parms = {
+//         //   "limit": "1000",
+//         //   "job_status": status,
+//         //   "job_type": type,
+//         // };
+//         ApiCaller()
+//             .missionRequest(
+//                 jobType: type,
+//                 auth: auth,
+//                 jobStatus: status,
+//                 latitude: lat,
+//                 longitude: lang)
+//             .then((value) {
+//           if (value.status = true) {
+//             if (status != null && status == "accepted") {
+//               missionUpcoming = value;
+//             } else if (status != null && status == "processing") {
+//               missionInProgress = value;
+//             } else if (status != null && status == "completed") {
+//               missionCompleted = value;
+//             } else if (status != null && status == "rejected") {
+//               missionCancelled = value;
+//             } else {}
+//           }
+//         }).whenComplete(() {
+//           if (status != null && status == "accepted") {
+//             isMissionInProgressLoading = true;
+//           } else if (status != null && status == "processing") {
+//             isMissionInProgressLoading = true;
+//           } else if (status != null && status == "completed") {
+//             isMissionCompleteLoading = true;
+//           } else if (status != null && status == "rejected") {
+//             isMissionCancelledLoading = true;
+//           } else {}
+//         });
+//       }
+//     },
+//   );
+// }
 
 class Dashboard extends StatefulWidget {
   @override
