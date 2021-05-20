@@ -49,11 +49,11 @@ class _MissionStatusScreenState extends State<MissionStatusScreen> {
 
       ApiCaller()
           .missionRequest(
-              auth: _auth,
-              jobType: "all",
-              latitude: widget.getProfileDataModel.data.user.latitude,
-              longitude: widget.getProfileDataModel.data.user.longitude,
-              jobStatus: "confirmed")
+          auth: _auth,
+          jobType: "all",
+          latitude: widget.getProfileDataModel.data.user.latitude,
+          longitude: widget.getProfileDataModel.data.user.longitude,
+          jobStatus: "upcoming")
           .then((value) {
         missionUpcoming = value;
       }).whenComplete(() {
@@ -63,11 +63,11 @@ class _MissionStatusScreenState extends State<MissionStatusScreen> {
       });
       ApiCaller()
           .missionRequest(
-              auth: _auth,
-              jobType: "all",
-              latitude: widget.getProfileDataModel.data.user.latitude,
-              longitude: widget.getProfileDataModel.data.user.longitude,
-              jobStatus: "processing")
+          auth: _auth,
+          jobType: "all",
+          latitude: widget.getProfileDataModel.data.user.latitude,
+          longitude: widget.getProfileDataModel.data.user.longitude,
+          jobStatus: "in-progress")
           .then((value) {
         missionInProgress = value;
       }).whenComplete(() {
@@ -77,11 +77,11 @@ class _MissionStatusScreenState extends State<MissionStatusScreen> {
       });
       ApiCaller()
           .missionRequest(
-              auth: _auth,
-              jobType: "all",
-              latitude: widget.getProfileDataModel.data.user.latitude,
-              longitude: widget.getProfileDataModel.data.user.longitude,
-              jobStatus: "completed")
+          auth: _auth,
+          jobType: "all",
+          latitude: widget.getProfileDataModel.data.user.latitude,
+          longitude: widget.getProfileDataModel.data.user.longitude,
+          jobStatus: "completed")
           .then((value) {
         missionCompleted = value;
       }).whenComplete(() {
@@ -95,7 +95,7 @@ class _MissionStatusScreenState extends State<MissionStatusScreen> {
           jobType: "all",
           latitude: widget.getProfileDataModel.data.user.latitude,
           longitude: widget.getProfileDataModel.data.user.longitude,
-          jobStatus: "rejected")
+          jobStatus: "cancelled")
           .then((value) {
         missionCancelled = value;
       }).whenComplete(() {
@@ -243,9 +243,9 @@ class _MissionStatusScreenState extends State<MissionStatusScreen> {
             child: MyDrawer(
               username: widget.getProfileDataModel.data.user.name,
               ImageUrl: widget.getProfileDataModel == null ||
-                      widget.getProfileDataModel.data == null ||
-                      widget.getProfileDataModel.data.user == null ||
-                      widget.getProfileDataModel.data.user.image == null
+                  widget.getProfileDataModel.data == null ||
+                  widget.getProfileDataModel.data.user == null ||
+                  widget.getProfileDataModel.data.user.image == null
                   ? null
                   : widget.getProfileDataModel.data.user.image,
             ),
@@ -253,7 +253,7 @@ class _MissionStatusScreenState extends State<MissionStatusScreen> {
           appBar: myCustomAppBar(
             titleHeading: "Mission Status",
             titleSubHeading:
-                "You can check status of your Mission\nposted by customer",
+            "You can check status of your Mission\nposted by customer",
             tabBarList: [
               Text("Upcoming"),
               Text("In-progress"),
@@ -272,123 +272,123 @@ class _MissionStatusScreenState extends State<MissionStatusScreen> {
                 // Icon(Icons.directions_car),
                 isUpcommingLoading == true
                     ? Center(
-                        child: spinkit,
-                      )
+                  child: spinkit,
+                )
                     : showList(
-                        obj: missionUpcoming,
-                        exploreType: "upcoming",
-                        context: context,
-                        title: "sdvlsdknmsdfsd",
-                        visibleStatus: true,
-                        miles: 6.5,
-                        customWidget: Badge(
-                            badgeContent: Text(
-                              '6',
-                              style: TextStyle(
-                                  fontSize: ScreenConfig.fontSizeXlarge,
-                                  color: CColors.missonNormalWhiteColor,
-                                  fontWeight: FontWeight.w100,
-                                  fontFamily: "Product"),
-                            ),
-                            badgeColor: Colors.blue.shade400
-
-                            // child: Icon(Icons.settings),
-                            ),
-                        description: "sdfdf",
-                        ref: 1234,
-                        type: "1 day ago",
+                  obj: missionUpcoming,
+                  exploreType: "upcoming",
+                  context: context,
+                  title: "sdvlsdknmsdfsd",
+                  visibleStatus: true,
+                  miles: 6.5,
+                  customWidget: Badge(
+                      badgeContent: Text(
+                        '6',
+                        style: TextStyle(
+                            fontSize: ScreenConfig.fontSizeXlarge,
+                            color: CColors.missonNormalWhiteColor,
+                            fontWeight: FontWeight.w100,
+                            fontFamily: "Product"),
                       ),
+                      badgeColor: Colors.blue.shade400
+
+                    // child: Icon(Icons.settings),
+                  ),
+                  description: "sdfdf",
+                  ref: 1234,
+                  type: "1 day ago",
+                ),
                 isInProgressLoading == true
                     ? Center(
-                        child: spinkit,
-                      )
+                  child: spinkit,
+                )
                     : showList(
-                        obj: missionInProgress,
-                        exploreType: "inProgress",
-                        context: context,
-                        title: "fsdfrs",
-                        visibleStatus: true,
-                        miles: 6.5,
-                        customWidget: Row(
-                          children: [
-                            Container(
-                              height: 10,
-                              width: 30,
-                              decoration: BoxDecoration(
-                                  color: Colors.yellow.shade300,
-                                  // border: Border.all(),
-                                  borderRadius: BorderRadius.circular(10)),
-                            ),
-                            SizedBox(
-                              width: 5,
-                            ),
-                            Container(
-                              height: 10,
-                              width: 30,
-                              decoration: BoxDecoration(
-                                  color: Colors.yellow.shade300,
-                                  // border: Border.all(),
-                                  borderRadius: BorderRadius.circular(10)),
-                            ),
-                          ],
-                        ),
-                        description: "sdfdf",
-                        ref: 1234,
-                        type: "1 day ago",
+                  obj: missionInProgress,
+                  exploreType: "inProgress",
+                  context: context,
+                  title: "fsdfrs",
+                  visibleStatus: true,
+                  miles: 6.5,
+                  customWidget: Row(
+                    children: [
+                      Container(
+                        height: 10,
+                        width: 30,
+                        decoration: BoxDecoration(
+                            color: Colors.yellow.shade300,
+                            // border: Border.all(),
+                            borderRadius: BorderRadius.circular(10)),
                       ),
+                      SizedBox(
+                        width: 5,
+                      ),
+                      Container(
+                        height: 10,
+                        width: 30,
+                        decoration: BoxDecoration(
+                            color: Colors.yellow.shade300,
+                            // border: Border.all(),
+                            borderRadius: BorderRadius.circular(10)),
+                      ),
+                    ],
+                  ),
+                  description: "sdfdf",
+                  ref: 1234,
+                  type: "1 day ago",
+                ),
                 isCompleteLoading == true
                     ? Center(
-                        child: spinkit,
-                      )
+                  child: spinkit,
+                )
                     : showList(
-                        obj: missionCompleted,
-                        exploreType: "completed",
-                        context: context,
-                        title: "fsdfrs",
-                        visibleStatus: true,
-                        miles: 6.5,
-                        customWidget: Badge(
-                            badgeContent: Icon(
-                              Icons.check,
-                              size: 15,
-                              color: CColors.missonNormalWhiteColor,
-                            ),
-                            badgeColor: Colors.green.shade200
-
-                            // child: Icon(Icons.settings),
-                            ),
-                        description: "sdfdf",
-                        ref: 1234,
-                        type: "1 day ago",
+                  obj: missionCompleted,
+                  exploreType: "completed",
+                  context: context,
+                  title: "fsdfrs",
+                  visibleStatus: true,
+                  miles: 6.5,
+                  customWidget: Badge(
+                      badgeContent: Icon(
+                        Icons.check,
+                        size: 15,
+                        color: CColors.missonNormalWhiteColor,
                       ),
+                      badgeColor: Colors.green.shade200
+
+                    // child: Icon(Icons.settings),
+                  ),
+                  description: "sdfdf",
+                  ref: 1234,
+                  type: "1 day ago",
+                ),
                 isCancelledLoading == true
                     ? Center(
-                        child: spinkit,
-                      )
+                  child: spinkit,
+                )
                     : showList(
-                        obj: missionCancelled,
-                        exploreType: "cancelled",
-                        context: context,
-                        title: "fsdfrs",
-                        visibleStatus: false,
-                        miles: 6.5,
-                        customWidget: Badge(
-                            badgeContent: Text(
-                              '5',
-                              style: TextStyle(
-                                  fontSize: ScreenConfig.fontSizeXlarge,
-                                  color: CColors.missonNormalWhiteColor,
-                                  fontWeight: FontWeight.w100,
-                                  fontFamily: "Product"),
-                            ),
-                            badgeColor: Colors.blue.shade400
-
-                            // child: Icon(Icons.settings),
-                            ),
-                        description: "sdfdf",
-                        ref: 1234,
-                        type: "1 day ago",
+                  obj: missionCancelled,
+                  exploreType: "cancelled",
+                  context: context,
+                  title: "fsdfrs",
+                  visibleStatus: false,
+                  miles: 6.5,
+                  customWidget: Badge(
+                      badgeContent: Text(
+                        '5',
+                        style: TextStyle(
+                            fontSize: ScreenConfig.fontSizeXlarge,
+                            color: CColors.missonNormalWhiteColor,
+                            fontWeight: FontWeight.w100,
+                            fontFamily: "Product"),
                       ),
+                      badgeColor: Colors.blue.shade400
+
+                    // child: Icon(Icons.settings),
+                  ),
+                  description: "sdfdf",
+                  ref: 1234,
+                  type: "1 day ago",
+                ),
               ],
             ),
           ),
@@ -397,17 +397,16 @@ class _MissionStatusScreenState extends State<MissionStatusScreen> {
     );
   }
 
-  Widget showList(
-      {MissionRequestModel obj,
-      context,
-      ref,
-      description,
-      title,
-      String exploreType,
-      visibleStatus,
-      Widget customWidget,
-      miles,
-      type}) {
+  Widget showList({MissionRequestModel obj,
+    context,
+    ref,
+    description,
+    title,
+    String exploreType,
+    visibleStatus,
+    Widget customWidget,
+    miles,
+    type}) {
     return Column(
       children: [
         // Container(
@@ -433,66 +432,104 @@ class _MissionStatusScreenState extends State<MissionStatusScreen> {
             itemBuilder: (context, index) {
               return obj.data.data.isEmpty
                   ? Center(
-                      child: Text("There is no data to show"),
-                    )
+                child: Text("There is no data to show"),
+              )
                   : Padding(
-                      padding: const EdgeInsets.symmetric(
-                          vertical: 2.0, horizontal: 8.0),
-                      child: containerBox(
-                          context,
-                          "$ref",
-                          "${obj.data.data.elementAt(index).title}",
-                          "${obj.data.data.elementAt(index).description}", () {
-                        switch (exploreType) {
-                          case "upcoming":
-                            {
-                              print("Hello Upcoming");
+                padding: const EdgeInsets.symmetric(
+                    vertical: 2.0, horizontal: 8.0),
+                child: containerBox(
+                    context,
+                    "${obj.data.data.elementAt(index).id}",
+                    "${obj.data.data
+                        .elementAt(index)
+                        .title}",
+                    "${obj.data.data
+                        .elementAt(index)
+                        .description}", () {
+                  switch (exploreType) {
+                    case "upcoming":
+                      {
+                        print("Hello Upcoming");
+                        print("sdfsddsfd $exploreType");
+                      }
+                      Get.to(
+                          MissionRequest(
+                            id: obj.data.data
+                                .elementAt(index)
+                                .id
+                                .toString(),
+                          ),
+                          transition: Transition.leftToRightWithFade,
+                          duration: Duration(milliseconds: 400))
+                          .then((value) => initState());
+                      break;
 
-                            }      Get.to(
-                                MissionRequest(
-                                  id: obj.data.data
-                                      .elementAt(index)
-                                      .id
-                                      .toString(),
-                                ),
-                                transition: Transition
-                                    .leftToRightWithFade,
-                                duration:
-                                Duration(milliseconds: 400))
-                                .then((value) => initState());
-                            break;
+                    case "inProgress":
+                      {
+                        print("Hello inProgress");
+                        Get.to(
+                            MissionRequest(
+                              id: obj.data.data
+                                  .elementAt(index)
+                                  .id
+                                  .toString(),
+                            ),
+                            transition: Transition.leftToRightWithFade,
+                            duration: Duration(milliseconds: 400))
+                            .then((value) => initState());
+                      }
+                      break;
+                    case "completed":
+                      {
+                        print("Hello Completed");
+                        Get.to(
+                            MissionRequest(
+                              id: obj.data.data
+                                  .elementAt(index)
+                                  .id
+                                  .toString(),
+                            ),
+                            transition: Transition.leftToRightWithFade,
+                            duration: Duration(milliseconds: 400))
+                            .then((value) => initState());
+                      }
+                      break;
+                    case "cancelled":
+                      {
+                        print("Hello Cancelled");
+                      }
+                      break;
 
-                          case "inProgress":
-                            {
-                              print("Hello inProgress");
-                            }
-                            break;
-                          case "completed":
-                            {
-                              print("Hello Completed");
-                            }
-                            break;
-                          case "cancelled":
-                            {
-                              print("Hello Cancelled");
-                            }
-                            break;
-
-                          default:
-                            {
-                              //statements;
-                            }
-                            break;
-                        }
-                        print("Hello $index");
-                      },
-                          miles: obj.data.data.elementAt(index).distanceMiles,
-                          type: obj.data.data.elementAt(index).startDate.toString().split(":").elementAt(0).split(" ").elementAt(0),
-                          customWidget: customWidget,
-                          visibleStatus: visibleStatus),
-                    );
+                    default:
+                      {
+                        //statements;
+                      }
+                      break;
+                  }
+                  print("Hello $index");
+                },
+                    miles: obj.data.data
+                        .elementAt(index)
+                        .distanceMiles,
+                    type: obj.data.data
+                        .elementAt(index)
+                        .startDate
+                        .toString()
+                        .split(":")
+                        .elementAt(0)
+                        .split(" ")
+                        .elementAt(0),
+                    customWidget: customWidget,
+                    visibleStatus: visibleStatus,
+                    status: obj.data.data
+                        .elementAt(index)
+                        .jobStatus,
+                    jobType: obj.data.data
+                        .elementAt(index)
+                        .jobType),
+              );
             },
-            itemCount:obj.data.data.isEmpty?1: obj.data.data.length,
+            itemCount: obj.data.data.isEmpty ? 1 : obj.data.data.length,
           ),
         ),
       ],
@@ -500,9 +537,14 @@ class _MissionStatusScreenState extends State<MissionStatusScreen> {
   }
 
   Widget containerBox(context, ref, description, title, function,
-      {visibleStatus, Widget customWidget, miles, type, String exploreType}) {
+      {visibleStatus,
+        Widget customWidget,
+        miles,
+        type,
+        String exploreType,
+        String status, String jobType}) {
     return Container(
-      height: ScreenConfig.screenHeight * 0.25,
+      height: ScreenConfig.screenHeight * 0.28,
       width: ScreenConfig.screenWidth * 0.90,
       decoration: BoxDecoration(
         color: CColors.missonNormalWhiteColor,
@@ -593,9 +635,9 @@ class _MissionStatusScreenState extends State<MissionStatusScreen> {
                       ),
                       child: Center(
                           child: SvgPicture.asset(
-                        "",
-                        height: ScreenConfig.screenHeight * 0.02,
-                      )), //assets/images/jobIcon.svg
+                            "",
+                            height: ScreenConfig.screenHeight * 0.02,
+                          )), //assets/images/jobIcon.svg
                     ),
                     SizedBox(width: ScreenConfig.screenWidth * 0.02),
                     Container(
@@ -604,20 +646,35 @@ class _MissionStatusScreenState extends State<MissionStatusScreen> {
                         children: [
                           Container(
                               child: Text(
-                            "$title ",
-                            style: TextStyle(
-                                fontSize: ScreenConfig.fontSizelarge,
-                                fontFamily: "Product",
-                                color: CColors.missonPrimaryColor),
-                            softWrap: true,
-                            overflow: TextOverflow.ellipsis,
-                          )),
-                          Text(
-                            "Tasker Required ",
-                            style: TextStyle(
-                                fontSize: 13,
-                                fontFamily: "Product",
-                                color: CColors.missonMediumGrey),
+                                "$title  ",
+                                maxLines: 1,
+                                style: TextStyle(
+                                    fontSize: ScreenConfig.fontSizelarge,
+                                    fontFamily: "Product",
+                                    color: CColors.missonPrimaryColor),
+                                softWrap: true,
+                                overflow: TextOverflow.ellipsis,
+                              )),
+                          Padding(
+                            padding:
+                            const EdgeInsets.symmetric(horizontal: 8.0),
+                            child: Text(
+                              "$status",
+                              style: TextStyle(
+                                  fontSize: 13,
+                                  fontFamily: "Product",
+                                  color: status == "pending"
+                                      ? Colors.blueGrey
+                                      : status == "accepted"
+                                      ? CColors.missonSkyBlue
+                                      : status == "processing"
+                                      ? CColors.missonYellow
+                                      : status == "cancelled"
+                                      ? CColors.missonRed
+                                      : status == "confirmed"
+                                      ? Colors.lightGreen
+                                      : CColors.missonGreen),
+                            ),
                           ),
                         ],
                       ),
@@ -637,15 +694,17 @@ class _MissionStatusScreenState extends State<MissionStatusScreen> {
                       ),
                       child: Center(
                           child: SvgPicture.asset(
-                        "",
-                        height: ScreenConfig.screenHeight * 0.02,
-                      )),
+                            "",
+                            height: ScreenConfig.screenHeight * 0.02,
+                          )),
                     ),
                     SizedBox(width: ScreenConfig.screenWidth * 0.02),
                     RichText(
                       text: TextSpan(
                         text: "",
-                        style: DefaultTextStyle.of(context).style,
+                        style: DefaultTextStyle
+                            .of(context)
+                            .style,
                         children: <TextSpan>[
                           TextSpan(
                               text: '$miles ',
@@ -655,6 +714,51 @@ class _MissionStatusScreenState extends State<MissionStatusScreen> {
                                   fontSize: ScreenConfig.fontSizeXlarge)),
                           TextSpan(
                               text: 'miles away',
+                              style: TextStyle(
+                                  fontWeight: FontWeight.w300,
+                                  color: CColors.missonPrimaryColor,
+                                  fontSize: ScreenConfig.fontSizeXlarge)),
+                        ],
+                      ),
+                    )
+                    // Text(
+                    //   "$miles",
+                    //   style: TextStyle(fontFamily: "Product"),
+                    // ),
+                  ],
+                ), SizedBox(height: ScreenConfig.screenHeight * 0.01),
+                Row(
+                  children: [
+                    Container(
+                      width: 30,
+                      height: 30,
+                      decoration: BoxDecoration(
+                        borderRadius: new BorderRadius.circular(30.0),
+                        //shape: BoxShape.circle,
+                        color: CColors.missonMediumGrey,
+                      ),
+                      child: Center(
+                          child: SvgPicture.asset(
+                            "",
+                            height: ScreenConfig.screenHeight * 0.02,
+                          )),
+                    ),
+                    SizedBox(width: ScreenConfig.screenWidth * 0.02),
+                    RichText(
+                      text: TextSpan(
+                        text: "",
+                        style: DefaultTextStyle
+                            .of(context)
+                            .style,
+                        children: <TextSpan>[
+                          TextSpan(
+                              text: '$jobType ',
+                              style: TextStyle(
+                                  fontWeight: FontWeight.w400,
+                                  color: CColors.missonPrimaryColor,
+                                  fontSize: ScreenConfig.fontSizeXlarge)),
+                          TextSpan(
+                              text: 'job type',
                               style: TextStyle(
                                   fontWeight: FontWeight.w300,
                                   color: CColors.missonPrimaryColor,

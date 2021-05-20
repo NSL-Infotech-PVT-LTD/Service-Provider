@@ -80,7 +80,7 @@ class _DashboardState extends State<Dashboard> {
   GetProfileDataModel getProfileDataModel;
   MissionRequestModel missionRequest;
   bool isLoadingData = true;
-  bool isLoadingRequest = true;
+  // bool isLoadingRequest = true;
   int _selectedIndex = 0;
 
   String _location = "Loading....";
@@ -99,20 +99,20 @@ class _DashboardState extends State<Dashboard> {
           isLoadingData = false;
 
           _location = getProfileDataModel.data.user.location;
-          ApiCaller()
-              .missionRequest(
-                  jobType: "direct",
-                  auth: auth,
-                  latitude: getProfileDataModel.data.user.latitude,
-                  longitude: getProfileDataModel.data.user.longitude,
-                  jobStatus: "pending")
-              .then((value) {
-            missionRequest = value;
-          }).whenComplete(() {
-            setState(() {
-              isLoadingRequest = false;
-            });
-          });
+          // ApiCaller()
+          //     .missionRequest(
+          //         jobType: "direct",
+          //         auth: auth,
+          //         latitude: getProfileDataModel.data.user.latitude,
+          //         longitude: getProfileDataModel.data.user.longitude,
+          //         jobStatus: "upcoming")
+          //     .then((value) {
+          //   missionRequest = value;
+          // }).whenComplete(() {
+          //   setState(() {
+          //     isLoadingRequest = false;
+          //   });
+          // });
         });
       });
     });
@@ -153,7 +153,7 @@ class _DashboardState extends State<Dashboard> {
     _listOfScreens = <Widget>[
       HomeScreen(
         getProfileDataModel: getProfileDataModel,
-        missionRequest: missionRequest,
+        // missionRequest: missionRequest,
       ),
       MissionExploreScreen(
         getProfileDataModel: getProfileDataModel,
@@ -167,13 +167,16 @@ class _DashboardState extends State<Dashboard> {
     ];
 
     return Scaffold(
-      body: (getProfileDataModel == null || missionRequest == null)
+      body: isLoadingData==true
           ? Center(child: spinkit)
-          : SafeArea(
-              child: Container(
-              color: CColors.missonNormalWhiteColor,
-              child: _listOfScreens.elementAt(_selectedIndex),
-            )),
+          : Container(
+        color: Colors.white,
+            child: SafeArea(
+                child: Container(
+                color: CColors.missonNormalWhiteColor,
+                child: _listOfScreens.elementAt(_selectedIndex),
+              )),
+          ),
       bottomNavigationBar: BottomNavigationBar(
           elevation: 0,
           backgroundColor: CColors.missonNormalWhiteColor,

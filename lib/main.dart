@@ -3,7 +3,9 @@ import 'dart:convert';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:get/get.dart';
 import 'package:get/get_navigation/src/root/get_material_app.dart';
+import 'package:misson_tasker/view/MissonRequestScreen/MissionRequest.dart';
 import 'package:misson_tasker/view/startup_screens/SplashScreen.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
@@ -59,8 +61,7 @@ class _MyAppState extends State<MyApp> {
 
   @override
   void initState() {
-    // final fbm = FirebaseMessaging();
-    // fbm.requestNotificationPermissions();
+    FirebaseMessaging.instance.requestPermission();
     print("CHECK $token");
     FirebaseMessaging.onMessage.listen((RemoteMessage message) {
       RemoteNotification notification = message.notification;
@@ -81,7 +82,7 @@ class _MyAppState extends State<MyApp> {
               ),
             ));
 
-        print("==============> YYYYYYYYYYYYYYYY ${message.data}");
+        print("======IN onMessage ========> YYYYYYYYYYYYYYYY ${message.data}");
         // print("==============> YYYYYYYYYYYYYYYY ${jsonEncode(message)}");
       }
     });
@@ -93,8 +94,20 @@ class _MyAppState extends State<MyApp> {
       AndroidNotification android = message.notification?.android;
       if (notification != null && android != null) {
         message.data.forEach((key, value) {
-          print("$key    fd;vmdfldf     $value");
+          // print("$key    fd;vmdfldf     $value");
+          //
+          //
+          // }
         });
+        print(
+            "======IN onMessageOpenedApp ========> YYYYYYYYYYYYYYYY ${message.data}");
+
+        if (message.data["data_type"] == "Job") {
+          print("${message.data}");
+        }
+        Get.to(MissionRequest(id: message.data["target_id"]),
+            transition: Transition.leftToRightWithFade,
+            duration: Duration(milliseconds: 400));
         // showDialog(
         //     context: context,
         //     builder: (_) {
@@ -110,7 +123,6 @@ class _MyAppState extends State<MyApp> {
         //     });
       }
     });
-
 
     super.initState();
   }

@@ -30,6 +30,7 @@ class _MissionExploreScreenState extends State<MissionExploreScreen> {
 
   bool isPosted = true;
   bool isRequested = true;
+  bool isProfileData = true;
 
   MissionRequestModel posted;
   MissionRequestModel requested;
@@ -51,7 +52,7 @@ class _MissionExploreScreenState extends State<MissionExploreScreen> {
               jobType: "direct",
               latitude: widget.getProfileDataModel.data.user.latitude,
               longitude: widget.getProfileDataModel.data.user.longitude,
-              jobStatus: "accepted")
+              jobStatus: "upcoming")
           .then((value) {
         posted = value;
       }).whenComplete(() {
@@ -65,7 +66,7 @@ class _MissionExploreScreenState extends State<MissionExploreScreen> {
               jobType: "post",
               latitude: widget.getProfileDataModel.data.user.latitude,
               longitude: widget.getProfileDataModel.data.user.longitude,
-              jobStatus: "accepted")
+              jobStatus: "upcoming")
           .then((value) {
         requested = value;
       }).whenComplete(() {
@@ -184,12 +185,13 @@ class _MissionExploreScreenState extends State<MissionExploreScreen> {
                 // Icon(Icons.directions_car),
                 isPosted == true
                     ? Center(child: spinkit)
-                    : showList(obj: posted),
+                    : showList(
+                        obj: requested, heading: "Posted By Task Seekers"),
                 isRequested == true
                     ? Center(
                         child: spinkit,
                       )
-                    : showList(obj: requested)
+                    : showList(obj: posted, heading: "Assigned By Task Seekers")
               ],
             ),
           ),
@@ -198,7 +200,7 @@ class _MissionExploreScreenState extends State<MissionExploreScreen> {
     );
   }
 
-  Widget showList({MissionRequestModel obj}) {
+  Widget showList({MissionRequestModel obj, String heading}) {
     return Column(
       children: [
         Container(
@@ -207,7 +209,7 @@ class _MissionExploreScreenState extends State<MissionExploreScreen> {
             padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 20),
             child: Row(
               children: [
-                Text("Posted By Task Seekers",
+                Text("$heading",
                     style: TextStyle(
                         fontWeight: FontWeight.w500,
                         color: CColors.missonMediumGrey,
@@ -228,31 +230,28 @@ class _MissionExploreScreenState extends State<MissionExploreScreen> {
                         context,
                         "${obj.data.data.elementAt(index).id}",
                         "${obj.data.data.elementAt(index).title}",
-                        "2",
-                        () {
-
-                          Get.to(
-                              MissionRequest(
-                                id: obj
-                                    .data.data
-                                    .elementAt(index)
-                                    .id
-                                    .toString(),
-                              ),
-                              transition: Transition
-                                  .leftToRightWithFade,
-                              duration:
-                              Duration(milliseconds: 400))
-                              .then((value) => initState());
-
-                        },
+                        "${obj.data.data.elementAt(index).description}", () {
+                        obj.data.data.elementAt(index).jobType == "direct"
+                            ? Get.to(
+                                    MissionRequest(
+                                      id: obj.data.data
+                                          .elementAt(index)
+                                          .id
+                                          .toString(),
+                                    ),
+                                    transition: Transition.leftToRightWithFade,
+                                    duration: Duration(milliseconds: 400))
+                                .then((value) => initState())
+                            : () {};
+                      },
                         obj: obj,
                         miles: obj.data.data.elementAt(index).distanceMiles,
                         type: "1 day ago",
-                        statusData: "123"),
+                        statusData: "123",
+                        jobStatus: obj.data.data.elementAt(index).jobStatus),
               );
             },
-            itemCount:obj.data.data.isEmpty ?1: obj.data.data.length,
+            itemCount: obj.data.data.isEmpty ? 1 : obj.data.data.length,
           ),
         ),
       ],
@@ -260,7 +259,12 @@ class _MissionExploreScreenState extends State<MissionExploreScreen> {
   }
 
   Widget containerBox(context, ref, description, title, function,
-      {MissionRequestModel obj, visibleStatus, statusData, miles, type}) {
+      {MissionRequestModel obj,
+      visibleStatus,
+      statusData,
+      miles,
+      type,
+      String jobStatus}) {
     return Container(
       height: ScreenConfig.screenHeight * 0.25,
       width: ScreenConfig.screenWidth * 0.90,
@@ -318,7 +322,7 @@ class _MissionExploreScreenState extends State<MissionExploreScreen> {
                         child: Text(
                           "$description",
                           softWrap: true,
-                          maxLines: 2,
+                          maxLines: 1,
                           style: TextStyle(
                             color: CColors.missonPrimaryColor,
                             fontFamily: "Product",
@@ -341,41 +345,54 @@ class _MissionExploreScreenState extends State<MissionExploreScreen> {
                 SizedBox(height: ScreenConfig.screenHeight * 0.01),
                 Row(
                   children: [
-                    Container(
-                      width: 30,
-                      height: 30,
-                      decoration: BoxDecoration(
-                        borderRadius: new BorderRadius.circular(30.0),
-                        //shape: BoxShape.circle,
-                        color: CColors.missonMediumGrey,
-                      ),
-                      child: Center(
-                          child: SvgPicture.asset(
-                        "",
-                        height: ScreenConfig.screenHeight * 0.02,
-                      )), //assets/images/jobIcon.svg
-                    ),
-                    SizedBox(width: ScreenConfig.screenWidth * 0.02),
+                    // Container(
+                    //   width: 30,
+                    //   height: 30,
+                    //   decoration: BoxDecoration(
+                    //     borderRadius: new BorderRadius.circular(30.0),
+                    //     //shape: BoxShape.circle,
+                    //     color: CColors.missonMediumGrey,
+                    //   ),
+                    //   child: Center(
+                    //       child: SvgPicture.asset(
+                    //     "",
+                    //     height: ScreenConfig.screenHeight * 0.02,
+                    //   )), //assets/images/jobIcon.svg
+                    // ),
+                    // SizedBox(width: ScreenConfig.screenWidth * 0.02),
                     Container(
                       child: Row(
                         mainAxisSize: MainAxisSize.min,
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           Container(
+                              width: ScreenConfig.screenWidth * 0.6,
                               child: Text(
-                            "$title ",
-                            style: TextStyle(
-                                fontSize: ScreenConfig.fontSizelarge,
-                                fontFamily: "Product",
-                                color: CColors.missonPrimaryColor),
-                            softWrap: true,
-                            overflow: TextOverflow.ellipsis,
-                          )),
+                                "$title ",
+                                maxLines: 1,
+                                style: TextStyle(
+                                    fontSize: ScreenConfig.fontSizelarge,
+                                    fontFamily: "Product",
+                                    color: CColors.missonPrimaryColor),
+                                softWrap: true,
+                                overflow: TextOverflow.ellipsis,
+                              )),
                           Text(
-                            "Tasker Required ",
+                            "$jobStatus",
                             style: TextStyle(
                                 fontSize: 13,
                                 fontFamily: "Product",
-                                color: CColors.missonMediumGrey),
+                                color: jobStatus == "pending"
+                                    ? Colors.blueGrey
+                                    : jobStatus == "accepted"
+                                        ? CColors.missonSkyBlue
+                                        : jobStatus == "processing"
+                                            ? CColors.missonYellow
+                                            : jobStatus == "cancelled"
+                                                ? CColors.missonRed
+                                                : jobStatus == "confirmed"
+                                                    ? Colors.lightGreen
+                                                    : CColors.missonGreen),
                           ),
                         ],
                       ),
@@ -434,7 +451,7 @@ class _MissionExploreScreenState extends State<MissionExploreScreen> {
           Align(
               alignment: Alignment.bottomRight,
               child: FlatButton(
-                onPressed:function,
+                onPressed: function,
                 child: Text(
                   "View More +",
                   style: TextStyle(color: Colors.white, fontSize: 14),

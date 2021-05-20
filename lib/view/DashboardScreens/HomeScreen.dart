@@ -18,10 +18,12 @@ import 'package:misson_tasker/view/startup_screens/SplashScreen.dart';
 
 class HomeScreen extends StatefulWidget {
   GetProfileDataModel getProfileDataModel;
-  MissionRequestModel missionRequest;
 
-  HomeScreen(
-      {@required this.getProfileDataModel, @required this.missionRequest});
+  // MissionRequestModel missionRequest;
+
+  HomeScreen({
+    @required this.getProfileDataModel,
+  });
 
   @override
   _HomeScreenState createState() => _HomeScreenState();
@@ -33,8 +35,10 @@ class _HomeScreenState extends State<HomeScreen> {
   bool isLoadingData = true;
   bool isRequestList = true;
   bool isConfirmedList = true;
+  List<Datum> listOfRequestsPending = [];
   MissionRequestModel missionRequestModelOnGoing;
   MissionRequestModel missionRequestModelConfirmed;
+  MissionRequestModel missionRequest;
   String username;
 
   @override
@@ -52,11 +56,18 @@ class _HomeScreenState extends State<HomeScreen> {
               jobType: "direct",
               latitude: widget.getProfileDataModel.data.user.latitude,
               longitude: widget.getProfileDataModel.data.user.longitude,
-              jobStatus: "pending")
+              jobStatus: "upcoming")
           .then((value) {
-        widget.missionRequest = value;
+        print("COMPLETED COMPLETED=============>");
+        missionRequest = value;
       }).whenComplete(() {
+        listOfRequestsPending.clear();
         setState(() {
+          missionRequest.data.data.forEach((element) {
+            if (element.jobStatus == "pending") {
+              listOfRequestsPending.add(element);
+            }
+          });
           isRequestList = false;
         });
       });
@@ -75,9 +86,12 @@ class _HomeScreenState extends State<HomeScreen> {
               jobType: "direct",
               latitude: widget.getProfileDataModel.data.user.latitude,
               longitude: widget.getProfileDataModel.data.user.longitude,
-              jobStatus: "processing")
+              jobStatus: "in-progress")
           .then((value) {
         missionRequestModelOnGoing = value;
+
+        print("FFFFFFFFFFFFF ${  missionRequestModelOnGoing.toJson()}");
+
       }).whenComplete(() {
         setState(() {
           isLoadingData = false;
@@ -97,7 +111,7 @@ class _HomeScreenState extends State<HomeScreen> {
               jobType: "direct",
               latitude: widget.getProfileDataModel.data.user.latitude,
               longitude: widget.getProfileDataModel.data.user.longitude,
-              jobStatus: "confirmed")
+              jobStatus: "completed")
           .then((value) {
         missionRequestModelConfirmed = value;
         print("DFDSJNSDKJSDF ${missionRequestModelConfirmed.toJson()}");
@@ -110,14 +124,14 @@ class _HomeScreenState extends State<HomeScreen> {
 
     FirebaseMessaging.onMessageOpenedApp.listen((RemoteMessage message) {
       print('A new onMessageOpenedApp event was published! $message');
-      Get.to(BusinessProfile(),
-              transition: Transition.leftToRightWithFade,
-              duration: Duration(milliseconds: 400))
-          .then((value) {
-        getSharedPref(widget);
-      }).whenComplete(() {
-        setState(() {});
-      });
+      // Get.to(BusinessProfile(),
+      //         transition: Transition.leftToRightWithFade,
+      //         duration: Duration(milliseconds: 400))
+      //     .then((value) {
+      //   getSharedPref(widget);
+      // }).whenComplete(() {
+      //   setState(() {});
+      // });
       print('${message.sentTime}');
       print('${message.notification.title}');
       print('${message.notification.body}');
@@ -194,15 +208,9 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   @override
   Widget build(BuildContext context) {
-    print("YEH ====> ${widget.missionRequest.toJson()}");
+    // print("YEH ====> ${widget.missionRequest.toJson()}");
 
-    return widget.missionRequest == null || widget.getProfileDataModel == null
-        ? Scaffold(
-            body: Center(
-              child: spinkit,
-            ),
-          )
-        : Scaffold(
+    return Scaffold(
             key: _drawerKey,
             onDrawerChanged: (isOpened) {
               print(isOpened);
@@ -377,54 +385,58 @@ class _HomeScreenState extends State<HomeScreen> {
                       height: 170,
                       width: ScreenConfig.screenWidth,
                       color: CColors.backgroundRed,
-                      child: widget.missionRequest.data.data.isEmpty
+                      child:missionRequest==null ? Center(child:spinkit):missionRequest.data.data.isEmpty
                           ? Center(
                               child: Container(
                                 child: Text("No Mission Request to show "),
                               ),
                             )
+                          : listOfRequestsPending.isEmpty
+                          ? Center(child: Text("There is no data to show"))
                           : ListView.builder(
                               itemBuilder: (context, index) {
                                 return Padding(
-                                  padding: const EdgeInsets.symmetric(
-                                      vertical: 20.0, horizontal: 10),
-                                  child: InkWell(
-                                    onTap: () {
-                                      // NavMe().NavPushLeftToRight(MissionRequest(
-                                      //   id: widget.missionRequest.data.data
-                                      //       .elementAt(index)
-                                      //       .id
-                                      //       .toString(),
-                                      // ));
+                                        padding: const EdgeInsets.symmetric(
+                                            vertical: 20.0, horizontal: 10),
+                                        child: InkWell(
+                                          onTap: () {
+                                            // NavMe().NavPushLeftToRight(MissionRequest(
+                                            //   id: widget.missionRequest.data.data
+                                            //       .elementAt(index)
+                                            //       .id
+                                            //       .toString(),
+                                            // ));
 
-                                      Get.to(
-                                              MissionRequest(
-                                                id: widget
-                                                    .missionRequest.data.data
-                                                    .elementAt(index)
-                                                    .id
-                                                    .toString(),
-                                              ),
-                                              transition: Transition
-                                                  .leftToRightWithFade,
-                                              duration:
-                                                  Duration(milliseconds: 400))
-                                          .then((value) => initState());
-                                    },
-                                    child: customTile(
-                                        heading:
-                                            "${widget.missionRequest.data.data.elementAt(index).title}",
-                                        // heading: "sdf",
-                                        subheading:
-                                            "${widget.missionRequest.data.data.elementAt(index).startTime.split(":").elementAt(0)}: ${widget.missionRequest.data.data.elementAt(index).startTime.split(":").elementAt(1)}, ${getWeekDay(widget.missionRequest.data.data.elementAt(index).startDate.weekday)}, ${widget.missionRequest.data.data.elementAt(index).startDate.day} ${getMonth(widget.missionRequest.data.data.elementAt(index).startDate.month)}",
-                                        lines: "Mission details",
-                                        bottomLineColor: CColors.missonRed,
-                                        tileColor:
-                                            CColors.missonNormalWhiteColor),
-                                  ),
-                                );
+                                            Get.to(
+                                                    MissionRequest(
+                                                      id: listOfRequestsPending
+                                                          .elementAt(index)
+                                                          .id
+                                                          .toString(),
+                                                    ),
+                                                    transition: Transition
+                                                        .leftToRightWithFade,
+                                                    duration: Duration(
+                                                        milliseconds: 400))
+                                                .then((value) => initState());
+                                          },
+                                          child: customTile(
+                                              heading:
+                                                  "${listOfRequestsPending.elementAt(index).title}",
+                                              // heading: "sdf",
+                                              subheading:
+                                                  "${listOfRequestsPending.elementAt(index).startTime.split(":").elementAt(0)}: ${listOfRequestsPending.elementAt(index).startTime.split(":").elementAt(1)}, ${getWeekDay(listOfRequestsPending.elementAt(index).startDate.weekday)}, ${listOfRequestsPending.elementAt(index).startDate.day} ${getMonth(listOfRequestsPending.elementAt(index).startDate.month)}",
+                                              lines: "Mission details",
+                                              bottomLineColor:
+                                                  CColors.missonRed,
+                                              tileColor: CColors
+                                                  .missonNormalWhiteColor),
+                                        ),
+                                      );
                               },
-                              itemCount: widget.missionRequest.data.data.length,
+                              itemCount: listOfRequestsPending.isEmpty
+                                  ? 1
+                                  : listOfRequestsPending.length,
                               // itemCount: 1,
                               scrollDirection: Axis.horizontal,
                             )),
@@ -434,7 +446,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     title: Row(
                       children: [
                         Text(
-                          "Mission Started",
+                          "Mission Accomplished",
                           style:
                               TextStyle(fontSize: ScreenConfig.fontSizeMedium),
                         ),
@@ -447,7 +459,7 @@ class _HomeScreenState extends State<HomeScreen> {
                       ],
                     ),
                     subtitle: Text(
-                      "All the best! Do it perfectly.",
+                      "See your recent complete work",
                       style: TextStyle(fontSize: ScreenConfig.fontSizeSmall),
                     ),
                     // trailing: Padding(
@@ -464,10 +476,10 @@ class _HomeScreenState extends State<HomeScreen> {
                   Container(
                       height: 200,
                       width: ScreenConfig.screenWidth,
-                      color: CColors.backgroundyellow,
+                      color: CColors.backgroundgreen,
                       child: isLoadingData == true
                           ? Center(child: spinkit)
-                          : missionRequestModelOnGoing.data.data.isEmpty
+                          : missionRequestModelConfirmed.data.data.isEmpty
                               ? Center(child: Text("There is nothing to show"))
                               : ListView.builder(
                                   itemBuilder: (context, index) {
@@ -482,7 +494,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
                                         Get.to(
                                                 MissionRequest(
-                                                  id: missionRequestModelOnGoing
+                                                  id: missionRequestModelConfirmed
                                                       .data.data
                                                       .elementAt(index)
                                                       .id
@@ -499,22 +511,22 @@ class _HomeScreenState extends State<HomeScreen> {
                                             vertical: 10.0, horizontal: 10),
                                         child: customTile2(
                                             heading:
-                                                "${missionRequestModelOnGoing.data.data.elementAt(index).title}",
+                                                "${missionRequestModelConfirmed.data.data.elementAt(index).title}",
                                             subheading:
-                                                "${missionRequestModelOnGoing.data.data.elementAt(index).startTime.split(":").elementAt(0)}: ${missionRequestModelOnGoing.data.data.elementAt(index).startTime.split(":").elementAt(1)}, ${getWeekDay(missionRequestModelOnGoing.data.data.elementAt(index).startDate.weekday)}, ${missionRequestModelOnGoing.data.data.elementAt(index).startDate.day} ${getMonth(missionRequestModelOnGoing.data.data.elementAt(index).startDate.month)}",
+                                                "${missionRequestModelConfirmed.data.data.elementAt(index).startTime.split(":").elementAt(0)}: ${missionRequestModelConfirmed.data.data.elementAt(index).startTime.split(":").elementAt(1)}, ${getWeekDay(missionRequestModelConfirmed.data.data.elementAt(index).startDate.weekday)}, ${missionRequestModelConfirmed.data.data.elementAt(index).startDate.day} ${getMonth(missionRequestModelConfirmed.data.data.elementAt(index).startDate.month)}",
                                             lines: "Mission details",
                                             backgroundColor:
                                                 CColors.backgroundRed,
                                             bottomWidget: SvgPicture.asset(
                                                 yellowClockLogo),
                                             bottomLineColor:
-                                                CColors.missonYellow,
+                                                CColors.missonGreen,
                                             tileColor:
                                                 CColors.missonNormalWhiteColor),
                                       ),
                                     );
                                   },
-                                  itemCount: missionRequestModelOnGoing
+                                  itemCount: missionRequestModelConfirmed
                                       .data.data.length,
                                   scrollDirection: Axis.horizontal,
                                 )),
@@ -608,7 +620,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     title: Row(
                       children: [
                         Text(
-                          "Mission Confrimed",
+                          "Mission Ongoing",
                           style:
                               TextStyle(fontSize: ScreenConfig.fontSizeMedium),
                         ),
@@ -656,7 +668,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
                                         Get.to(
                                                 MissionRequest(
-                                                  id: missionRequestModelConfirmed
+                                                  id: missionRequestModelOnGoing
                                                       .data.data
                                                       .elementAt(index)
                                                       .id
@@ -673,7 +685,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                             vertical: 10.0, horizontal: 10),
                                         child: customTile2(
                                             heading:
-                                                "${missionRequestModelConfirmed.data.data.elementAt(index).title}",
+                                                "${missionRequestModelOnGoing.data.data.elementAt(index).title}",
                                             subheading: "",
                                             // "${missionRequestModelConfirmed.data.data.elementAt(index).startTime.split(":").elementAt(0)}: ${missionRequestModelOnGoing.data.data.elementAt(index).startTime.split(":").elementAt(1)}, ${getWeekDay(missionRequestModelOnGoing.data.data.elementAt(index).startDate.weekday)}, ${missionRequestModelOnGoing.data.data.elementAt(index).startDate.day} ${getMonth(missionRequestModelOnGoing.data.data.elementAt(index).startDate.month)}",
                                             lines: "Mission details",
