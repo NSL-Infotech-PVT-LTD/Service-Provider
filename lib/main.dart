@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:get/get_navigation/src/root/get_material_app.dart';
+import 'package:misson_tasker/utils/CColors.dart';
 import 'package:misson_tasker/view/MissonRequestScreen/MissionRequest.dart';
 import 'package:misson_tasker/view/startup_screens/SplashScreen.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -31,6 +32,11 @@ Future _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
 String fcmToken;
 
 Future<void> main() async {
+  SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
+      statusBarColor: CColors.missonNormalWhiteColor,
+      systemNavigationBarColor: CColors.missonNormalWhiteColor,
+      systemNavigationBarIconBrightness: Brightness.dark,
+      statusBarIconBrightness: Brightness.dark));
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
   fcmToken = await FirebaseMessaging.instance.getToken();

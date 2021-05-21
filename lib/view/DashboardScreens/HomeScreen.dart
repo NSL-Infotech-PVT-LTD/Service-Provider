@@ -210,94 +210,97 @@ class _HomeScreenState extends State<HomeScreen> {
   Widget build(BuildContext context) {
     // print("YEH ====> ${widget.missionRequest.toJson()}");
 
-    return Scaffold(
-            key: _drawerKey,
-            onDrawerChanged: (isOpened) {
-              print(isOpened);
-              if (isOpened == false) {
-                getSharedPref(widget);
-              }
-            },
-            drawer: Drawer(
-                // Add a ListView to the drawer. This ensures the user can scroll
-                // through the options in the drawer if there isn't enough vertical
-                // space to fit everything.
-                child: MyDrawer(
-              username: widget.getProfileDataModel.data.user.name,
-              ImageUrl: widget.getProfileDataModel == null ||
-                      widget.getProfileDataModel.data == null ||
-                      widget.getProfileDataModel.data.user == null ||
-                      widget.getProfileDataModel.data.user.image == null
-                  ? null
-                  : widget.getProfileDataModel.data.user.image,
-            )),
-            appBar: AppBar(
-              elevation: 0,
-              backgroundColor: CColors.missonNormalWhiteColor,
-              titleSpacing: -1.0,
-              leading: InkWell(
-                onTap: () {
-                  _drawerKey.currentState.openDrawer();
-                },
-                child: Padding(
-                  padding: const EdgeInsets.all(18.0),
-                  child: SvgPicture.asset(drawerIcon),
+    return Container(
+       color: CColors.missonNormalWhiteColor,
+      child: Scaffold(
+              key: _drawerKey,
+              onDrawerChanged: (isOpened) {
+                print(isOpened);
+                if (isOpened == false) {
+                  getSharedPref(widget);
+                }
+              },
+              drawer: Drawer(
+                  // Add a ListView to the drawer. This ensures the user can scroll
+                  // through the options in the drawer if there isn't enough vertical
+                  // space to fit everything.
+                  child: MyDrawer(
+                username: widget.getProfileDataModel.data.user.name,
+                ImageUrl: widget.getProfileDataModel == null ||
+                        widget.getProfileDataModel.data == null ||
+                        widget.getProfileDataModel.data.user == null ||
+                        widget.getProfileDataModel.data.user.image == null
+                    ? null
+                    : widget.getProfileDataModel.data.user.image,
+              )),
+              appBar: AppBar(
+                elevation: 0,
+                backgroundColor: CColors.missonNormalWhiteColor,
+                titleSpacing: -1.0,
+                leading: InkWell(
+                  onTap: () {
+                    _drawerKey.currentState.openDrawer();
+                  },
+                  child: Padding(
+                    padding: const EdgeInsets.all(18.0),
+                    child: SvgPicture.asset(drawerIcon),
+                  ),
                 ),
-              ),
-              title: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    "current location",
-                    textAlign: TextAlign.left,
-                    style: TextStyle(
-                        fontSize: ScreenConfig.fontSizeSmall,
-                        color: CColors.textColor),
-                  ),
-                  Text(
-                    "${widget.getProfileDataModel.data.user.location}",
-                    style: TextStyle(
-                        fontSize: ScreenConfig.fontSizeMedium,
-                        color: CColors.textColor),
-                    textAlign: TextAlign.left,
-                  ),
-                ],
-              ),
-              actions: [
-                Padding(
-                  padding: EdgeInsets.only(right: 16.0),
-                  child: InkWell(
-                    onTap: () {
-                      // NavMe().NavPushLeftToRight(BusinessProfile());
-                      Get.to(BusinessProfile(),
-                              transition: Transition.leftToRightWithFade,
-                              duration: Duration(milliseconds: 400))
-                          .then((value) {
-                        getSharedPref(widget);
-                      }).whenComplete(() {
-                        setState(() {});
-                      });
-                    },
-                    child: CircleAvatar(
-                      backgroundColor: CColors.missonGrey,
-                      // radius: ,
+                title: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      "current location",
+                      textAlign: TextAlign.left,
+                      style: TextStyle(
+                          fontSize: ScreenConfig.fontSizeSmall,
+                          color: CColors.textColor),
+                    ),
+                    Text(
+                      "${widget.getProfileDataModel.data.user.location}",
+                      style: TextStyle(
+                          fontSize: ScreenConfig.fontSizeMedium,
+                          color: CColors.textColor),
+                      textAlign: TextAlign.left,
+                    ),
+                  ],
+                ),
+                actions: [
+                  Padding(
+                    padding: EdgeInsets.only(right: 16.0),
+                    child: InkWell(
+                      onTap: () {
+                        // NavMe().NavPushLeftToRight(BusinessProfile());
+                        Get.to(BusinessProfile(),
+                                transition: Transition.leftToRightWithFade,
+                                duration: Duration(milliseconds: 400))
+                            .then((value) {
+                          getSharedPref(widget);
+                        }).whenComplete(() {
+                          setState(() {});
+                        });
+                      },
                       child: CircleAvatar(
-                        backgroundImage: widget.getProfileDataModel == null ||
-                                widget.getProfileDataModel.data == null ||
-                                widget.getProfileDataModel.data.user == null ||
-                                widget.getProfileDataModel.data.user.image ==
-                                    null
-                            ? AssetImage(avatar1)
-                            : NetworkImage(
-                                "${widget.getProfileDataModel.data.user.image}"),
+                        backgroundColor: CColors.missonGrey,
+                        // radius: ,
+                        child: CircleAvatar(
+                          backgroundImage: widget.getProfileDataModel == null ||
+                                  widget.getProfileDataModel.data == null ||
+                                  widget.getProfileDataModel.data.user == null ||
+                                  widget.getProfileDataModel.data.user.image ==
+                                      null
+                              ? AssetImage(avatar1)
+                              : NetworkImage(
+                                  "${widget.getProfileDataModel.data.user.image}"),
+                        ),
                       ),
                     ),
-                  ),
-                )
-              ],
+                  )
+                ],
+              ),
+              body: currentView(1),
             ),
-            body: currentView(1),
-          );
+    );
   }
 
   Widget currentView(int state) {
