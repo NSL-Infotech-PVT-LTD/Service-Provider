@@ -1,23 +1,27 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:get/get.dart';
+import 'package:intl/intl.dart';
 import 'package:misson_tasker/model/ApiCaller.dart';
 import 'package:misson_tasker/model/api_models/GetProfileDataModel.dart';
+import 'package:misson_tasker/model/api_models/NotificationModel.dart';
 import 'package:misson_tasker/utils/CColors.dart';
 import 'package:misson_tasker/utils/ScreenConfig.dart';
 import 'package:misson_tasker/utils/StringsPath.dart';
 import 'package:misson_tasker/utils/local_data.dart';
+import 'package:misson_tasker/view/MissonRequestScreen/MissionRequest.dart';
 import 'package:misson_tasker/view/startup_screens/SplashScreen.dart';
-
 
 class NotificationScreen extends StatefulWidget {
   @override
-   _NotificationScreenState createState() => _NotificationScreenState();
+  _NotificationScreenState createState() => _NotificationScreenState();
 }
 
 class _NotificationScreenState extends State<NotificationScreen> {
   bool isLoading = true;
 
   GetProfileDataModel getProfileDataModel;
+  NotificationModel notificationModel;
   String auth;
   bool isLoadingData = true;
 
@@ -35,26 +39,16 @@ class _NotificationScreenState extends State<NotificationScreen> {
         setState(() {
           isLoadingData = false;
         });
+        ApiCaller().getListOfNotification(auth: auth).then((value) {
+          notificationModel = value;
+        }).whenComplete(() {
+          setState(() {
+
+            isLoading = false;
+          });
+        });
       });
     });
-// getString(sharedPref.userToken).then((value) => auth=value).whenComplete(() {
-//   print(" QWE$auth");
-//
-//   ApiCaller().getProfileData(auth: auth).then((value) {
-//     getProfileDataModel=value;
-//   }).whenComplete(() {
-//     setState(() {
-//       isLoadingData=false;
-//
-//       _fullName=getProfileDataModel.data.user.name;
-//      _email =getProfileDataModel.data.user.email;
-//        _number = getProfileDataModel.data.user.mobile;
-//        _location = getProfileDataModel.data.user.location;
-//        _postal = "1234";
-//     });
-//
-//   });
-// });
 
     super.initState();
   }
@@ -78,13 +72,13 @@ class _NotificationScreenState extends State<NotificationScreen> {
       "message": "Accepted your request for job. ",
       "time": "1hr ago",
       "isNotification": true,
-    }, {
+    },
+    {
       "name": "Jimmy Warish",
       "message": "Accepted your request for job. ",
       "time": "1hr ago",
       "isNotification": false,
     },
-
   ];
 
   @override
@@ -132,35 +126,82 @@ class _NotificationScreenState extends State<NotificationScreen> {
       ),
       body: Container(
           color: CColors.missonNormalWhiteColor,
-          child: ListView.builder(
+          child: isLoading == true
+              ? Center(child: spinkit)
+              : ListView.builder(
             itemBuilder: (context, index) {
               return Padding(
-                padding: EdgeInsets.symmetric(vertical: 6),
-                child: listCard(
-                    title: "${listOfNotifications.elementAt(index)["name"]}",
-                    subtitle: "${listOfNotifications.elementAt(index)["message"]}",
-                    time: "${listOfNotifications.elementAt(index)["time"]}",
-                    showBadge:listOfNotifications.elementAt(index)["isNotification"]),
-              );
+                  padding: EdgeInsets.symmetric(vertical: 6),
+                  child: notificationModel.data.data.isEmpty
+                      ? Text("There is no notification to show")
+                      : InkWell(
+                    onTap: () {
+                      // ApiCaller().readNotification(
+                      //     auth: auth, Id: notificationModel.data.data
+                      //     .elementAt(index)
+                      //     .bookingDetail.targetId
+                      //     .toString()).then((value) => print("IS READ${value.toJson()}")).whenComplete(() {
+                      //   Get.to(
+                      //       MissionRequest(
+                      //         id: notificationModel.data.data.elementAt(index).id.toString(),
+                      //       ),
+                      //       transition: Transition.leftToRightWithFade,
+                      //       duration: Duration(milliseconds: 400))
+                      //       .then((value) => initState());
+                      // });
+                    },
+                    child: listCard(
+                        title:
+                        "${notificationModel.data.data
+                            .elementAt(index)
+                            .title}"
+                            .replaceAll("Title.", ""),
+                        subtitle:
+                        "${notificationModel.data.data
+                            .elementAt(index)
+                            .body}",
+                        time:
+                        "${DateFormat.jm().format(notificationModel.data.data
+                            .elementAt(index)
+                            .updatedAt
+                            .toLocal())} ",
+                        showBadge: notificationModel.data.data
+                            .elementAt(index)
+                            .isRead !=
+                            "0"
+                            ? false
+                            : true,
+                        imageUrl: notificationModel.data.data
+                            .elementAt(index)
+                            .customerDetail
+                            .image),
+                  ));
             },
-            itemCount: listOfNotifications.length,
+            itemCount:notificationModel!=null? notificationModel.data.data.isEmpty
+                ? 1
+                : notificationModel.data.data.length: 0,
           )),
     );
   }
 
-  listCard(
-      {@required String title,
-      @required String subtitle,
-      @required String time,
-      @required bool showBadge}) {
+  listCard({@required String title,
+    @required String subtitle,
+    @required String time,
+    @required bool showBadge,
+    @required String imageUrl}) {
     return Container(
       margin: EdgeInsets.symmetric(horizontal: 10, vertical: 2),
       child: Row(
         children: [
           Container(
-            child: CircleAvatar(
+            child: imageUrl == "" || imageUrl == null
+                ? CircleAvatar(
               radius: 35,
               backgroundImage: AssetImage(avatar1),
+            )
+                : CircleAvatar(
+              radius: 35,
+              backgroundImage: NetworkImage(imageUrl),
             ),
           ),
           Expanded(
@@ -178,22 +219,35 @@ class _NotificationScreenState extends State<NotificationScreen> {
                             fontSize: ScreenConfig.fontSizelarge),
                       ),
                       Spacer(),
-                      Visibility(visible: showBadge, child: SvgPicture.asset(dotLogo))
+                      Visibility(
+                          visible: showBadge, child: SvgPicture.asset(dotLogo))
                     ],
+                  ),
+                  SizedBox(
+                    height: 5,
                   ),
                   Row(
                     children: [
-                      Expanded(flex:8,
+                      Expanded(
+                        flex: 6,
                         child: Text(
                           "$subtitle",
                           style: TextStyle(
                               fontFamily: "Product",
-                              fontSize: ScreenConfig.fontSizelarge,
+                              fontSize: ScreenConfig.fontSizeMedium,
                               color: CColors.missonMediumGrey),
                         ),
                       ),
-
-                     Expanded(flex: 2,child:  Text("$time"))
+                      Expanded(
+                          flex: 2,
+                          child: Text(
+                            "$time",
+                            style: TextStyle(
+                                fontSize: ScreenConfig.fontSizeSmall,
+                                color: CColors.missonMediumGrey,
+                                fontFamily: "Product"),
+                            textAlign: TextAlign.right,
+                          ))
                     ],
                   ),
                 ],

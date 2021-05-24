@@ -9,6 +9,7 @@ import 'package:misson_tasker/model/api_models/ListOfServicesModel.dart';
 import 'package:misson_tasker/model/api_models/MissionRequestModel.dart';
 import 'package:misson_tasker/model/api_models/GetJobByIdModel.dart';
 import 'package:misson_tasker/model/api_models/ChnageJobStatusModel.dart';
+import 'package:misson_tasker/model/api_models/NotificationModel.dart';
 import 'package:misson_tasker/view/Chat/ChatModels/ChatHistoryModel.dart';
 import 'package:misson_tasker/view/Chat/ChatModels/ListChatUserModel.dart';
 
@@ -20,6 +21,7 @@ import 'api_models/ForgetPasswordModel.dart';
 import 'api_models/LoginUserModel.dart';
 import 'package:http/http.dart' as http;
 
+import 'api_models/NotificationReadModel.dart';
 import 'api_models/NotificationToggle.dart';
 import 'api_models/RegisterNewUserModel.dart';
 import 'api_models/UpdateBusinessProfileDataModel.dart';
@@ -49,6 +51,8 @@ class ApiCaller {
   String oneToMany = "getItemByReceiverId";
   String oneToOne = "getItemsByReceiverId";
   String uploadMedia = "upload-media";
+  String notificationList = "list";
+  String notificationRead = "read";
 
   String status = "status";
 
@@ -479,6 +483,53 @@ class ApiCaller {
       print("getJobByIdModel ${response.body}");
       print(
           "THERE IS AN ERROR INT THE TERMS AND CONDITION API WITH STATUS CODE ${response.statusCode}");
+    }
+  }
+
+  Future<NotificationModel> getListOfNotification({String auth}) async {
+    NotificationModel notificationModel;
+    var response = await http.post(
+      Uri.parse(baseUrl + notification + notificationList),
+      headers: <String, String>{
+        'Content-Type': 'application/json; charset=UTF-8',
+        'Authorization': "Bearer " + auth
+      },
+      body:  jsonEncode(
+          <String, dynamic>{"limit": "1000"}),
+    );
+
+    if (response.statusCode == 200 || response.statusCode == 422) {
+      print("getJobByIdModel ${response.body}");
+      return notificationModel = notificationModelFromJson(response.body);
+    } else {
+      print("getJobByIdModel ${response.body}");
+      print(
+          "THERE IS AN ERROR INT THE getListOfNotification API WITH STATUS CODE ${response.statusCode}");
+    }
+  }
+
+  Future<NotificationReadModel> readNotification(
+      {String auth, String Id}) async {
+    NotificationReadModel notificationReadModel;
+    var response = await http.post(
+      Uri.parse(baseUrl + notification + notificationRead),
+      headers: <String, String>{
+        'Content-Type': 'application/json; charset=UTF-8',
+        'Authorization': "Bearer " + auth
+      },
+      body: jsonEncode(<String, dynamic>{
+        'id': "$Id",
+      }),
+    );
+
+    if (response.statusCode == 200 || response.statusCode == 422) {
+      print("readNotification ${response.body}");
+      return notificationReadModel =
+          notificationReadModelFromJson(response.body);
+    } else {
+      print("readNotification ${response.body}");
+      print(
+          "THERE IS AN ERROR INT THE readNotification API WITH STATUS CODE ${response.statusCode}");
     }
   }
 

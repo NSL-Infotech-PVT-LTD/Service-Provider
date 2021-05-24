@@ -86,6 +86,7 @@ class User {
     this.iqamaId,
     this.role,
     this.images,
+    this.profile_progress_bar
   });
 
   int id;
@@ -117,9 +118,11 @@ class User {
   String iqamaId;
   Role role;
   List<String> images;
+  int profile_progress_bar;
 
   factory User.fromJson(Map<String, dynamic> json) => User(
     id: json["id"],
+    profile_progress_bar: json["profile_progress_bar"],
     name: json["name"],
     mobile: json["mobile"],
     email: json["email"],
@@ -152,6 +155,7 @@ class User {
 
   Map<String, dynamic> toJson() => {
     "id": id,
+    "profile_progress_bar": profile_progress_bar,
     "name": name,
     "mobile": mobile,
     "email": email,
