@@ -6,6 +6,7 @@ import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:get/get_navigation/src/root/get_material_app.dart';
 import 'package:misson_tasker/utils/CColors.dart';
+import 'package:misson_tasker/utils/local_data.dart';
 import 'package:misson_tasker/view/MissonRequestScreen/MissionRequest.dart';
 import 'package:misson_tasker/view/startup_screens/SplashScreen.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -24,7 +25,13 @@ final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
 
 Future _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
   await Firebase.initializeApp();
-  print('A bg message just showed up : ${message.messageId}');
+  print('IN THE ON Background ===============>>>>>>>>>>> ${message.data}');
+  setString("target_id", message.data["target_id"]);
+  getString("target_id").then((value) {
+    print("======target_id==============> $value");
+
+  });
+
 }
 
 //check kri
@@ -32,15 +39,11 @@ Future _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
 String fcmToken;
 
 Future<void> main() async {
-  SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
-      statusBarColor: CColors.missonNormalWhiteColor,
-      systemNavigationBarColor: CColors.missonNormalWhiteColor,
-      systemNavigationBarIconBrightness: Brightness.dark,
-      statusBarIconBrightness: Brightness.dark));
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
   fcmToken = await FirebaseMessaging.instance.getToken();
   print("====================> $fcmToken");
+
   FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
   await flutterLocalNotificationsPlugin
       .resolvePlatformSpecificImplementation<
@@ -67,66 +70,61 @@ class _MyAppState extends State<MyApp> {
 
   @override
   void initState() {
+    getString("target_id").then((value) {
+      print("======target_id==============> $value");
+    });
     FirebaseMessaging.instance.requestPermission();
     print("CHECK $token");
-    FirebaseMessaging.onMessage.listen((RemoteMessage message) {
-      RemoteNotification notification = message.notification;
-      AndroidNotification android = message.notification?.android;
-      if (notification != null && android != null) {
-        flutterLocalNotificationsPlugin.show(
-            notification.hashCode,
-            notification.title,
-            notification.body,
-            NotificationDetails(
-              android: AndroidNotificationDetails(
-                channel.id,
-                channel.name,
-                channel.description,
-                color: Colors.blue,
-                playSound: true,
-                icon: '@mipmap/ic_launcher',
-              ),
-            ));
+    FirebaseMessaging.onMessage.listen(
+      (RemoteMessage message) {
+        print("IN THE ON MESSAGE ===============>>>>>>>>>>>");
+        RemoteNotification notification = message.notification;
+        AndroidNotification android = message.notification?.android;
+        if (notification != null && android != null) {
+          flutterLocalNotificationsPlugin.show(
+              notification.hashCode,
+              notification.title,
+              notification.body,
+              NotificationDetails(
+                android: AndroidNotificationDetails(
+                  channel.id,
+                  channel.name,
+                  channel.description,
+                  // color: Colors.blue,
+                  playSound: true,
+                  icon: '@mipmap/ic_launcher',
+                ),
+              ));
 
-        print("======IN onMessage ========> YYYYYYYYYYYYYYYY ${message.data}");
-        // print("==============> YYYYYYYYYYYYYYYY ${jsonEncode(message)}");
-      }
-    });
+          print(
+              "======IN onMessage ========> YYYYYYYYYYYYYYYY ${message.data}");
+
+        }
+      },
+    );
 
     FirebaseMessaging.onMessageOpenedApp.listen((RemoteMessage message) {
-      print(
-          'A new onMessageOpenedApp event was published! $message  cgbgfngffhgh');
+      print("IN THE OPEN MESSAGE  ============>>>>>>>>>>>");
+
       RemoteNotification notification = message.notification;
       AndroidNotification android = message.notification?.android;
       if (notification != null && android != null) {
-        message.data.forEach((key, value) {
-          // print("$key    fd;vmdfldf     $value");
-          //
-          //
-          // }
-        });
+
         print(
             "======IN onMessageOpenedApp ========> YYYYYYYYYYYYYYYY ${message.data}");
 
         if (message.data["data_type"] == "Job") {
           print("${message.data}");
+          setString("target_id", message.data["target_id"]);
+          getString("target_id").then((value) {
+            print("======target_id==============> $value");
+
+            print("123 $value");
+          });
+          Get.to(MissionRequest(id: message.data["target_id"]),
+              transition: Transition.leftToRightWithFade,
+              duration: Duration(milliseconds: 400));
         }
-        Get.to(MissionRequest(id: message.data["target_id"]),
-            transition: Transition.leftToRightWithFade,
-            duration: Duration(milliseconds: 400));
-        // showDialog(
-        //     context: context,
-        //     builder: (_) {
-        //       return AlertDialog(
-        //         title: Text(notification.title),
-        //         content: SingleChildScrollView(
-        //           child: Column(
-        //             crossAxisAlignment: C```````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````           rossAxisAlignment.start,
-        //             children: [Text(notification.body)],
-        //           ),
-        //         ),
-        //       );
-        //     });
       }
     });
 
@@ -155,6 +153,11 @@ class _MyAppState extends State<MyApp> {
     SystemChrome.setPreferredOrientations([
       DeviceOrientation.portraitUp,
     ]);
+    SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
+        statusBarColor: CColors.missonNormalWhiteColor,
+        systemNavigationBarColor: CColors.missonNormalWhiteColor,
+        systemNavigationBarIconBrightness: Brightness.dark,
+        statusBarIconBrightness: Brightness.dark));
     return GetMaterialApp(
       title: 'Mission Tasker',
       debugShowCheckedModeBanner: false,
