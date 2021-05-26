@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'dart:developer' as developer;
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
+import 'package:intl/intl.dart';
 import 'package:misson_tasker/model/ApiCaller.dart';
 import 'package:misson_tasker/model/api_models/GetProfileDataModel.dart';
 import 'package:misson_tasker/model/api_models/MissionRequestModel.dart';
@@ -510,14 +511,16 @@ class _MissionStatusScreenState extends State<MissionStatusScreen> {
                         print("Hello $index");
                       },
                           miles: obj.data.data.elementAt(index).distanceMiles,
-                          type: obj.data.data
-                              .elementAt(index)
-                              .startDate
-                              .toString()
-                              .split(":")
-                              .elementAt(0)
-                              .split(" ")
-                              .elementAt(0),
+                          // type: obj.data.data
+                          //     .elementAt(index)
+                          //     .startDate
+                          //     .toString()
+                          //     .split(":")
+                          //     .elementAt(0)
+                          //     .split(" ")
+                          //     .elementAt(0),
+                          // type: "${DateFormat.jm().format(DateTime.parse(obj.data.data.elementAt(index).createdAt).toLocal())} ",
+                          type: "${DateFormat.MMMMd().add_jm().format(DateTime.parse(obj.data.data.elementAt(index).createdAt).toLocal())} ",
                           customWidget: customWidget,
                           visibleStatus: visibleStatus,
                           status: obj.data.data.elementAt(index).jobStatus,
@@ -580,7 +583,7 @@ class _MissionStatusScreenState extends State<MissionStatusScreen> {
                     ),
                     Spacer(),
                     Text(
-                      "Start Date $type",
+                      "Created at $type",
                       style: TextStyle(
                           fontWeight: FontWeight.w400,
                           fontSize: ScreenConfig.fontSizeSmall,

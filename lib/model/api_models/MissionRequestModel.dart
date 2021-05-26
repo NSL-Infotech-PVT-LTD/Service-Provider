@@ -99,6 +99,7 @@ class Data {
 class Datum {
   Datum({
     this.id,
+    this.createdAt,
     this.jobType,
     this.jobStatus,
     this.title,
@@ -119,6 +120,7 @@ class Datum {
   String title;
   String estimatedHours;
   int budget;
+  String createdAt;
   String description;
   String startTime;
   DateTime startDate;
@@ -129,6 +131,7 @@ class Datum {
 
   factory Datum.fromJson(Map<String, dynamic> json) => Datum(
         id: json["id"],
+    createdAt: json["created_at"],
         jobType: json["job_type"],
         jobStatus: json["job_status"],
         title: json["title"],
@@ -148,6 +151,7 @@ class Datum {
         "job_type": jobType,
         "job_status": jobStatus,
         "title": title,
+        "created_at": createdAt,
         "estimated_hours": estimatedHours,
         "budget": budget,
         "description": description,

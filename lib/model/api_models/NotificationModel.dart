@@ -493,7 +493,7 @@ class BookingDetail {
     this.dataType,
   });
 
-  String targetId;
+ var targetId;
   String targetModel;
   String dataType;
 
