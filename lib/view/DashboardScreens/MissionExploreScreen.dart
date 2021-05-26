@@ -88,6 +88,7 @@ class _MissionExploreScreenState extends State<MissionExploreScreen> {
           key: _drawerKey,
           drawer: Drawer(
             child: MyDrawer(
+              auth: _auth,
               username: widget.getProfileDataModel.data.user.name,
               ImageUrl: widget.getProfileDataModel == null ||
                       widget.getProfileDataModel.data == null ||
@@ -183,11 +184,11 @@ class _MissionExploreScreenState extends State<MissionExploreScreen> {
             child: TabBarView(
               children: [
                 // Icon(Icons.directions_car),
-                isPosted == true
+                isRequested == true
                     ? Center(child: spinkit)
                     : showList(
                         obj: requested, heading: "Posted By Task Seekers"),
-                isRequested == true
+                isPosted == true
                     ? Center(
                         child: spinkit,
                       )

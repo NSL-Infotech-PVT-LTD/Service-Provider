@@ -43,7 +43,6 @@ class _NotificationScreenState extends State<NotificationScreen> {
           notificationModel = value;
         }).whenComplete(() {
           setState(() {
-
             isLoading = false;
           });
         });
@@ -129,66 +128,75 @@ class _NotificationScreenState extends State<NotificationScreen> {
           child: isLoading == true
               ? Center(child: spinkit)
               : ListView.builder(
-            itemBuilder: (context, index) {
-              return Padding(
-                  padding: EdgeInsets.symmetric(vertical: 6),
-                  child: notificationModel.data.data.isEmpty
-                      ? Text("There is no notification to show")
-                      : InkWell(
-                    onTap: () {
-                      // ApiCaller().readNotification(
-                      //     auth: auth, Id: notificationModel.data.data
-                      //     .elementAt(index)
-                      //     .bookingDetail.targetId
-                      //     .toString()).then((value) => print("IS READ${value.toJson()}")).whenComplete(() {
-                      //   Get.to(
-                      //       MissionRequest(
-                      //         id: notificationModel.data.data.elementAt(index).id.toString(),
-                      //       ),
-                      //       transition: Transition.leftToRightWithFade,
-                      //       duration: Duration(milliseconds: 400))
-                      //       .then((value) => initState());
-                      // });
-                    },
-                    child: listCard(
-                        title:
-                        "${notificationModel.data.data
-                            .elementAt(index)
-                            .title}"
-                            .replaceAll("Title.", ""),
-                        subtitle:
-                        "${notificationModel.data.data
-                            .elementAt(index)
-                            .body}",
-                        time:
-                        "${DateFormat.jm().format(notificationModel.data.data
-                            .elementAt(index)
-                            .updatedAt
-                            .toLocal())} ",
-                        showBadge: notificationModel.data.data
-                            .elementAt(index)
-                            .isRead !=
-                            "0"
-                            ? false
-                            : true,
-                        imageUrl: notificationModel.data.data
-                            .elementAt(index)
-                            .customerDetail
-                            .image),
-                  ));
-            },
-            itemCount:notificationModel!=null? notificationModel.data.data.isEmpty
-                ? 1
-                : notificationModel.data.data.length: 0,
-          )),
+                  itemBuilder: (context, index) {
+                    return Padding(
+                        padding: EdgeInsets.symmetric(vertical: 6),
+                        child: notificationModel.data.data.isEmpty
+                            ? Center(
+                                child: Text("There is no notification to show"))
+                            : InkWell(
+                                onTap: () {
+                                  ApiCaller()
+                                      .readNotification(
+                                          auth: auth,
+                                          Id: notificationModel.data.data
+                                              .elementAt(index)
+                                              .
+                                              id
+                                              .toString())
+                                      .then((value) =>
+                                          print("IS READ${value.toJson()}"))
+                                      .whenComplete(() {
+                                    Get.to(
+                                            MissionRequest(
+                                              id: notificationModel.data.data
+                                                  .elementAt(index)
+                                                  .bookingDetail
+                                                  .targetId
+                                                  .toString(),
+                                            ),
+                                            transition:
+                                                Transition.leftToRightWithFade,
+                                            duration:
+                                                Duration(milliseconds: 400))
+                                        .then((value) => initState());
+                                  });
+                                },
+                                child: listCard(
+                                    title:
+                                        "${notificationModel.data.data.elementAt(index).title}"
+                                            .replaceAll("Title.", ""),
+                                    subtitle:
+                                        "${notificationModel.data.data.elementAt(index).body}",
+                                    time:
+                                        "${DateFormat.jm().format(notificationModel.data.data.elementAt(index).updatedAt.toLocal())} ",
+                                    showBadge: notificationModel.data.data
+                                                .elementAt(index)
+                                                .isRead !=
+                                            "0"
+                                        ? false
+                                        : true,
+                                    imageUrl: notificationModel.data.data
+                                        .elementAt(index)
+                                        .customerDetail
+                                        .image),
+                              ));
+                  },
+                  itemCount: notificationModel != null
+                      ? notificationModel.data.data.isEmpty
+                          ? 1
+                          : notificationModel.data.data.length
+                      : 0,
+                )),
     );
   }
 
-  listCard({@required String title,
-    @required String subtitle,
-    @required String time,
-    @required bool showBadge,
-    @required String imageUrl}) {
+  listCard(
+      {@required String title,
+      @required String subtitle,
+      @required String time,
+      @required bool showBadge,
+      @required String imageUrl}) {
     return Container(
       margin: EdgeInsets.symmetric(horizontal: 10, vertical: 2),
       child: Row(
@@ -196,13 +204,13 @@ class _NotificationScreenState extends State<NotificationScreen> {
           Container(
             child: imageUrl == "" || imageUrl == null
                 ? CircleAvatar(
-              radius: 35,
-              backgroundImage: AssetImage(avatar1),
-            )
+                    radius: 35,
+                    backgroundImage: AssetImage(avatar1),
+                  )
                 : CircleAvatar(
-              radius: 35,
-              backgroundImage: NetworkImage(imageUrl),
-            ),
+                    radius: 35,
+                    backgroundImage: NetworkImage(imageUrl),
+                  ),
           ),
           Expanded(
             child: Padding(

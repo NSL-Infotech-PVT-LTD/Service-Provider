@@ -6,6 +6,7 @@ import 'package:misson_tasker/model/api_models/GetProfileDataModel.dart';
 import 'package:misson_tasker/utils/CColors.dart';
 import 'package:misson_tasker/utils/NavMe.dart';
 import 'package:misson_tasker/utils/ScreenConfig.dart';
+import 'package:misson_tasker/utils/SharedStrings.dart';
 import 'package:misson_tasker/utils/StringsPath.dart';
 import 'package:misson_tasker/utils/local_data.dart';
 import 'package:misson_tasker/view/ProfileView/BusinessDetails.dart';
@@ -26,12 +27,10 @@ class SettingPage extends StatefulWidget {
 class _SettingPageState extends State<SettingPage> {
   bool isLoading = true;
 
-
-
   String auth = "";
   GetProfileDataModel getProfileDataModel;
   bool isLoadingData = true;
-
+  String fcmToken;
   @override
   void initState() {
     // registerUser();
@@ -46,10 +45,15 @@ class _SettingPageState extends State<SettingPage> {
       }).whenComplete(() {
         setState(() {
           isLoadingData = false;
-
-
         });
       });
+    });
+
+    getString(sharedPref.deviceFcmToken)
+        .then((value) {
+      print(
+          "======FCM==============> $value");
+      fcmToken = value;
     });
     super.initState();
   }
@@ -200,11 +204,9 @@ class _SettingPageState extends State<SettingPage> {
                       vertical: 16.0, horizontal: 10),
                   child: InkWell(
                     onTap: () {
-
-                        NavMe().NavPushLeftToRight(ConfigurationScreen(
-                          apiName: "Privacy Policy",
-                        ));
-
+                      NavMe().NavPushLeftToRight(ConfigurationScreen(
+                        apiName: "Privacy Policy",
+                      ));
                     },
                     child: ListTile(
                       title: Column(
@@ -327,41 +329,49 @@ class _SettingPageState extends State<SettingPage> {
                 //     ),
                 //   ),
                 // ),
-                InkWell(onTap: (){
+                InkWell(
+                  onTap: () {
+                    return showCupertinoDialog(
+                      context: context,
+                      builder: (BuildContext context) {
+                        return CupertinoAlertDialog(
+                          title: Text('Alert'),
+                          content: Text('Are you sure to logout?'),
+                          actions: [
+                            CupertinoDialogAction(
+                              child: Text('Yes'),
+                              onPressed: () {
+                                ApiCaller()
+                                    .userLogout(
+                                    auth: auth,
+                                    deviceType: ScreenConfig.deviceType,
+                                    fcmId: fcmToken)
+                                    .then((value) {
+                                  print("LOGOUT =========> $value");
+                                }).whenComplete(() {
+                                  clearedShared();
+                                  Navigator.pushAndRemoveUntil(
+                                      context,
+                                      MaterialPageRoute(
+                                          builder: (_) => LoginPage()),
+                                          (route) => false);
+                                });
 
-                  return showCupertinoDialog(
-                    context: context,
-                    builder: (BuildContext context) {
-                      return CupertinoAlertDialog(
-                        title: Text('Alert'),
-                        content: Text('Are you sure to logout?'),
-                        actions: [
-                          CupertinoDialogAction(
-                            child: Text('Yes'),
-                            onPressed: () {
-                              clearedShared();
-                              Navigator.pushAndRemoveUntil(
-                                  context,
-                                  MaterialPageRoute(
-                                      builder: (_) => LoginPage()),
-                                      (route) => false);
-                              // NavMe().NavPushReplaceFadeIn(LoginPage());
-                            },
-                          ),
-                          CupertinoDialogAction(
-                            child: Text('No'),
-                            onPressed: () {
-                              clearedShared();
-                              Navigator.pop(context);
-                            },
-                          ),
-                        ],
-                      );
-                    },
-                  );
-
-
-                },
+                                // NavMe().NavPushReplaceFadeIn(LoginPage());
+                              },
+                            ),
+                            CupertinoDialogAction(
+                              child: Text('No'),
+                              onPressed: () {
+                                // clearedShared();
+                                Navigator.pop(context);
+                              },
+                            ),
+                          ],
+                        );
+                      },
+                    );
+                  },
                   child: Padding(
                     padding: const EdgeInsets.symmetric(
                         vertical: 16.0, horizontal: 10),

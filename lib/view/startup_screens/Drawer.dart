@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:misson_tasker/model/ApiCaller.dart';
 import 'package:misson_tasker/utils/CColors.dart';
 import 'package:misson_tasker/utils/NavMe.dart';
 import 'package:misson_tasker/utils/ScreenConfig.dart';
@@ -15,8 +16,9 @@ import 'package:misson_tasker/view/startup_screens/SplashScreen.dart';
 class MyDrawer extends StatefulWidget {
   String username;
   String ImageUrl;
+  String auth;
 
-  MyDrawer({@required this.username, this.ImageUrl});
+  MyDrawer({@required this.username, this.ImageUrl, this.auth});
 
   @override
   _MyDrawerState createState() => _MyDrawerState();
@@ -26,8 +28,19 @@ class _MyDrawerState extends State<MyDrawer> {
   // static String username = "";
   var data;
 
+  String fcmToken;
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    getString(sharedPref.deviceFcmToken)
+        .then((value) {
+      print(
+          "======FCM==============> $value");
+      fcmToken = value;
+    });
 
-
+  }
 
   getSharedPref(widget) {
     getString(sharedPref.userNetworkImage).then((value) {
@@ -42,6 +55,7 @@ class _MyDrawerState extends State<MyDrawer> {
     }).whenComplete(() {
       setState(() {});
     });
+
   }
 
   @override
@@ -297,19 +311,30 @@ class _MyDrawerState extends State<MyDrawer> {
                           CupertinoDialogAction(
                             child: Text('Yes'),
                             onPressed: () {
-                              clearedShared();
-                              Navigator.pushAndRemoveUntil(
-                                  context,
-                                  MaterialPageRoute(
-                                      builder: (_) => LoginPage()),
-                                  (route) => false);
+
+
+                              ApiCaller()
+                                  .userLogout(
+                                  auth: widget.auth,
+                                  deviceType: ScreenConfig.deviceType,
+                                  fcmId: fcmToken)
+                                  .then((value) {
+                                print("LOGOUT =========> $value");
+                              }).whenComplete(() {
+                                clearedShared();
+                                Navigator.pushAndRemoveUntil(
+                                    context,
+                                    MaterialPageRoute(
+                                        builder: (_) => LoginPage()),
+                                        (route) => false);
+                              });
                               // NavMe().NavPushReplaceFadeIn(LoginPage());
                             },
                           ),
                           CupertinoDialogAction(
                             child: Text('No'),
                             onPressed: () {
-                              clearedShared();
+                              // clearedShared();
                               Navigator.pop(context);
                             },
                           ),

@@ -1,3 +1,4 @@
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -6,6 +7,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:geocoder/geocoder.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:get/get.dart';
+import 'package:misson_tasker/main.dart';
 import 'package:misson_tasker/model/ApiCaller.dart';
 import 'package:misson_tasker/model/api_models/RegisterNewUserModel.dart';
 import 'package:misson_tasker/utils/NavMe.dart';
@@ -68,7 +70,19 @@ class _SignUpState extends State<SignUp> {
   bool serviceEnabled;
   bool isPasswordShown = false;
   bool isRePasswordShown = false;
+String myToken;
+  Future<String> getFcmToken()async
+  {
+    return  await FirebaseMessaging.instance
+        .getToken()
+        .whenComplete(() {
+      // fcmToken=myToken;
+      print("IN LOGIN PAGE $myToken");
 
+
+
+    });
+  }
   @override
   void dispose() {
     // TODO: implement dispose
@@ -151,7 +165,7 @@ class _SignUpState extends State<SignUp> {
   @override
   void initState() {
     // TODO: implement initState
-
+    getFcmToken();
     checkPermisson().whenComplete(() {
       if (permission == LocationPermission.deniedForever) {
         ispermanentDenied = false;
@@ -236,61 +250,91 @@ class _SignUpState extends State<SignUp> {
   RegisterNewUserModel registerNewUserModel;
 
   void registerUser() async {
-    ApiCaller()
-        .registerUser(
-            fullName: _fullNameController.text,
-            email: _emailAddressFieldController.text,
-            password: _passwordFieldController.text,
-            phonenumber: _phoneNumberController.text,
-            location: _locationController.text,
-            idName: _selectedRadioValue,
-            idNumber: _id_number.text,
-            lat: lat,
-            lang: lang,
-            deviceType: "android",
-            deviceToken: "sdgdfgfgfdg",
-            postalCode: postalCode)
-        .then((value) {
-      registerNewUserModel = value;
+
+    getFcmToken().then((value) {
+      myToken  = value;
     }).whenComplete(() {
-      if (registerNewUserModel != null &&
-          registerNewUserModel.code == 201 &&
-          registerNewUserModel.data != null &&
-          registerNewUserModel.data.user != null) {
+      print("TOKEN IS HERE $myToken");
+      print("12345 $myToken");
+      setString(sharedPref.deviceFcmToken, myToken.toString());
+
+      ApiCaller()
+          .registerUser(
+          fullName: _fullNameController.text,
+          email: _emailAddressFieldController.text,
+          password: _passwordFieldController.text,
+          phonenumber: _phoneNumberController.text,
+          location: _locationController.text,
+          idName: _selectedRadioValue,
+          idNumber: _id_number.text,
+          lat: lat,
+          lang: lang,
+          deviceType: "android",
+          deviceToken: myToken,
+          postalCode: postalCode)
+          .then((value) {
+        registerNewUserModel = value;
+      }).whenComplete(() {
+        if (registerNewUserModel != null &&
+            registerNewUserModel.code == 201 &&
+            registerNewUserModel.data != null &&
+            registerNewUserModel.data.user != null) {
+          setState(() {
+            isLoading = false;
+          });
+          // setString(sharedPref.userEmail, registerNewUserModel.data.user.email);
+          // setString(sharedPref.userName, registerNewUserModel.data.user.name);
+
+          // setString(sharedPref.userToken, registerNewUserModel.data.token);
+          // setString(
+          //     sharedPref.userLocation, registerNewUserModel.data.user.location);
+          // setString(
+          //     sharedPref.userPhoneNumber, registerNewUserModel.data.user.mobile);
+
+          // getString(sharedPref.userPhoneNumber)
+          //     .then((value) => print("123 $value"));
+
+          // getString(sharedPref.userToken).then((value) => print("123 $value"));
+
+          // getString(sharedPref.userEmail).then((value) => print("123 $value"));
+
+          // getString(sharedPref.userLocation).then((value) => print("123 $value"));
+          // getString(sharedPref.userLocation).then((value) => print("123 $value"));
+
+          Get.off(PackageScreen(), transition: Transition.rightToLeft);
+        } else if (registerNewUserModel != null &&
+            registerNewUserModel.code == 422) {
+          setState(() {
+            isLoading = false;
+          });
+          showCupertinoDialog(
+            context: context,
+            builder: (BuildContext context) {
+              return CupertinoAlertDialog(
+                title: Text('Alert'),
+                content: Text('${registerNewUserModel.error}'),
+                actions: [
+                  CupertinoDialogAction(
+                    child: Text('OK'),
+                    onPressed: () {
+                      Navigator.pop(context);
+                    },
+                  ),
+                ],
+              );
+            },
+          );
+        }
+      }).timeout(Duration(minutes: 1), onTimeout: () {
         setState(() {
           isLoading = false;
         });
-        // setString(sharedPref.userEmail, registerNewUserModel.data.user.email);
-        // setString(sharedPref.userName, registerNewUserModel.data.user.name);
-
-        // setString(sharedPref.userToken, registerNewUserModel.data.token);
-        // setString(
-        //     sharedPref.userLocation, registerNewUserModel.data.user.location);
-        // setString(
-        //     sharedPref.userPhoneNumber, registerNewUserModel.data.user.mobile);
-
-        // getString(sharedPref.userPhoneNumber)
-        //     .then((value) => print("123 $value"));
-
-        // getString(sharedPref.userToken).then((value) => print("123 $value"));
-
-        // getString(sharedPref.userEmail).then((value) => print("123 $value"));
-
-        // getString(sharedPref.userLocation).then((value) => print("123 $value"));
-        // getString(sharedPref.userLocation).then((value) => print("123 $value"));
-
-        Get.off(PackageScreen(), transition: Transition.rightToLeft);
-      } else if (registerNewUserModel != null &&
-          registerNewUserModel.code == 422) {
-        setState(() {
-          isLoading = false;
-        });
-        showCupertinoDialog(
+        return showCupertinoDialog(
           context: context,
           builder: (BuildContext context) {
             return CupertinoAlertDialog(
-              title: Text('Alert'),
-              content: Text('${registerNewUserModel.error}'),
+              title: Text('Info'),
+              content: Text('Something Went Wrong Please Try Again Later'),
               actions: [
                 CupertinoDialogAction(
                   child: Text('OK'),
@@ -302,28 +346,7 @@ class _SignUpState extends State<SignUp> {
             );
           },
         );
-      }
-    }).timeout(Duration(minutes: 1), onTimeout: () {
-      setState(() {
-        isLoading = false;
       });
-      return showCupertinoDialog(
-        context: context,
-        builder: (BuildContext context) {
-          return CupertinoAlertDialog(
-            title: Text('Info'),
-            content: Text('Something Went Wrong Please Try Again Later'),
-            actions: [
-              CupertinoDialogAction(
-                child: Text('OK'),
-                onPressed: () {
-                  Navigator.pop(context);
-                },
-              ),
-            ],
-          );
-        },
-      );
     });
   }
 

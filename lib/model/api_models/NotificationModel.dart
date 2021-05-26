@@ -306,6 +306,16 @@
 // To parse this JSON data, do
 //
 //     final notificationModel = notificationModelFromJson(jsonString);
+// To parse this JSON data, do
+//
+//     final notificationModel = notificationModelFromJson(jsonString);
+
+// To parse this JSON data, do
+//
+//     final notificationModel = notificationModelFromJson(jsonString);
+// To parse this JSON data, do
+//
+//     final notificationModel = notificationModelFromJson(jsonString);
 
 import 'dart:convert';
 
@@ -317,22 +327,29 @@ class NotificationModel {
   NotificationModel({
     this.status,
     this.code,
+    this.error,
     this.data,
   });
 
   bool status;
   int code;
+  String error;
   Data data;
 
   factory NotificationModel.fromJson(Map<String, dynamic> json) => NotificationModel(
     status: json["status"],
     code: json["code"],
-    data: Data.fromJson(json["data"]),
-  );
+    error: json["error"],
+      data: json["data"] != null &&
+        (json["data"] as Map<String, dynamic>).isNotEmpty
+            ? Data.fromJson(json["data"])
+            : null,
+      );
 
   Map<String, dynamic> toJson() => {
     "status": status,
     "code": code,
+    "error": error,
     "data": data.toJson(),
   };
 }
@@ -420,7 +437,7 @@ class Datum {
   });
 
   int id;
-  Title title;
+  String title;
   String body;
   String message;
   int targetId;
@@ -436,7 +453,7 @@ class Datum {
 
   factory Datum.fromJson(Map<String, dynamic> json) => Datum(
     id: json["id"],
-    title: titleValues.map[json["title"]],
+    title: json["title"],
     body: json["body"],
     message: json["message"],
     targetId: json["target_id"],
@@ -453,7 +470,7 @@ class Datum {
 
   Map<String, dynamic> toJson() => {
     "id": id,
-    "title": titleValues.reverse[title],
+    "title": title,
     "body": body,
     "message": message,
     "target_id": targetId,
@@ -474,51 +491,24 @@ class BookingDetail {
     this.targetId,
     this.targetModel,
     this.dataType,
-    this.jobId,
-    this.status,
   });
 
-  dynamic targetId;
-  TargetModel targetModel;
-  TargetModel dataType;
-  int jobId;
-  Status status;
+  String targetId;
+  String targetModel;
+  String dataType;
 
   factory BookingDetail.fromJson(Map<String, dynamic> json) => BookingDetail(
     targetId: json["target_id"],
-    targetModel: targetModelValues.map[json["target_model"]],
-    dataType: json["data_type"] == null ? null : targetModelValues.map[json["data_type"]],
-    jobId: json["job_id"] == null ? null : json["job_id"],
-    status: json["status"] == null ? null : statusValues.map[json["status"]],
+    targetModel: json["target_model"],
+    dataType: json["data_type"],
   );
 
   Map<String, dynamic> toJson() => {
     "target_id": targetId,
-    "target_model": targetModelValues.reverse[targetModel],
-    "data_type": dataType == null ? null : targetModelValues.reverse[dataType],
-    "job_id": jobId == null ? null : jobId,
-    "status": status == null ? null : statusValues.reverse[status],
+    "target_model": targetModel,
+    "data_type": dataType,
   };
 }
-
-enum TargetModel { JOB_PROCESSING, JOB_COMPLETED, JOB_ACCEPTED, JOB_CONFIRMED, JOB }
-
-final targetModelValues = EnumValues({
-  "Job": TargetModel.JOB,
-  "Job-accepted": TargetModel.JOB_ACCEPTED,
-  "Job-completed": TargetModel.JOB_COMPLETED,
-  "Job-confirmed": TargetModel.JOB_CONFIRMED,
-  "Job-processing": TargetModel.JOB_PROCESSING
-});
-
-enum Status { PROCESSING, CONFIRMED, ACCEPTED, COMPLETED }
-
-final statusValues = EnumValues({
-  "accepted": Status.ACCEPTED,
-  "completed": Status.COMPLETED,
-  "confirmed": Status.CONFIRMED,
-  "processing": Status.PROCESSING
-});
 
 class CustomerDetail {
   CustomerDetail({
@@ -531,7 +521,7 @@ class CustomerDetail {
   });
 
   int id;
-  CustomerDetailName name;
+  String name;
   String image;
   Role role;
   List<dynamic> images;
@@ -539,7 +529,7 @@ class CustomerDetail {
 
   factory CustomerDetail.fromJson(Map<String, dynamic> json) => CustomerDetail(
     id: json["id"],
-    name: customerDetailNameValues.map[json["name"]],
+    name: json["name"],
     image: json["image"],
     role: Role.fromJson(json["role"]),
     images: List<dynamic>.from(json["images"].map((x) => x)),
@@ -548,21 +538,13 @@ class CustomerDetail {
 
   Map<String, dynamic> toJson() => {
     "id": id,
-    "name": customerDetailNameValues.reverse[name],
+    "name": name,
     "image": image,
     "role": role.toJson(),
     "images": List<dynamic>.from(images.map((x) => x)),
     "profile_progress_bar": profileProgressBar,
   };
 }
-
-enum CustomerDetailName { TASKER, SWATI, CUSTOMER }
-
-final customerDetailNameValues = EnumValues({
-  "Customer": CustomerDetailName.CUSTOMER,
-  "swati": CustomerDetailName.SWATI,
-  "Tasker": CustomerDetailName.TASKER
-});
 
 class Role {
   Role({
@@ -571,50 +553,19 @@ class Role {
     this.permission,
   });
 
-  RoleName name;
+  String name;
   int id;
   List<dynamic> permission;
 
   factory Role.fromJson(Map<String, dynamic> json) => Role(
-    name: roleNameValues.map[json["name"]],
+    name: json["name"],
     id: json["id"],
     permission: List<dynamic>.from(json["permission"].map((x) => x)),
   );
 
   Map<String, dynamic> toJson() => {
-    "name": roleNameValues.reverse[name],
+    "name": name,
     "id": id,
     "permission": List<dynamic>.from(permission.map((x) => x)),
   };
-}
-
-enum RoleName { SERVICEPROVIDER, CUSTOMER }
-
-final roleNameValues = EnumValues({
-  "customer": RoleName.CUSTOMER,
-  "serviceprovider": RoleName.SERVICEPROVIDER
-});
-
-enum Title { JOB_STARTED, JOB_COMPLETED, JOB_STATUS, JOB_CONFIRMED, NEW_JOB }
-
-final titleValues = EnumValues({
-  "Job Completed": Title.JOB_COMPLETED,
-  "Job Confirmed": Title.JOB_CONFIRMED,
-  "Job Started": Title.JOB_STARTED,
-  "Job Status": Title.JOB_STATUS,
-  "New Job": Title.NEW_JOB
-});
-
-class EnumValues<T> {
-  Map<String, T> map;
-  Map<T, String> reverseMap;
-
-  EnumValues(this.map);
-
-  Map<T, String> get reverse {
-    if (reverseMap == null) {
-      reverseMap = map.map((k, v) => new MapEntry(v, k));
-    }
-    return reverseMap;
-  }
 }

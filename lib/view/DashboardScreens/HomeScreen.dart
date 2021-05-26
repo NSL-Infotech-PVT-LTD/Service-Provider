@@ -59,6 +59,7 @@ class _HomeScreenState extends State<HomeScreen> {
               jobStatus: "upcoming")
           .then((value) {
         print("COMPLETED COMPLETED=============>");
+
         missionRequest = value;
       }).whenComplete(() {
         listOfRequestsPending.clear();
@@ -225,6 +226,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   // through the options in the drawer if there isn't enough vertical
                   // space to fit everything.
                   child: MyDrawer(
+                    auth: _auth,
                 username: widget.getProfileDataModel.data.user.name,
                 ImageUrl: widget.getProfileDataModel == null ||
                         widget.getProfileDataModel.data == null ||
@@ -480,7 +482,7 @@ class _HomeScreenState extends State<HomeScreen> {
                       height: 200,
                       width: ScreenConfig.screenWidth,
                       color: CColors.backgroundgreen,
-                      child: isLoadingData == true
+                      child: isConfirmedList == true
                           ? Center(child: spinkit)
                           : missionRequestModelConfirmed.data.data.isEmpty
                               ? Center(child: Text("There is nothing to show"))
@@ -703,11 +705,11 @@ class _HomeScreenState extends State<HomeScreen> {
                                       ),
                                     );
                                   },
-                                  itemCount: missionRequestModelConfirmed
+                                  itemCount:missionRequestModelConfirmed==null? missionRequestModelConfirmed
                                           .data.data.isEmpty
                                       ? 0
                                       : missionRequestModelConfirmed
-                                          .data.data.length,
+                                          .data.data.length:0,
                                   scrollDirection: Axis.horizontal,
                                 )),
                 ],

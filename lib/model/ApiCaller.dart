@@ -6,6 +6,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:get/get_connect/http/src/multipart/multipart_file.dart';
 import 'package:misson_tasker/model/api_models/GetProfileDataModel.dart';
 import 'package:misson_tasker/model/api_models/ListOfServicesModel.dart';
+import 'package:misson_tasker/model/api_models/LogoutModel.dart';
 import 'package:misson_tasker/model/api_models/MissionRequestModel.dart';
 import 'package:misson_tasker/model/api_models/GetJobByIdModel.dart';
 import 'package:misson_tasker/model/api_models/ChnageJobStatusModel.dart';
@@ -53,26 +54,32 @@ class ApiCaller {
   String uploadMedia = "upload-media";
   String notificationList = "list";
   String notificationRead = "read";
+  String logout = "logout";
 
   String status = "status";
 
   Future<LoginUserModel> loginUser(
       {@required String email,
       @required String password,
-      @required deviceType,
-      @required deviceToken}) async {
+      @required String deviceType,
+      @required String deviceToken}) async {
+    Map<String, String> parms = {
+      'email': email,
+      'password': password,
+      "device_type": "$deviceType",
+      "device_token": "$deviceToken"
+    };
+    print("Check it =============> $parms");
+
     var response = await http.post(
       Uri.parse(baseUrl + provider + login),
       headers: <String, String>{
-        'Content-Type': 'application/json; charset=UTF-8',
+        'Content-Type': 'application/json',
       },
-      body: jsonEncode(<String, String>{
-        'email': email,
-        'password': password,
-        "device_type": deviceType,
-        "device_token": deviceToken
-      }),
+      body: jsonEncode(parms),
     );
+    //18>>>abcdefcddjVO0VRw6tF3OSIOLCIQ:APA91bHjG55Zzw9r5P1PNAH16t4LFCIk16b2M33CCq3x6MWgyzyQ03v_QZI0OWTiXQdw0y9LwyeUsfUXK9HcVuz09qt6D389FQv658oM3Kjnll8uYPdOI1eEAZWpOgAiC8OJbUnyoB3P
+    print("${response.body}");
     LoginUserModel loginUserModel;
     if (response.statusCode == 200 || response.statusCode == 422) {
       loginUserModel = loginUserModelFromJson(response.body);
@@ -530,6 +537,33 @@ class ApiCaller {
       print("readNotification ${response.body}");
       print(
           "THERE IS AN ERROR INT THE readNotification API WITH STATUS CODE ${response.statusCode}");
+    }
+  }
+
+  Future<LogoutModel> userLogout(
+      {String auth, String fcmId, String deviceType}) async {
+    print("Logout id ======================> $fcmId");
+    LogoutModel logoutModel;
+    var response = await http.post(
+      Uri.parse(baseUrl + logout),
+      headers: <String, String>{
+        'Content-Type': 'application/json; charset=UTF-8',
+        'Authorization': "Bearer " + auth
+      },
+      body: jsonEncode(<String, dynamic>{
+        'device_token': "$fcmId",
+        'device_type': "$deviceType",
+      }),
+    );
+
+    if (response.statusCode == 200 || response.statusCode == 422) {
+      print("userLogout ${response.body}");
+      return logoutModel =
+          logoutModelFromJson(response.body);
+    } else {
+      print("userLogout ${response.body}");
+      print(
+          "THERE IS AN ERROR INT THE userLogout API WITH STATUS CODE ${response.statusCode}");
     }
   }
 

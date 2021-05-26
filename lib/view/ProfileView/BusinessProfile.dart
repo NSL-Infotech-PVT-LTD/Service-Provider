@@ -30,7 +30,6 @@ class _BusinessProfileState extends State<BusinessProfile> {
   String _location = "Loading..";
   String _postal = "Loading..";
 
-
   String auth = "";
   GetProfileDataModel getProfileDataModel;
   bool isLoadingData = true;
@@ -49,7 +48,8 @@ class _BusinessProfileState extends State<BusinessProfile> {
       }).whenComplete(() {
         setState(() {
           isLoadingData = false;
-
+          print(
+              "PROGRESS ${getProfileDataModel.data.user.profile_progress_bar}");
           _fullName = getProfileDataModel.data.user.name;
           _email = getProfileDataModel.data.user.email;
           _number = getProfileDataModel.data.user.mobile;
@@ -63,6 +63,194 @@ class _BusinessProfileState extends State<BusinessProfile> {
 
   final _formKey = GlobalKey<FormState>();
 
+  Widget showProgressbar({int number}) {
+    switch (number) {
+      case 0:
+        {
+          return Container(
+            decoration: BoxDecoration(
+              border: Border.all(color: CColors.missonMediumGrey),
+              borderRadius: BorderRadius.circular(2.5),
+            ),
+            height: 7,
+            child: Row(
+              children: [
+                Expanded(
+                    flex: 1,
+                    child: Container(
+                      color: Colors.white,
+                    )),
+                // SizedBox(
+                //   width: 2.5,
+                // ),
+                Expanded(
+                    flex: 1,
+                    child: Container(
+                      color: Colors.white,
+                    )),
+                // SizedBox(
+                //   width: 2.5,
+                // ),
+                Expanded(
+                    flex: 1,
+                    child: Container(
+                      color: Colors.white,
+                    ))
+              ],
+            ),
+          );
+        }
+        break;
+
+      case 1:
+        {
+          return Container(
+            decoration: BoxDecoration(
+              border: Border.all(color: CColors.missonMediumGrey),
+              borderRadius: BorderRadius.circular(2.5),
+            ),
+            height: 7,
+            child: Row(
+              children: [
+                Expanded(
+                    flex: 1,
+                    child: Container(
+                      color: Colors.green,
+                    )),
+                // SizedBox(
+                //   width: 2.5,
+                // ),
+                Expanded(
+                    flex: 1,
+                    child: Container(
+                      color: Colors.white,
+                    )),
+                // SizedBox(
+                //   width: 2.5,
+                // ),
+                Expanded(
+                    flex: 1,
+                    child: Container(
+                      color: Colors.white,
+                    ))
+              ],
+            ),
+          );
+        }
+        break;
+      case 2:
+        {
+          return Container(
+            decoration: BoxDecoration(
+              border: Border.all(color: CColors.missonMediumGrey),
+              borderRadius: BorderRadius.circular(2.5),
+            ),
+            height: 7,
+            child: Row(
+              children: [
+                Expanded(
+                    flex: 1,
+                    child: Container(
+                      color: Colors.green,
+                    )),
+                // SizedBox(
+                //   width: 2.5,
+                // ),
+                Expanded(
+                    flex: 1,
+                    child: Container(
+                      color: Colors.green,
+                    )),
+                // SizedBox(
+                //   width: 2.5,
+                // ),
+                Expanded(
+                    flex: 1,
+                    child: Container(
+                      color: Colors.white,
+                    ))
+              ],
+            ),
+          );
+        }
+        break;
+      case 3:
+        {
+          //statements;
+          return Container(
+            decoration: BoxDecoration(
+              border: Border.all(color: CColors.missonMediumGrey),
+              borderRadius: BorderRadius.circular(2.5),
+            ),
+            height: 7,
+            child: Row(
+              children: [
+                Expanded(
+                    flex: 1,
+                    child: Container(
+                      color: Colors.green,
+                    )),
+                // SizedBox(
+                //   width: 2.5,
+                // ),
+                Expanded(
+                    flex: 1,
+                    child: Container(
+                      color: Colors.green,
+                    )),
+                // SizedBox(
+                //   width: 2.5,
+                // ),
+                Expanded(
+                    flex: 1,
+                    child: Container(
+                      color: Colors.green,
+                    ))
+              ],
+            ),
+          );
+        }
+        break;
+
+      default:
+        {
+          return Container(
+            decoration: BoxDecoration(
+              border: Border.all(color: CColors.missonMediumGrey),
+              borderRadius: BorderRadius.circular(2.5),
+            ),
+            height: 7,
+            child: Row(
+              children: [
+                Expanded(
+                    flex: 1,
+                    child: Container(
+                      color: Colors.white,
+                    )),
+                // SizedBox(
+                //   width: 2.5,
+                // ),
+                Expanded(
+                    flex: 1,
+                    child: Container(
+                      color: Colors.white,
+                    )),
+                // SizedBox(
+                //   width: 2.5,
+                // ),
+                Expanded(
+                    flex: 1,
+                    child: Container(
+                      color: Colors.white,
+                    ))
+              ],
+            ),
+          );
+        }
+        break;
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -70,7 +258,7 @@ class _BusinessProfileState extends State<BusinessProfile> {
       appBar: AppBar(
         actions: [
           InkWell(
-            onTap: () {
+            onTap: isLoadingData==true ?null :() {
               NavMe().NavPushLeftToRight(NotificationScreen());
             },
             child: Padding(
@@ -108,7 +296,7 @@ class _BusinessProfileState extends State<BusinessProfile> {
         backgroundColor: Colors.white,
         elevation: 0,
       ),
-      body: Container(
+      body: isLoadingData==true?Center(child:spinkit) : Container(
           margin: EdgeInsets.only(top: ScreenConfig.screenHeight * 0.05),
           color: Colors.white,
           child: Column(
@@ -158,8 +346,11 @@ class _BusinessProfileState extends State<BusinessProfile> {
                                     // NavMe().NavPushLeftToRight(EditProfile());
 
                                     Get.to(EditProfile(),
-                                        transition: Transition.leftToRightWithFade,
-                                        duration: Duration(milliseconds: 400)).then((value) => initState());
+                                            transition:
+                                                Transition.leftToRightWithFade,
+                                            duration:
+                                                Duration(milliseconds: 400))
+                                        .then((value) => initState());
                                   },
                                   child: Text(
                                     "Edit profile",
@@ -195,34 +386,9 @@ class _BusinessProfileState extends State<BusinessProfile> {
                     SizedBox(
                       height: 10,
                     ),
-                    Container(
-                      height: 7,
-                      child: Row(
-                        children: [
-                          Expanded(
-                              flex: 1,
-                              child: Container(
-                                color: Colors.green,
-                              )),
-                          SizedBox(
-                            width: 2.5,
-                          ),
-                          Expanded(
-                              flex: 1,
-                              child: Container(
-                                color: Colors.green,
-                              )),
-                          SizedBox(
-                            width: 2.5,
-                          ),
-                          Expanded(
-                              flex: 1,
-                              child: Container(
-                                color: Colors.green,
-                              ))
-                        ],
-                      ),
-                    )
+                    showProgressbar(
+                        number:
+                            getProfileDataModel.data.user.profile_progress_bar)
                   ],
                 ),
               ),
@@ -239,8 +405,9 @@ class _BusinessProfileState extends State<BusinessProfile> {
                       // NavMe().NavPushLeftToRight(UserProfile()).then((value) {});
 
                       Get.to(UserProfile(),
-                          transition: Transition.leftToRightWithFade,
-                          duration: Duration(milliseconds: 400)).then((value) => initState());
+                              transition: Transition.leftToRightWithFade,
+                              duration: Duration(milliseconds: 400))
+                          .then((value) => initState());
                     },
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,

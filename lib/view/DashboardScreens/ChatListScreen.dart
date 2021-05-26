@@ -120,6 +120,7 @@ class _ChatListScreenState extends State<ChatListScreen> {
             // through the options in the drawer if there isn't enough vertical
             // space to fit everything.
             child: MyDrawer(
+              auth: _auth,
           username: widget.getProfileDataModel.data.user.name,
           ImageUrl: widget.getProfileDataModel == null ||
                   widget.getProfileDataModel.data == null ||

@@ -29,14 +29,12 @@ Future _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
   setString("target_id", message.data["target_id"]);
   getString("target_id").then((value) {
     print("======target_id==============> $value");
-
   });
-
 }
 
 //check kri
 //ok
-String fcmToken;
+String fcmToken=" ";
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -98,7 +96,6 @@ class _MyAppState extends State<MyApp> {
 
           print(
               "======IN onMessage ========> YYYYYYYYYYYYYYYY ${message.data}");
-
         }
       },
     );
@@ -109,7 +106,6 @@ class _MyAppState extends State<MyApp> {
       RemoteNotification notification = message.notification;
       AndroidNotification android = message.notification?.android;
       if (notification != null && android != null) {
-
         print(
             "======IN onMessageOpenedApp ========> YYYYYYYYYYYYYYYY ${message.data}");
 

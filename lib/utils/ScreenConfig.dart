@@ -1,8 +1,10 @@
+import 'dart:io';
 import 'package:flutter/widgets.dart';
 
 class ScreenConfig {
   static var screenHeight;
   static var screenWidth;
+  static String deviceType;
   static double widgetPaddingXLarge;
   static double widgetPaddingLarge;
   static double widgetPaddingMedium;
@@ -23,6 +25,7 @@ class ScreenConfig {
   void init(BuildContext context) {
     screenHeight = MediaQuery.of(context).size.height;
     screenWidth = MediaQuery.of(context).size.width;
+    deviceType = Platform.isAndroid==true ? "android":"ios";
     widgetPaddingXLarge = 50;
     widgetPaddingLarge = 25;
     widgetPaddingMedium = 10;

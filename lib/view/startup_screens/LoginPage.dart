@@ -1,4 +1,6 @@
+
 import 'dart:io';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
@@ -28,7 +30,7 @@ class LoginPage extends StatefulWidget {
 
 class _LoginPageState extends State<LoginPage> {
   String _auth = '';
-
+var myToken = "";
   TextStyle _textStyle = TextStyle(
     color: Colors.grey,
   );
@@ -46,19 +48,39 @@ class _LoginPageState extends State<LoginPage> {
   void initState() {
     // TODO: implement initState
     super.initState();
-
   }
 
-  @override
-  Widget build(BuildContext context) {
-    void login() async {
-      print("12345 $fcmToken");
+  Future<String> getFcmToken()async
+  {
+    return  await FirebaseMessaging.instance
+        .getToken()
+        .whenComplete(() {
+          // fcmToken=myToken;
+      print("IN LOGIN PAGE $myToken");
+
+      // setString(sharedPref.deviceFcmToken, fcmToken);
+      // getString(sharedPref.deviceFcmToken).then((value) {
+      //   print("======inGetFcmToken==============> $value");
+      //
+      // });
+
+    });
+  }
+  void login() async {
+
+    getFcmToken().then((value) {
+      myToken  = value;
+    }).whenComplete(() {
+      print("TOKEN IS HERE $myToken");
+      print("12345 $myToken");
+      setString(sharedPref.deviceFcmToken, myToken.toString());
+
       ApiCaller()
           .loginUser(
-              email: _emailAddressFieldController.text,
-              password: _passwordFieldController.text,
-              deviceType: "android",
-              deviceToken: !fcmToken.isBlank?"$fcmToken":"No Token is here")
+          email: _emailAddressFieldController.text,
+          password: _passwordFieldController.text,
+          deviceType: ScreenConfig.deviceType,
+          deviceToken: myToken.toString())
           .then((value) => loginUserModel = value)
           .whenComplete(() {
         if (loginUserModel != null &&
@@ -75,8 +97,7 @@ class _LoginPageState extends State<LoginPage> {
           setString(sharedPref.userDefaultImage, avatar1);
           setString(
               sharedPref.userNetworkImage, loginUserModel.data.user.image);
-          setString(
-              sharedPref.userId, loginUserModel.data.user.id.toString());
+          setString(sharedPref.userId, loginUserModel.data.user.id.toString());
 
           getString(sharedPref.userPhoneNumber)
               .then((value) => print("123 $value"));
@@ -139,7 +160,17 @@ class _LoginPageState extends State<LoginPage> {
           },
         );
       });
-    }
+
+
+
+    });
+
+
+
+  }
+  @override
+  Widget build(BuildContext context) {
+
 
     return Form(
       key: _formKey,

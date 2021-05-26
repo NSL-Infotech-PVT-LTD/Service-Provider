@@ -9,9 +9,11 @@ class SharedPref{
   String _userCurrentLang= "user_current_lang";
   String _userDefaultImage= "user_default_image";
   String _userNetworkImage= "user_network_image";
+  String _deviceFcmToken= "deviceFcmToken";
 
   String get userToken => _userToken;
   String get userId => _userId;
+  String get deviceFcmToken => _deviceFcmToken;
 
 
   String get userEmail => _userEmail;
