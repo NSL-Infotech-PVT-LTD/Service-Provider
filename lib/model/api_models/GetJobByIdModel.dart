@@ -49,10 +49,12 @@ class Data {
     this.latitude,
     this.longitude,
     this.distanceMiles,
+    this.createdAt
   });
 
   int id;
   String jobStatus;
+  String createdAt;
   String title;
   String estimatedHours;
   int budget;
@@ -66,6 +68,7 @@ class Data {
 
   factory Data.fromJson(Map<String, dynamic> json) => Data(
     id: json["id"],
+    createdAt: json["created_at"],
     jobStatus: json["job_status"],
     title: json["title"],
     estimatedHours: json["estimated_hours"],
@@ -81,6 +84,7 @@ class Data {
 
   Map<String, dynamic> toJson() => {
     "id": id,
+    "created_at": createdAt,
     "job_status": jobStatus,
     "title": title,
     "estimated_hours": estimatedHours,

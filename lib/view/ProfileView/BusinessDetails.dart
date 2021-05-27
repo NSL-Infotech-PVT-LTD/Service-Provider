@@ -484,7 +484,7 @@ String auth="";
                                       builder: (BuildContext context) {
                                         return CupertinoAlertDialog(
                                           title: Text('Info'),
-                                          content: Text('${dataModel.data.message}'),
+                                          content:dataModel.status==false  ? Text('${dataModel.error}'):Text('${dataModel.data.message}'),
                                           actions: [
                                             CupertinoDialogAction(
                                               child: Text('OK'),

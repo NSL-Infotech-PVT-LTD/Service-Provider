@@ -13,14 +13,16 @@ class UpdateProfileDataModel {
     this.status,
     this.code,
     this.data,
+    this.error,
   });
 
   bool status;
   int code;
   Data data;
-
+String error;
   factory UpdateProfileDataModel.fromJson(Map<String, dynamic> json) => UpdateProfileDataModel(
     status: json["status"],
+    error: json["error"],
     code: json["code"],
     data:json["data"] != null &&
         (json["data"] as Map<String, dynamic>).isNotEmpty
@@ -29,6 +31,7 @@ class UpdateProfileDataModel {
 
   Map<String, dynamic> toJson() => {
     "status": status,
+    "error": error,
     "code": code,
     "data": data.toJson(),
   };

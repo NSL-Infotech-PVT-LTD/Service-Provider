@@ -312,7 +312,7 @@ class ApiCaller {
     var streamedResponse = await request.send();
     var response = await http.Response.fromStream(streamedResponse);
 
-    if (response.statusCode == 200) {
+    if (response.statusCode == 200|| response.statusCode==422) {
       print("${response.body}");
       dataModel = updateProfileDataModelFromJson(response.body);
       // var map = Map<String, dynamic>.from(jsonData);

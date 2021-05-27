@@ -1,16 +1,13 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:intl/intl.dart';
 import 'package:misson_tasker/model/ApiCaller.dart';
-import 'package:misson_tasker/model/api_models/GetProfileDataModel.dart';
 import 'package:misson_tasker/utils/CColors.dart';
-import 'package:misson_tasker/utils/NavMe.dart';
 import 'package:misson_tasker/utils/ScreenConfig.dart';
 import 'package:misson_tasker/utils/StringsPath.dart';
 import 'package:misson_tasker/utils/local_data.dart';
 import 'package:misson_tasker/view/startup_screens/SplashScreen.dart';
-import 'package:misson_tasker/view/ProfileView/NotificationScreen.dart';
 
 import 'package:misson_tasker/view/startup_screens/SplashScreen.dart';
 import 'package:misson_tasker/model/api_models/GetJobByIdModel.dart';
@@ -156,7 +153,8 @@ class _MissionProcessScreenState extends State<MissionProcessScreen> {
                                   height: ScreenConfig.screenHeight * 0.01,
                                 ),
                                 Text(
-                                  "Posted on 18/04/2021 , 02:34 PM",
+                                  "Posted on ${DateFormat.MMMMd().add_jm().format(DateTime.parse(getJobByIdModel.data.createdAt).toLocal())}",
+
                                   style: TextStyle(
                                     color: CColors.missonMediumGrey,
                                     fontSize: ScreenConfig.fontSizeSmall,

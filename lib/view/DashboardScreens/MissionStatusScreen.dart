@@ -573,7 +573,7 @@ class _MissionStatusScreenState extends State<MissionStatusScreen> {
                               color: CColors.missonPrimaryColor,
                             )),
                         TextSpan(
-                            text: " Job Reference number,",
+                            text: " Job Reference No,",
                             style: TextStyle(
                               fontSize: 14,
                               fontFamily: "Product",
