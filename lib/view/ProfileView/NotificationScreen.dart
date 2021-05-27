@@ -169,7 +169,7 @@ class _NotificationScreenState extends State<NotificationScreen> {
                                     subtitle:
                                         "${notificationModel.data.data.elementAt(index).body}",
                                     time:
-                                        "${DateFormat.jm().format(notificationModel.data.data.elementAt(index).updatedAt.toLocal())} ",
+                                        "${DateFormat.jm().format(DateTime.parse(notificationModel.data.data.elementAt(index).updatedAt.toString()+"Z"))} ",
                                     showBadge: notificationModel.data.data
                                                 .elementAt(index)
                                                 .isRead !=

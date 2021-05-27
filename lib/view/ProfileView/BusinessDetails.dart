@@ -492,6 +492,7 @@ String auth="";
                                                 Navigator.pop(context);
                                                 // NavMe().NavPushReplaceFadeIn(LoginPage());
                                                 // Navigator.pushReplacement(context, MaterialPageRoute(builder: (_)=> LoginPage()));
+
                                               },
                                             ),
                                           ],

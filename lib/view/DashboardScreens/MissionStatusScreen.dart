@@ -520,7 +520,7 @@ class _MissionStatusScreenState extends State<MissionStatusScreen> {
                           //     .split(" ")
                           //     .elementAt(0),
                           // type: "${DateFormat.jm().format(DateTime.parse(obj.data.data.elementAt(index).createdAt).toLocal())} ",
-                          type: "${DateFormat.MMMMd().add_jm().format(DateTime.parse(obj.data.data.elementAt(index).createdAt).toLocal())} ",
+                          type: "${DateFormat.MMMMd().add_jm().format(DateTime.parse(obj.data.data.elementAt(index).createdAt+"Z").toLocal())} ",
                           customWidget: customWidget,
                           visibleStatus: visibleStatus,
                           status: obj.data.data.elementAt(index).jobStatus,

@@ -3227,6 +3227,7 @@ import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:intl/intl.dart';
 import 'package:misson_tasker/model/ApiCaller.dart';
+import 'package:misson_tasker/model/api_models/AcceptProposalModel.dart';
 import 'package:misson_tasker/model/api_models/GetProfileDataModel.dart';
 import 'package:misson_tasker/utils/CColors.dart';
 import 'package:misson_tasker/utils/NavMe.dart';
@@ -3263,6 +3264,7 @@ class _MissionRequestState extends State<MissionRequest> {
   TextEditingController moneyController = new TextEditingController();
   TextEditingController descriptionController = new TextEditingController();
   ChangeJobStatusModel changeJobStatusModel;
+  AcceptProposalModel acceptProposalModel;
   String auth = "";
   GetJobByIdModel getJobByIdModel;
   bool isLoadingData = true;
@@ -3449,8 +3451,9 @@ class _MissionRequestState extends State<MissionRequest> {
                                         height:
                                             ScreenConfig.screenHeight * 0.01,
                                       ),
+
                                       Text(
-                                        "Posted on ${DateFormat.MMMMd().add_jm().format(DateTime.parse(getJobByIdModel.data.createdAt).toLocal())}",
+                                        "Posted on ${DateFormat.MMMMd().add_jm().format(DateTime.parse(getJobByIdModel.data.createdAt+"Z").toLocal())}",
                                         style: TextStyle(
                                           color: CColors.missonMediumGrey,
                                           fontSize: ScreenConfig.fontSizeSmall,
@@ -3639,7 +3642,9 @@ class _MissionRequestState extends State<MissionRequest> {
                                 return ScaleTransition(
                                     child: child, scale: animation);
                               },
-                              child: bottomView(viewValue),
+                              child: getJobByIdModel.data.jobType == "direct"
+                                  ? bottomViewDirect(viewValue)
+                                  : bottomViewPost(viewValue),
                             )
                           ],
                         )),
@@ -5695,7 +5700,7 @@ class _MissionRequestState extends State<MissionRequest> {
     }
   }
 
-  Widget bottomView(String status) {
+  Widget bottomViewDirect(String status) {
     switch (status) {
       case "pending":
         {
@@ -5987,6 +5992,226 @@ class _MissionRequestState extends State<MissionRequest> {
                 ),
               ),
             ),
+          );
+        }
+        break;
+
+      default:
+        {
+          return Container();
+        }
+        break;
+    }
+  }
+
+  Widget bottomViewPost(String status) {
+    switch (status) {
+      case "open":
+        {
+          return Center(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                Row(
+
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    Center(
+                      child: Container(
+                        height: 50,
+                        width: 200,
+                        margin: EdgeInsets.only(top: 10, bottom: 10),
+                        child: ElevatedButton(
+                            // style: ElevatedButton.styleFrom(primary: CColors.b),
+                            //   onPressed: () {},
+                            style: ElevatedButton.styleFrom(
+                                primary: CColors.missonPrimaryColor,
+                                shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(10),
+                                    side: BorderSide(
+                                        color: CColors.missonGrey, width: 1))),
+
+                            // style: ElevatedButton.styleFrom(primary: CColors.b),
+                            onPressed: () {
+                              setState(() {
+                                isJobStatusChanging = true;
+                                isAcceptButtonPressed = true;
+                              });
+
+                              ApiCaller()
+                                  .sendProposal(auth: auth, jobId: widget.id)
+                                  .then((value){
+                                    print("===========>${value.toJson()}");
+                                acceptProposalModel = value;
+                              })
+                                  .whenComplete(() {
+                                setState(() {
+                                  print("===========>${acceptProposalModel.toJson()}");
+                                  isJobStatusChanging = false;
+                                  isAcceptButtonPressed = false;
+                                });
+                                if (acceptProposalModel.code == 422) {
+                                  return showCupertinoDialog(
+                                    context: context,
+                                    builder: (BuildContext context) {
+                                      return CupertinoAlertDialog(
+                                        title: Text('Alert'),
+                                        content:
+                                            Text('${acceptProposalModel}'),
+                                        actions: [
+                                          CupertinoDialogAction(
+                                            child: Text('OK'),
+                                            onPressed: () {
+                                              Navigator.pop(context);
+                                              // NavMe().NavPushReplaceFadeIn(LoginPage());
+                                              // Navigator.pushReplacement(context, MaterialPageRoute(builder: (_)=> LoginPage()));
+                                            },
+                                          ),
+                                        ],
+                                      );
+                                    },
+                                  );
+                                } else {
+                                  return showCupertinoDialog(
+                                    context: context,
+                                    builder: (BuildContext context) {
+                                      return CupertinoAlertDialog(
+                                        title: Text('Alert'),
+                                        content: Text(
+                                            '${acceptProposalModel.data.message}'),
+                                        actions: [
+                                          CupertinoDialogAction(
+                                            child: Text('OK'),
+                                            onPressed: () {
+                                              Navigator.pop(context);
+
+                                              setState(() {
+                                                viewValue = "accepted";
+                                              });
+                                              // NavMe().NavPushReplaceFadeIn(LoginPage());
+                                              // Navigator.pushReplacement(context, MaterialPageRoute(builder: (_)=> LoginPage()));
+                                            },
+                                          ),
+                                        ],
+                                      );
+                                    },
+                                  );
+                                }
+                              });
+                            },
+                            child: isAcceptButtonPressed == true
+                                ? spinkit
+                                : Text(
+                                    "I will do the task",
+                                    textAlign: TextAlign.left,
+                                    style: TextStyle(fontWeight: FontWeight.w500),
+                                  )),
+                      ),
+                    ),
+                  ],
+                ),
+                SizedBox(
+                  height: 30,
+                ),
+              ],
+            ),
+          );
+          // statements;
+        }
+        break;
+
+      case "accepted":
+        {
+          return Row(
+            children: [
+              InkWell(
+                onTap: () {
+                  setState(() {
+                    currentCaseStatus = 2;
+                  });
+                },
+                child: Container(
+                  color: CColors.missonNormalWhiteColor,
+                  width: 70,
+                  height: 100,
+                  child: SvgPicture.asset(tickLogo),
+                ),
+              ),
+              Expanded(
+                child: Container(
+                  height: 100,
+                  color: CColors.missonPrimaryColor,
+                  child: Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Spacer(),
+                        Text(
+                          "Response successfully sent to Assigner.",
+                          style: TextStyle(
+                              fontSize: ScreenConfig.fontSizelarge,
+                              fontWeight: FontWeight.w400,
+                              color: CColors.missonNormalWhiteColor),
+                        ),
+                        Spacer(),
+                        Text(
+                          "You will be notified if Assigner select you",
+                          style: TextStyle(
+                              fontSize: ScreenConfig.fontSizeSmall,
+                              fontWeight: FontWeight.w400,
+                              color: CColors.missonNormalWhiteColor),
+                        ),
+                        Spacer()
+                      ],
+                    ),
+                  ),
+                ),
+              )
+            ],
+          );
+        }
+        break;
+      case "pending":
+        {
+          return Column(
+            children: [
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Spacer(),
+                  Container(
+                    height: 50,
+                    width: 200,
+                    margin: EdgeInsets.only(top: 10, bottom: 10),
+                    child: ElevatedButton(
+                        // style: ElevatedButton.styleFrom(primary: CColors.b),
+                        //   onPressed: () {},
+                        style: ElevatedButton.styleFrom(
+                            primary: CColors.missonYellow,
+                            shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(10),
+                                side: BorderSide(
+                                    color: CColors.missonYellow, width: 1))),
+
+                        // style: ElevatedButton.styleFrom(primary: CColors.b),
+                        onPressed: () {},
+                        child: isAcceptButtonPressed == true
+                            ? spinkit
+                            : Text(
+                                "Requested",
+                                textAlign: TextAlign.left,
+                                style: TextStyle(fontWeight: FontWeight.w500),
+                              )),
+                  ),
+                  Spacer(),
+                ],
+              ),
+              SizedBox(
+                height: 30,
+              ),
+            ],
           );
         }
         break;

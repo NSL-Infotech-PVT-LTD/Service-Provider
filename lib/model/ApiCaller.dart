@@ -4,6 +4,7 @@ import 'dart:io';
 import 'package:connectivity/connectivity.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:get/get_connect/http/src/multipart/multipart_file.dart';
+import 'package:misson_tasker/model/api_models/AcceptProposalModel.dart';
 import 'package:misson_tasker/model/api_models/GetProfileDataModel.dart';
 import 'package:misson_tasker/model/api_models/ListOfServicesModel.dart';
 import 'package:misson_tasker/model/api_models/LogoutModel.dart';
@@ -46,6 +47,7 @@ class ApiCaller {
   String notification = "notification/";
   String job = "job/";
   String listofJob = "list";
+  String proposal = "proposal";
   String jobById = "ById";
   String changeJobStatusApi = "change-job-status";
   String chat = "chat/";
@@ -138,7 +140,7 @@ class ApiCaller {
       Uri.parse(baseUrl + notification + status),
       headers: <String, String>{
         'Content-Type': 'application/json; charset=UTF-8',
-        'Authorization': "Bearer " + auth
+         'Authorization': "Bearer " + auth
       },
       body: jsonEncode(<String, String>{
         'is_notify': value,
@@ -312,7 +314,7 @@ class ApiCaller {
     var streamedResponse = await request.send();
     var response = await http.Response.fromStream(streamedResponse);
 
-    if (response.statusCode == 200|| response.statusCode==422) {
+    if (response.statusCode == 200 || response.statusCode == 422) {
       print("${response.body}");
       dataModel = updateProfileDataModelFromJson(response.body);
       // var map = Map<String, dynamic>.from(jsonData);
@@ -470,6 +472,34 @@ class ApiCaller {
     }
   }
 
+  Future<AcceptProposalModel> sendProposal({
+    String auth,
+    String jobId,
+  }) async {
+    print("$jobId");
+    AcceptProposalModel acceptProposalModel;
+    var response = await http.post(
+      Uri.parse(baseUrl + provider + job + proposal),
+      // Uri.parse(baseUrl + "provider/job/proposal"),
+      headers: <String, String>{
+        'Content-Type': 'application/json; charset=UTF-8',
+        'Authorization': "Bearer " + auth
+      },
+      body: jsonEncode(<String, dynamic>{
+        'user_job_id': "$jobId",
+      }),
+    );
+
+    if (response.statusCode == 200 || response.statusCode == 422) {
+      print(" sendProposal ${response.body}");
+      return acceptProposalModelFromJson(response.body);
+    } else {
+      print("sendProposal ${response.body}");
+      print(
+          "THERE IS AN ERROR INT sendProposal API WITH STATUS CODE ${response.statusCode}");
+    }
+  }
+
   Future<GetJobByIdModel> getJobDetailsByID({String auth, String Id}) async {
     GetJobByIdModel getJobByIdModel;
     var response = await http.post(
@@ -501,8 +531,7 @@ class ApiCaller {
         'Content-Type': 'application/json; charset=UTF-8',
         'Authorization': "Bearer " + auth
       },
-      body:  jsonEncode(
-          <String, dynamic>{"limit": "1000"}),
+      body: jsonEncode(<String, dynamic>{"limit": "1000"}),
     );
 
     if (response.statusCode == 200 || response.statusCode == 422) {
@@ -558,8 +587,7 @@ class ApiCaller {
 
     if (response.statusCode == 200 || response.statusCode == 422) {
       print("userLogout ${response.body}");
-      return logoutModel =
-          logoutModelFromJson(response.body);
+      return logoutModel = logoutModelFromJson(response.body);
     } else {
       print("userLogout ${response.body}");
       print(
@@ -569,6 +597,9 @@ class ApiCaller {
 
   Future<ChangeJobStatusModel> changeJobStatus(
       {String auth, String Id, String jobStatus}) async {
+    print("$Id");
+    print("$auth");
+    print("$jobStatus");
     ChangeJobStatusModel changeJobStatusModel;
     var response = await http.post(
       Uri.parse(baseUrl + provider + changeJobStatusApi),
@@ -577,7 +608,7 @@ class ApiCaller {
         'Authorization': "Bearer " + auth
       },
       body: jsonEncode(
-          <String, dynamic>{'job_id': "$Id", 'job_status': '$jobStatus'}),
+          <String, dynamic>{'user_job_id': "$Id", 'job_status': '$jobStatus'}),
     );
 
     if (response.statusCode == 200 || response.statusCode == 422) {

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
+import 'package:intl/intl.dart';
 import 'package:misson_tasker/model/ApiCaller.dart';
 import 'package:misson_tasker/model/api_models/GetProfileDataModel.dart';
 import 'package:misson_tasker/model/api_models/MissionRequestModel.dart';
@@ -243,11 +244,20 @@ class _MissionExploreScreenState extends State<MissionExploreScreen> {
                                     transition: Transition.leftToRightWithFade,
                                     duration: Duration(milliseconds: 400))
                                 .then((value) => initState())
-                            : () {};
+                            : Get.to(
+                            MissionRequest(
+                              id: obj.data.data
+                                  .elementAt(index)
+                                  .id
+                                  .toString(),
+                            ),
+                            transition: Transition.leftToRightWithFade,
+                            duration: Duration(milliseconds: 400))
+                            .then((value) => initState());
                       },
                         obj: obj,
                         miles: obj.data.data.elementAt(index).distanceMiles,
-                        type: "1 day ago",
+                 type:  "${DateFormat.MMMMd().add_jm().format(DateTime.parse(obj.data.data.elementAt(index).createdAt+"Z").toLocal())} ",
                         statusData: "123",
                         jobStatus: obj.data.data.elementAt(index).jobStatus),
               );
