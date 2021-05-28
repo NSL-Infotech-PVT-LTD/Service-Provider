@@ -34,7 +34,7 @@ Future _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
 
 //check kri
 //ok
-String fcmToken=" ";
+String fcmToken = " ";
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -63,17 +63,53 @@ class MyApp extends StatefulWidget {
   _MyAppState createState() => _MyAppState();
 }
 
-
 class _MyAppState extends State<MyApp> {
   var token;
+  var initializationSettings;
 
+  initializePlatformSpecifics() {
+    var initializationSettingsAndroid =
+        AndroidInitializationSettings('app_notf_icon');
+    var initializationSettingsIOS = IOSInitializationSettings(
+      requestAlertPermission: true,
+      requestBadgePermission: true,
+      requestSoundPermission: false,
+      onDidReceiveLocalNotification: (id, title, body, payload) async {
+        // your call back to the UI
+      },
+    );
+    initializationSettings = InitializationSettings(
+        android: initializationSettingsAndroid, iOS: initializationSettingsIOS);
+  }
+
+  getMe() async {
+    await flutterLocalNotificationsPlugin.initialize(initializationSettings,
+        onSelectNotification: (String payload) async {
+      print("======LOCAL NOTIFICATION======> $payload");
+
+      Map myMap = jsonDecode(payload);
+
+      print("====myMap====>${json.encode(payload)}");
+      print("====myMap====>${json.decode(payload)["target_id"]}");
+      print("====myMap====>${myMap["target_id"]}");
+      print("====myMap====>$payload}");
+      if (myMap["data_type"] == "Job") {
+        print("${myMap}");
+
+        Get.to(MissionRequest(id: myMap["target_id"]),
+            transition: Transition.leftToRightWithFade,
+            duration: Duration(milliseconds: 400));
+      }
+    });
+  }
 
   @override
   void initState() {
     getString("target_id").then((value) {
       print("======target_id==============> $value");
     });
-
+    initializePlatformSpecifics();
+    getMe();
 
     FirebaseMessaging.instance.requestPermission();
     print("CHECK $token");
@@ -96,7 +132,8 @@ class _MyAppState extends State<MyApp> {
                   playSound: true,
                   icon: '@mipmap/ic_launcher',
                 ),
-              ));
+              ),
+              payload: json.encode(message.data));
 
           print(
               "======IN onMessage ========> YYYYYYYYYYYYYYYY ${message.data}");
