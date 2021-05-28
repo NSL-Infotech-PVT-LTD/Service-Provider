@@ -40,7 +40,23 @@ class _HomeScreenState extends State<HomeScreen> {
   MissionRequestModel missionRequestModelConfirmed;
   MissionRequestModel missionRequest;
   String username;
+  RemoteMessage initialMessage ;
+  getMe()async{
 
+    initialMessage= await FirebaseMessaging.instance.getInitialMessage();
+    if (initialMessage.data["data_type"] == "Job") {
+      print("${initialMessage.data}");
+      setString("target_id", initialMessage.data["target_id"]);
+      getString("target_id").then((value) {
+        print("======target_id==============> $value");
+
+        print("123 $value");
+      });
+      Get.to(MissionRequest(id: initialMessage.data["target_id"]),
+          transition: Transition.leftToRightWithFade,
+          duration: Duration(milliseconds: 400));
+    }
+  }
   @override
   void initState() {
     getString(sharedPref.userToken).then((value) {
@@ -49,7 +65,7 @@ class _HomeScreenState extends State<HomeScreen> {
       print("123 $value");
     }).whenComplete(() {
       // isRequestList = false;
-
+      getMe();
       ApiCaller()
           .missionRequest(
               auth: _auth,

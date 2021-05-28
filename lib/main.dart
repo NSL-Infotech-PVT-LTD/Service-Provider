@@ -63,14 +63,18 @@ class MyApp extends StatefulWidget {
   _MyAppState createState() => _MyAppState();
 }
 
+
 class _MyAppState extends State<MyApp> {
   var token;
+
 
   @override
   void initState() {
     getString("target_id").then((value) {
       print("======target_id==============> $value");
     });
+
+
     FirebaseMessaging.instance.requestPermission();
     print("CHECK $token");
     FirebaseMessaging.onMessage.listen(
