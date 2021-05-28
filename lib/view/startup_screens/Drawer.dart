@@ -8,6 +8,7 @@ import 'package:misson_tasker/utils/ScreenConfig.dart';
 import 'package:misson_tasker/utils/StringsPath.dart';
 import 'package:misson_tasker/utils/local_data.dart';
 import 'package:misson_tasker/view/DrawerScreens/MissionHistoryScreen.dart';
+import 'package:misson_tasker/view/DrawerScreens/MissionReviewScreen.dart';
 import 'package:misson_tasker/view/ProfileView/SettingPage.dart';
 import 'package:misson_tasker/view/ProfileView/editProfile.dart';
 import 'package:misson_tasker/view/startup_screens/LoginPage.dart';
@@ -215,10 +216,11 @@ class _MyDrawerState extends State<MyDrawer> {
                   ],
                 ),
                 onTap: () {
+                  NavMe().NavPushLeftToRight(MissionReviewScreen());
                   // Update the state of the app
                   // ...
                   // Then close the MyDrawer
-                  Navigator.pop(context);
+                  // Navigator.pop(context);
                 },
               ),
               SizedBox(

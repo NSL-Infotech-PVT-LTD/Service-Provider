@@ -100,7 +100,7 @@ class _MissionProcessScreenState extends State<MissionProcessScreen> {
                 fontSize: ScreenConfig.fontSizeXlarge),
           ),
         ),
-        leading: InkWell(
+          leading: InkWell(
           onTap: () {
             Navigator.pop(context);
           },
