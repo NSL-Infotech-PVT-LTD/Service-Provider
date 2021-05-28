@@ -201,7 +201,7 @@ class _MissionHistoryScreenState extends State<MissionHistoryScreen> {
                         return customHistoryCard(
                             title: "Shop groceries for me",
                             onPress: () {
-                              NavMe().NavPushLeftToRight(MissionProcessScreen(id: "30",));
+                              NavMe().NavPushLeftToRight(MissionProcessScreen(id: "1",));
 
                             },
                             subTitle: "#7621189");

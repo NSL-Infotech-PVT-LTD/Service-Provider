@@ -44,7 +44,6 @@ class _MissionProcessScreenState extends State<MissionProcessScreen> {
   void initState() {
     // registerUser();
 
-
     getString(sharedPref.userToken).then((value) {
       auth = value;
 
@@ -93,7 +92,7 @@ class _MissionProcessScreenState extends State<MissionProcessScreen> {
         title: Padding(
           padding: const EdgeInsets.only(left: 20.0, top: 30.0),
           child: Text(
-            "Mission Request",
+            "Mission",
             style: TextStyle(
                 color: Colors.black,
                 fontFamily: "Product",
@@ -127,487 +126,524 @@ class _MissionProcessScreenState extends State<MissionProcessScreen> {
                   margin:
                       EdgeInsets.only(top: ScreenConfig.screenHeight * 0.05),
                   color: Colors.white,
-                  child: Column(
-                    children: [
-                      Container(
-                        width: ScreenConfig.screenWidth * 0.80,
-                        child: Column(
-                          children: [
-                            SizedBox(
-                              width: 10,
-                            ),
-                            Column(
-                              crossAxisAlignment: CrossAxisAlignment.center,
-                              children: [
-                                Text(
-                                  "${getJobByIdModel.data.title}",
-                                  style: TextStyle(
-                                      color: Colors.black,
-                                      fontWeight: FontWeight.bold,
-                                      fontSize: ScreenConfig.fontSizeXXlarge,
-                                      fontFamily: "Product"),
-                                  softWrap: true,
-                                  overflow: TextOverflow.ellipsis,
-                                ),
-                                SizedBox(
-                                  height: ScreenConfig.screenHeight * 0.01,
-                                ),
-                                Text(
-                                  "Posted on ${DateFormat.MMMMd().add_jm().format(DateTime.parse(getJobByIdModel.data.createdAt).toLocal())}",
-
-                                  style: TextStyle(
-                                    color: CColors.missonMediumGrey,
-                                    fontSize: ScreenConfig.fontSizeSmall,
-                                  ),
-                                ),
-                                SizedBox(
-                                  height: ScreenConfig.screenHeight * 0.02,
-                                ),
-                                Text(
-                                  "Job Reference number",
-                                  style: TextStyle(
-                                    color: Colors.black,
-                                    fontSize: ScreenConfig.fontSizeSmall,
-                                  ),
-                                ),
-                                SizedBox(
-                                  height: ScreenConfig.screenHeight * 0.02,
-                                ),
-                                Text(
-                                  "#${getJobByIdModel.data.id}",
-                                  style: TextStyle(
-                                    color: Colors.black,
-                                    fontWeight: FontWeight.bold,
-                                    fontSize: ScreenConfig.fontSizeXlarge,
-                                  ),
-                                )
-                              ],
-                            ),
-                          ],
-                        ),
-                      ),
-                      ExpansionTile(
-                        tilePadding: EdgeInsets.symmetric(horizontal: 10),
-                        title: Column(
-                          mainAxisAlignment: MainAxisAlignment.end,
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(
-                              "Mission details",
-                              style: TextStyle(
-                                  fontSize: ScreenConfig.fontSizelarge,
-                                  fontWeight: FontWeight.w300,
-                                  color: CColors.missonPrimaryColor),
-                            ),
-                          ],
-                        ),
-                        children: [
-                          Padding(
-                            padding: const EdgeInsets.symmetric(
-                                horizontal: 15.0, vertical: 8.0),
-                            child: TextFormField(
-                              controller: locationController,
-                              readOnly: true,
-                              decoration: InputDecoration(
-                                prefixIcon: Padding(
-                                  padding: const EdgeInsets.all(8.0),
-                                  child:
-                                      SvgPicture.asset(locationTextFiledIcon),
-                                ),
-                              ),
-                            ),
-                          ),
-                          Padding(
-                            padding: const EdgeInsets.symmetric(
-                                horizontal: 15.0, vertical: 8.0),
-                            child: TextFormField(
-                              controller: dateController,
-                              readOnly: true,
-                              decoration: InputDecoration(
-                                prefixIcon: Padding(
-                                  padding: const EdgeInsets.all(8.0),
-                                  child:
-                                      SvgPicture.asset(calanderTextFiledIcon),
-                                ),
-                              ),
-                            ),
-                          ),
-                          Padding(
-                            padding: const EdgeInsets.symmetric(
-                                horizontal: 15.0, vertical: 8.0),
-                            child: TextFormField(
-                              controller: timeController,
-                              readOnly: true,
-                              decoration: InputDecoration(
-                                prefixIcon: Padding(
-                                  padding: const EdgeInsets.all(8.0),
-                                  child: SvgPicture.asset(timeTextFiledIcon),
-                                ),
-                                suffixIcon: Column(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  children: [
-                                    Padding(
-                                      padding:
-                                          const EdgeInsets.only(right: 16.0),
-                                      child: Text(
-                                        "Hrs",
-                                        style: TextStyle(
-                                            fontSize:
-                                                ScreenConfig.fontSizelarge,
-                                            fontWeight: FontWeight.w300,
-                                            color: CColors.missonMediumGrey),
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                              ),
-                            ),
-                          ),
-                          Padding(
-                            padding: const EdgeInsets.symmetric(
-                                horizontal: 15.0, vertical: 8.0),
-                            child: TextFormField(
-                              controller: moneyController,
-                              readOnly: true,
-                              decoration: InputDecoration(
-                                prefixIcon: Padding(
-                                  padding: const EdgeInsets.all(8.0),
-                                  child: SvgPicture.asset(cashLogo),
-                                ),
-                                suffixIcon: Column(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  children: [
-                                    Padding(
-                                      padding:
-                                          const EdgeInsets.only(right: 16.0),
-                                      child: Text(
-                                        "\$/hr",
-                                        style: TextStyle(
-                                            fontSize:
-                                                ScreenConfig.fontSizelarge,
-                                            fontWeight: FontWeight.w300,
-                                            color: CColors.missonMediumGrey),
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                              ),
-                            ),
-                          ),
-                          Row(
+                  child: Container(
+                    height: ScreenConfig.screenHeight,
+                    child: Stack(
+                      children: [
+                        SingleChildScrollView(
+                          child: Column(
                             children: [
-                              Padding(
-                                padding: const EdgeInsets.symmetric(
-                                    horizontal: 16, vertical: 8.0),
-                                child: Text(
-                                  "Description",
-                                  style: TextStyle(
-                                      fontSize: ScreenConfig.fontSizeXlarge,
-                                      fontWeight: FontWeight.w300,
-                                      color: CColors.missonPrimaryColor),
-                                ),
-                              ),
-                              Spacer()
-                            ],
-                          ),
-                          Padding(
-                            padding: const EdgeInsets.symmetric(
-                                horizontal: 30, vertical: 8.0),
-                            child: Container(
-                              child: TextFormField(
-                                controller: descriptionController,
-                                readOnly: true,
-                                keyboardType: TextInputType.multiline,
-                                maxLines: 8,
-                                decoration: InputDecoration(
-                                  border: OutlineInputBorder(
-                                    borderSide: BorderSide(
-                                      color: CColors.missonMediumGrey,
-                                    ),
-                                  ),
-                                ),
-                              ),
-                            ),
-                          ),
-                          SizedBox(
-                            height: 30,
-                          ),
-                        ],
-                      ),
-                      ExpansionTile(
-                        tilePadding: EdgeInsets.symmetric(horizontal: 10),
-                        title: Column(
-                          mainAxisAlignment: MainAxisAlignment.end,
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(
-                              "Mission Status",
-                              style: TextStyle(
-                                  fontSize: ScreenConfig.fontSizelarge,
-                                  fontWeight: FontWeight.w300,
-                                  color: CColors.missonPrimaryColor),
-                            ),
-                          ],
-                        ),
-                        children: [
-                          Padding(
-                            padding:
-                                const EdgeInsets.symmetric(horizontal: 8.0),
-                            child: TimelineTile(
-                              alignment: TimelineAlign.start,
-                              // afterLineStyle: ,
-                              // isLast: false,
-                              isFirst: true,
-                              indicatorStyle: IndicatorStyle(
-                                width: 20,
-                                color: CColors.missonGrey,
-                                // indicator: Text("efdsf"),
-                                // indicatorXY: 0.7,
-                                iconStyle: IconStyle(
-                                  color: CColors.missonNormalWhiteColor,
-                                  iconData: Icons.check,
-                                ),
-                              ),
-                              endChild: Padding(
-                                padding: const EdgeInsets.only(left: 8.0),
+                              Container(
+                                width: ScreenConfig.screenWidth * 0.80,
                                 child: Column(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
-                                    Text(
-                                      "Advance pay",
-                                      style: TextStyle(
-                                          fontSize: ScreenConfig.fontSizelarge,
-                                          fontWeight: FontWeight.w500,
-                                          fontFamily: "Product",
-                                          color: CColors.missonPrimaryColor),
-                                    ),
-                                  ],
-                                ),
-                              ),
-                            ),
-                          ),
-                          Padding(
-                            padding:
-                                const EdgeInsets.symmetric(horizontal: 8.0),
-                            child: TimelineTile(
-                              alignment: TimelineAlign.start,
-                              // afterLineStyle: ,
-                              // isLast: false,
-                              // isFirst: true,
-                              indicatorStyle: IndicatorStyle(
-                                width: 20,
-                                color: CColors.missonGrey,
-                                // indicator: Text("efdsf"),
-                                // indicatorXY: 0.7,
-                                iconStyle: IconStyle(
-                                  color: CColors.missonNormalWhiteColor,
-                                  iconData: Icons.check,
-                                ),
-                              ),
-                              endChild: Padding(
-                                padding:
-                                    const EdgeInsets.only(left: 8.0, top: 30),
-                                child: Column(
-                                  mainAxisAlignment: MainAxisAlignment.end,
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    Text(
-                                      "Mission Started",
-                                      style: TextStyle(
-                                          fontSize: ScreenConfig.fontSizelarge,
-                                          fontWeight: FontWeight.w500,
-                                          fontFamily: "Product",
-                                          color: CColors.missonPrimaryColor),
-                                    ),
                                     SizedBox(
-                                      height: 10,
+                                      width: 10,
                                     ),
-                                    Text(
-                                      "12:36 PM, Thursday, 32 march",
-                                      style: TextStyle(
-                                          fontSize: ScreenConfig.fontSizeMedium,
-                                          fontWeight: FontWeight.w500,
-                                          fontFamily: "Product",
-                                          color: CColors.missonMediumGrey),
-                                    ),
-                                  ],
-                                ),
-                              ),
-                            ),
-                          ),
-                          Padding(
-                            padding:
-                                const EdgeInsets.symmetric(horizontal: 8.0),
-                            child: TimelineTile(
-                              alignment: TimelineAlign.start,
-                              // afterLineStyle: ,
-                              // isLast: false,
-                              // isFirst: true,
-                              indicatorStyle: IndicatorStyle(
-                                width: 20,
-                                color: CColors.missonGreen,
-                                // indicator: Text("efdsf"),
-                                // indicatorXY: 0.7,
-                                iconStyle: IconStyle(
-                                  color: CColors.missonNormalWhiteColor,
-                                  iconData: Icons.check,
-                                ),
-                              ),
-                              endChild: Padding(
-                                padding:
-                                    const EdgeInsets.only(left: 8.0, top: 20),
-                                child: Column(
-                                  mainAxisAlignment: MainAxisAlignment.end,
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    Text(
-                                      "Mission Accomplished",
-                                      style: TextStyle(
-                                          fontSize: ScreenConfig.fontSizelarge,
-                                          fontWeight: FontWeight.w500,
-                                          fontFamily: "Product",
-                                          color: CColors.missonPrimaryColor),
-                                    ),
-                                    SizedBox(
-                                      height: 10,
-                                    ),
-                                    Text(
-                                      "12:36 PM, Thursday, 32 march",
-                                      style: TextStyle(
-                                          fontSize: ScreenConfig.fontSizeMedium,
-                                          fontWeight: FontWeight.w500,
-                                          fontFamily: "Product",
-                                          color: CColors.missonMediumGrey),
-                                    ),
-                                  ],
-                                ),
-                              ),
-                            ),
-                          ),
-                          Padding(
-                            padding:
-                                const EdgeInsets.symmetric(horizontal: 8.0),
-                            child: TimelineTile(
-                              alignment: TimelineAlign.start,
-                              // afterLineStyle: ,
-                              isLast: true,
-                              // isFirst: true,
-                              indicatorStyle: IndicatorStyle(
-                                width: 20,
-                                color: CColors.missonGrey,
-                                // indicator: Text("efdsf"),
-                                // indicatorXY: 0.7,
-                                iconStyle: IconStyle(
-                                  color: CColors.missonNormalWhiteColor,
-                                  iconData: Icons.check,
-                                ),
-                              ),
-                              endChild: Padding(
-                                padding:
-                                    const EdgeInsets.only(left: 8.0, top: 20),
-                                child: Column(
-                                  mainAxisAlignment: MainAxisAlignment.end,
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    Row(
+                                    Column(
+                                      crossAxisAlignment: CrossAxisAlignment.center,
                                       children: [
                                         Text(
-                                          "Total Payment",
+                                          "${getJobByIdModel.data.title}",
                                           style: TextStyle(
-                                              fontSize:
-                                                  ScreenConfig.fontSizelarge,
-                                              fontWeight: FontWeight.w500,
-                                              fontFamily: "Product",
-                                              color:
-                                                  CColors.missonPrimaryColor),
-                                        ),
-                                        Spacer(),
-                                        Text(
-                                          "\$ 174.00",
-                                          style: TextStyle(
-                                              fontSize:
-                                                  ScreenConfig.fontSizelarge,
+                                              color: Colors.black,
                                               fontWeight: FontWeight.bold,
-                                              fontFamily: "Product",
-                                              color: CColors.missonGreen),
+                                              fontSize:
+                                                  ScreenConfig.fontSizeXXlarge,
+                                              fontFamily: "Product"),
+                                          softWrap: true,
+                                          overflow: TextOverflow.ellipsis,
                                         ),
                                         SizedBox(
-                                          width: 20,
+                                          height: ScreenConfig.screenHeight * 0.01,
+                                        ),
+                                        Text(
+                                          "Posted on ${DateFormat.MMMMd().add_jm().format(DateTime.parse(getJobByIdModel.data.createdAt).toLocal())}",
+                                          style: TextStyle(
+                                            color: CColors.missonMediumGrey,
+                                            fontSize: ScreenConfig.fontSizeSmall,
+                                          ),
+                                        ),
+                                        SizedBox(
+                                          height: ScreenConfig.screenHeight * 0.02,
+                                        ),
+                                        Text(
+                                          "Job Reference number",
+                                          style: TextStyle(
+                                            color: Colors.black,
+                                            fontSize: ScreenConfig.fontSizeSmall,
+                                          ),
+                                        ),
+                                        SizedBox(
+                                          height: ScreenConfig.screenHeight * 0.02,
+                                        ),
+                                        Text(
+                                          "#${getJobByIdModel.data.id}",
+                                          style: TextStyle(
+                                            color: Colors.black,
+                                            fontWeight: FontWeight.bold,
+                                            fontSize: ScreenConfig.fontSizeXlarge,
+                                          ),
                                         )
                                       ],
                                     ),
-                                    SizedBox(
-                                      height: 10,
-                                    ),
-                                    Text(
-                                      "View Receipt",
-                                      style: TextStyle(
-                                          fontSize: ScreenConfig.fontSizeMedium,
-                                          fontWeight: FontWeight.bold,
-                                          fontFamily: "Product",
-                                          color: Colors.blue),
-                                    ),
                                   ],
                                 ),
                               ),
-                            ),
-                          ),
-                          SizedBox(
-                            height: 10,
-                          ),
-                        ],
-                      ),
-                      ExpansionTile(
-                        tilePadding: EdgeInsets.symmetric(horizontal: 10),
-                        title: Column(
-                          mainAxisAlignment: MainAxisAlignment.end,
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(
-                              "Mission Reviews",
-                              style: TextStyle(
-                                  fontSize: ScreenConfig.fontSizelarge,
-                                  fontWeight: FontWeight.w300,
-                                  color: CColors.missonPrimaryColor),
-                            ),
-                          ],
-                        ),
-                        children: [
-                          Column(
-                            children: [
-                              SizedBox(height: 10,),
-                              Text(
-                                "Assigner reviews will be shown here ",
-                                style: TextStyle(
-                                    fontSize: ScreenConfig.fontSizelarge,
-                                    fontWeight: FontWeight.w300,
-                                    color: CColors.missonPrimaryColor),
+                              ExpansionTile(
+                                tilePadding: EdgeInsets.symmetric(horizontal: 10),
+                                title: Column(
+                                  mainAxisAlignment: MainAxisAlignment.end,
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Text(
+                                      "Mission details",
+                                      style: TextStyle(
+                                          fontSize: ScreenConfig.fontSizelarge,
+                                          fontWeight: FontWeight.w300,
+                                          color: CColors.missonPrimaryColor),
+                                    ),
+                                  ],
+                                ),
+                                children: [
+                                  Padding(
+                                    padding: const EdgeInsets.symmetric(
+                                        horizontal: 15.0, vertical: 8.0),
+                                    child: TextFormField(
+                                      controller: locationController,
+                                      readOnly: true,
+                                      decoration: InputDecoration(
+                                        prefixIcon: Padding(
+                                          padding: const EdgeInsets.all(8.0),
+                                          child: SvgPicture.asset(
+                                              locationTextFiledIcon),
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                  Padding(
+                                    padding: const EdgeInsets.symmetric(
+                                        horizontal: 15.0, vertical: 8.0),
+                                    child: TextFormField(
+                                      controller: dateController,
+                                      readOnly: true,
+                                      decoration: InputDecoration(
+                                        prefixIcon: Padding(
+                                          padding: const EdgeInsets.all(8.0),
+                                          child: SvgPicture.asset(
+                                              calanderTextFiledIcon),
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                  Padding(
+                                    padding: const EdgeInsets.symmetric(
+                                        horizontal: 15.0, vertical: 8.0),
+                                    child: TextFormField(
+                                      controller: timeController,
+                                      readOnly: true,
+                                      decoration: InputDecoration(
+                                        prefixIcon: Padding(
+                                          padding: const EdgeInsets.all(8.0),
+                                          child:
+                                              SvgPicture.asset(timeTextFiledIcon),
+                                        ),
+                                        suffixIcon: Column(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.center,
+                                          children: [
+                                            Padding(
+                                              padding: const EdgeInsets.only(
+                                                  right: 16.0),
+                                              child: Text(
+                                                "Hrs",
+                                                style: TextStyle(
+                                                    fontSize:
+                                                        ScreenConfig.fontSizelarge,
+                                                    fontWeight: FontWeight.w300,
+                                                    color:
+                                                        CColors.missonMediumGrey),
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                  Padding(
+                                    padding: const EdgeInsets.symmetric(
+                                        horizontal: 15.0, vertical: 8.0),
+                                    child: TextFormField(
+                                      controller: moneyController,
+                                      readOnly: true,
+                                      decoration: InputDecoration(
+                                        prefixIcon: Padding(
+                                          padding: const EdgeInsets.all(8.0),
+                                          child: SvgPicture.asset(cashLogo),
+                                        ),
+                                        suffixIcon: Column(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.center,
+                                          children: [
+                                            Padding(
+                                              padding: const EdgeInsets.only(
+                                                  right: 16.0),
+                                              child: Text(
+                                                "\$/hr",
+                                                style: TextStyle(
+                                                    fontSize:
+                                                        ScreenConfig.fontSizelarge,
+                                                    fontWeight: FontWeight.w300,
+                                                    color:
+                                                        CColors.missonMediumGrey),
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                  Row(
+                                    children: [
+                                      Padding(
+                                        padding: const EdgeInsets.symmetric(
+                                            horizontal: 16, vertical: 8.0),
+                                        child: Text(
+                                          "Description",
+                                          style: TextStyle(
+                                              fontSize: ScreenConfig.fontSizeXlarge,
+                                              fontWeight: FontWeight.w300,
+                                              color: CColors.missonPrimaryColor),
+                                        ),
+                                      ),
+                                      Spacer()
+                                    ],
+                                  ),
+                                  Padding(
+                                    padding: const EdgeInsets.symmetric(
+                                        horizontal: 30, vertical: 8.0),
+                                    child: Container(
+                                      child: TextFormField(
+                                        controller: descriptionController,
+                                        readOnly: true,
+                                        keyboardType: TextInputType.multiline,
+                                        maxLines: 8,
+                                        decoration: InputDecoration(
+                                          border: OutlineInputBorder(
+                                            borderSide: BorderSide(
+                                              color: CColors.missonMediumGrey,
+                                            ),
+                                          ),
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                  SizedBox(
+                                    height: 30,
+                                  ),
+                                ],
                               ),
-                              SizedBox(height: 10,),
-                              Text(
-                                "Send request for reviews",
-                                style: TextStyle(
-                                    fontSize: ScreenConfig.fontSizelarge,
-                                    fontWeight: FontWeight.bold,
-                                    color: Colors.blue),
+                              ExpansionTile(
+                                tilePadding: EdgeInsets.symmetric(horizontal: 10),
+                                title: Column(
+                                  mainAxisAlignment: MainAxisAlignment.end,
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Text(
+                                      "Mission Status",
+                                      style: TextStyle(
+                                          fontSize: ScreenConfig.fontSizelarge,
+                                          fontWeight: FontWeight.w300,
+                                          color: CColors.missonPrimaryColor),
+                                    ),
+                                  ],
+                                ),
+                                children: [
+                                  Padding(
+                                    padding:
+                                        const EdgeInsets.symmetric(horizontal: 8.0),
+                                    child: TimelineTile(
+                                      alignment: TimelineAlign.start,
+                                      // afterLineStyle: ,
+                                      // isLast: false,
+                                      isFirst: true,
+                                      indicatorStyle: IndicatorStyle(
+                                        width: 20,
+                                        color: CColors.missonGrey,
+                                        // indicator: Text("efdsf"),
+                                        // indicatorXY: 0.7,
+                                        iconStyle: IconStyle(
+                                          color: CColors.missonNormalWhiteColor,
+                                          iconData: Icons.check,
+                                        ),
+                                      ),
+                                      endChild: Padding(
+                                        padding: const EdgeInsets.only(left: 8.0),
+                                        child: Column(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.center,
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.start,
+                                          children: [
+                                            Text(
+                                              "Advance pay",
+                                              style: TextStyle(
+                                                  fontSize:
+                                                      ScreenConfig.fontSizelarge,
+                                                  fontWeight: FontWeight.w500,
+                                                  fontFamily: "Product",
+                                                  color:
+                                                      CColors.missonPrimaryColor),
+                                            ),
+                                          ],
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                  Padding(
+                                    padding:
+                                        const EdgeInsets.symmetric(horizontal: 8.0),
+                                    child: TimelineTile(
+                                      alignment: TimelineAlign.start,
+                                      // afterLineStyle: ,
+                                      // isLast: false,
+                                      // isFirst: true,
+                                      indicatorStyle: IndicatorStyle(
+                                        width: 20,
+                                        color: CColors.missonGrey,
+                                        // indicator: Text("efdsf"),
+                                        // indicatorXY: 0.7,
+                                        iconStyle: IconStyle(
+                                          color: CColors.missonNormalWhiteColor,
+                                          iconData: Icons.check,
+                                        ),
+                                      ),
+                                      endChild: Padding(
+                                        padding: const EdgeInsets.only(
+                                            left: 8.0, top: 30),
+                                        child: Column(
+                                          mainAxisAlignment: MainAxisAlignment.end,
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.start,
+                                          children: [
+                                            Text(
+                                              "Mission Started",
+                                              style: TextStyle(
+                                                  fontSize:
+                                                      ScreenConfig.fontSizelarge,
+                                                  fontWeight: FontWeight.w500,
+                                                  fontFamily: "Product",
+                                                  color:
+                                                      CColors.missonPrimaryColor),
+                                            ),
+                                            SizedBox(
+                                              height: 10,
+                                            ),
+                                            Text(
+                                              "12:36 PM, Thursday, 32 march",
+                                              style: TextStyle(
+                                                  fontSize:
+                                                      ScreenConfig.fontSizeMedium,
+                                                  fontWeight: FontWeight.w500,
+                                                  fontFamily: "Product",
+                                                  color: CColors.missonMediumGrey),
+                                            ),
+                                          ],
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                  Padding(
+                                    padding:
+                                        const EdgeInsets.symmetric(horizontal: 8.0),
+                                    child: TimelineTile(
+                                      alignment: TimelineAlign.start,
+                                      // afterLineStyle: ,
+                                      // isLast: false,
+                                      // isFirst: true,
+                                      indicatorStyle: IndicatorStyle(
+                                        width: 20,
+                                        color: CColors.missonGreen,
+                                        // indicator: Text("efdsf"),
+                                        // indicatorXY: 0.7,
+                                        iconStyle: IconStyle(
+                                          color: CColors.missonNormalWhiteColor,
+                                          iconData: Icons.check,
+                                        ),
+                                      ),
+                                      endChild: Padding(
+                                        padding: const EdgeInsets.only(
+                                            left: 8.0, top: 20),
+                                        child: Column(
+                                          mainAxisAlignment: MainAxisAlignment.end,
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.start,
+                                          children: [
+                                            Text(
+                                              "Mission Accomplished",
+                                              style: TextStyle(
+                                                  fontSize:
+                                                      ScreenConfig.fontSizelarge,
+                                                  fontWeight: FontWeight.w500,
+                                                  fontFamily: "Product",
+                                                  color:
+                                                      CColors.missonPrimaryColor),
+                                            ),
+                                            SizedBox(
+                                              height: 10,
+                                            ),
+                                            Text(
+                                              "12:36 PM, Thursday, 32 march",
+                                              style: TextStyle(
+                                                  fontSize:
+                                                      ScreenConfig.fontSizeMedium,
+                                                  fontWeight: FontWeight.w500,
+                                                  fontFamily: "Product",
+                                                  color: CColors.missonMediumGrey),
+                                            ),
+                                          ],
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                  Padding(
+                                    padding:
+                                        const EdgeInsets.symmetric(horizontal: 8.0),
+                                    child: TimelineTile(
+                                      alignment: TimelineAlign.start,
+                                      // afterLineStyle: ,
+                                      isLast: true,
+                                      // isFirst: true,
+                                      indicatorStyle: IndicatorStyle(
+                                        width: 20,
+                                        color: CColors.missonGrey,
+                                        // indicator: Text("efdsf"),
+                                        // indicatorXY: 0.7,
+                                        iconStyle: IconStyle(
+                                          color: CColors.missonNormalWhiteColor,
+                                          iconData: Icons.check,
+                                        ),
+                                      ),
+                                      endChild: Padding(
+                                        padding: const EdgeInsets.only(
+                                            left: 8.0, top: 20),
+                                        child: Column(
+                                          mainAxisAlignment: MainAxisAlignment.end,
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.start,
+                                          children: [
+                                            Row(
+                                              children: [
+                                                Text(
+                                                  "Total Payment",
+                                                  style: TextStyle(
+                                                      fontSize: ScreenConfig
+                                                          .fontSizelarge,
+                                                      fontWeight: FontWeight.w500,
+                                                      fontFamily: "Product",
+                                                      color: CColors
+                                                          .missonPrimaryColor),
+                                                ),
+                                                Spacer(),
+                                                Text(
+                                                  "\$ 174.00",
+                                                  style: TextStyle(
+                                                      fontSize: ScreenConfig
+                                                          .fontSizelarge,
+                                                      fontWeight: FontWeight.bold,
+                                                      fontFamily: "Product",
+                                                      color: CColors.missonGreen),
+                                                ),
+                                                SizedBox(
+                                                  width: 20,
+                                                )
+                                              ],
+                                            ),
+                                            SizedBox(
+                                              height: 10,
+                                            ),
+                                            Text(
+                                              "View Receipt",
+                                              style: TextStyle(
+                                                  fontSize:
+                                                      ScreenConfig.fontSizeMedium,
+                                                  fontWeight: FontWeight.bold,
+                                                  fontFamily: "Product",
+                                                  color: Colors.blue),
+                                            ),
+                                          ],
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                  SizedBox(
+                                    height: 10,
+                                  ),
+                                ],
                               ),
-                              SizedBox(height: 10,)
+                              ExpansionTile(
+                                tilePadding: EdgeInsets.symmetric(horizontal: 10),
+                                title: Column(
+                                  mainAxisAlignment: MainAxisAlignment.end,
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Text(
+                                      "Mission Reviews",
+                                      style: TextStyle(
+                                          fontSize: ScreenConfig.fontSizelarge,
+                                          fontWeight: FontWeight.w300,
+                                          color: CColors.missonPrimaryColor),
+                                    ),
+                                  ],
+                                ),
+                                children: [
+                                  Column(
+                                    children: [
+                                      SizedBox(
+                                        height: 10,
+                                      ),
+                                      Text(
+                                        "Assigner reviews will be shown here ",
+                                        style: TextStyle(
+                                            fontSize: ScreenConfig.fontSizelarge,
+                                            fontWeight: FontWeight.w300,
+                                            color: CColors.missonPrimaryColor),
+                                      ),
+                                      SizedBox(
+                                        height: 10,
+                                      ),
+                                      Text(
+                                        "Send request for reviews",
+                                        style: TextStyle(
+                                            fontSize: ScreenConfig.fontSizelarge,
+                                            fontWeight: FontWeight.bold,
+                                            color: Colors.blue),
+                                      ),
+                                      SizedBox(
+                                        height: 10,
+                                      )
+                                    ],
+                                  )
+                                ],
+                              ),
+                              SizedBox(height: 120,)
 
                             ],
-                          )
-                        ],
-                      ),
-                      AnimatedSwitcher(
-                        duration: Duration(milliseconds: 400),
-                        transitionBuilder:
-                            (Widget child, Animation<double> animation) {
-                          return ScaleTransition(
-                              child: child, scale: animation);
-                        },
-                        child: bottomView(viewValue),
-                      )
-                    ],
+                          ),
+                        ),
+                        Align(child:     AnimatedSwitcher(
+                          duration: Duration(milliseconds: 400),
+                          transitionBuilder:
+                              (Widget child, Animation<double> animation) {
+                            return ScaleTransition(
+                                child: child, scale: animation);
+                          },
+                          child: bottomView(viewValue),
+                        ),
+                        alignment: Alignment.bottomCenter,
+                        )
+                      ],
+                    ),
                   )),
             ),
     );
