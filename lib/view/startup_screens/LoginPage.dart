@@ -1,9 +1,7 @@
 
-import 'dart:io';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 import 'package:get/get_navigation/src/routes/transitions_type.dart';
@@ -12,11 +10,8 @@ import 'package:misson_tasker/model/api_models/LoginUserModel.dart';
 import 'package:misson_tasker/utils/local_data.dart';
 import 'package:misson_tasker/view/Dashboard.dart';
 
-import '../../main.dart';
-import '../../utils/CColors.dart';
 import '../../utils/CColors.dart';
 import '../../utils/NavMe.dart';
-import '../../utils/ScreenConfig.dart';
 import '../../utils/ScreenConfig.dart';
 import '../../utils/StringsPath.dart';
 import 'ForgetPassword.dart';
@@ -46,6 +41,7 @@ var myToken = "";
 
   @override
   void initState() {
+    clearedShared();
     // TODO: implement initState
     super.initState();
   }
@@ -171,7 +167,7 @@ var myToken = "";
   @override
   Widget build(BuildContext context) {
 
-
+getString(sharedPref.userToken).then((value) => print("TOKEN======+> $value"));
     return Form(
       key: _formKey,
       child: Scaffold(

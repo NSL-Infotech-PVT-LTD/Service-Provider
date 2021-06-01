@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:intl/intl.dart';
 import 'package:misson_tasker/model/ApiCaller.dart';
 import 'package:misson_tasker/model/api_models/GetProfileDataModel.dart';
 import 'package:misson_tasker/utils/CColors.dart';
@@ -24,7 +25,43 @@ class MissionReviewScreen extends StatefulWidget {
 
 class _MissionReviewScreenState extends State<MissionReviewScreen> {
   final _formKey = GlobalKey<FormState>();
-  PanelController _panelController=PanelController();
+  PanelController _panelController = PanelController();
+  final children = <Widget>[];
+  double _currentSliderValue = 3.5;
+  String isShowPositive = "";
+  bool isDescendingIsPressed = true;
+
+  DateTime selectedDate = DateTime.now();
+
+  _selectFilterDate(BuildContext context) async {
+    final DateTime filterTime = await showDatePicker(
+      context: context,
+      initialDate: selectedDate,
+      firstDate: DateTime(2000),
+      lastDate: DateTime.now(),
+    );
+    if (filterTime != null) {
+      setState(() {
+        selectedDate = filterTime;
+      });
+    }
+  }
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    for (var i = 6; i < 11; i++) {
+      children.add(Text(
+        "${i / 2}",
+        style: TextStyle(
+            fontSize: ScreenConfig.fontSizeMedium,
+            color: CColors.missonPrimaryColor,
+            fontFamily: "Product"),
+      ));
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -75,7 +112,6 @@ class _MissionReviewScreenState extends State<MissionReviewScreen> {
           elevation: 0,
         ),
         body: SlidingUpPanel(
-
           controller: _panelController,
           borderRadius: BorderRadius.only(
               topLeft: Radius.circular(20.0), topRight: Radius.circular(20.0)),
@@ -340,9 +376,11 @@ class _MissionReviewScreenState extends State<MissionReviewScreen> {
                                 fontWeight: FontWeight.w500,
                                 fontFamily: "Product"),
                           ),
-                          InkWell(onTap: (){
-                            _panelController.open();
-                          }, child: Icon(Icons.account_tree_rounded))
+                          InkWell(
+                              onTap: () {
+                                _panelController.open();
+                              },
+                              child: Icon(Icons.account_tree_rounded))
                         ],
                       ),
                     ),
@@ -360,7 +398,7 @@ class _MissionReviewScreenState extends State<MissionReviewScreen> {
             ],
           ),
           panel: panelView(),
-          maxHeight: ScreenConfig.screenHeight * 0.80,
+          maxHeight: ScreenConfig.screenHeight * 0.88,
           minHeight: 0,
         ));
   }
@@ -505,20 +543,31 @@ class _MissionReviewScreenState extends State<MissionReviewScreen> {
                         fontWeight: FontWeight.bold,
                         fontFamily: "Product"),
                   ),
-                  SizedBox(height: 15,),
+                  SizedBox(
+                    height: 15,
+                  ),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceAround,
                     children: [
                       ElevatedButton(
                           style: ElevatedButton.styleFrom(
-                            primary: Colors.blue,
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(5),
-                              // side: BorderSide(color: Colors.)
-                            ),
-                            padding: EdgeInsets.symmetric(horizontal:30, vertical: 20)
-                          ),
-                          onPressed: () {},
+                              primary: isDescendingIsPressed == true
+                                  ? Colors.blue
+                                  : CColors.missonNormalWhiteColor,
+                              onPrimary: isDescendingIsPressed == true
+                                  ? CColors.missonNormalWhiteColor
+                                  : CColors.missonPrimaryColor,
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(5),
+                                // side: BorderSide(color: Colors.)
+                              ),
+                              padding: EdgeInsets.symmetric(
+                                  horizontal: 30, vertical: 20)),
+                          onPressed: () {
+                            setState(() {
+                              isDescendingIsPressed = true;
+                            });
+                          },
                           child: Text(
                             "Descending",
                             textAlign: TextAlign.left,
@@ -526,16 +575,24 @@ class _MissionReviewScreenState extends State<MissionReviewScreen> {
                           )),
                       ElevatedButton(
                           style: ElevatedButton.styleFrom(
-                            onPrimary: Colors.black,
-                            primary:CColors.missonNormalWhiteColor,
-                          // textStyle: TextStyle(color: CColors.missonPrimaryColor),
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(5),
-                              // side: BorderSide(color: Colors.)
-                            ),
-                            padding: EdgeInsets.symmetric(horizontal:30, vertical: 20)
-                          ),
-                          onPressed: () {},
+                              onPrimary: isDescendingIsPressed == true
+                                  ? CColors.missonPrimaryColor
+                                  : CColors.missonNormalWhiteColor,
+                              primary: isDescendingIsPressed == true
+                                  ? CColors.missonNormalWhiteColor
+                                  : Colors.blue,
+                              // textStyle: TextStyle(color: CColors.missonPrimaryColor),
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(5),
+                                // side: BorderSide(color: Colors.)
+                              ),
+                              padding: EdgeInsets.symmetric(
+                                  horizontal: 30, vertical: 20)),
+                          onPressed: () {
+                            setState(() {
+                              isDescendingIsPressed = false;
+                            });
+                          },
                           child: Text(
                             "Ascending",
                             textAlign: TextAlign.left,
@@ -545,7 +602,176 @@ class _MissionReviewScreenState extends State<MissionReviewScreen> {
                   )
                 ],
               ),
-            )
+            ),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 15),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    "By date",
+                    style: TextStyle(
+                        color: CColors.missonPrimaryColor,
+                        fontSize: ScreenConfig.fontSizelarge,
+                        fontWeight: FontWeight.bold,
+                        fontFamily: "Product"),
+                  ),
+                  SizedBox(
+                    height: 15,
+                  ),
+                  Container(
+                    width: double.maxFinite,
+                    child: ElevatedButton(
+                        style: ElevatedButton.styleFrom(
+                            primary: CColors.missonNormalWhiteColor,
+                            onPrimary: CColors.missonPrimaryColor,
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(5),
+                              // side: BorderSide(color: Colors.)
+                            ),
+                            padding: EdgeInsets.symmetric(
+                                horizontal: 30, vertical: 20)),
+                        onPressed: () {
+                          _selectFilterDate(context);
+                          print("$selectedDate");
+                        },
+                        child: Row(
+                          children: [
+                            Text(
+                              "${DateFormat.yMd().format(selectedDate)}",
+                              textAlign: TextAlign.left,
+                              style: TextStyle(fontWeight: FontWeight.w500),
+                            ),
+                          ],
+                        )),
+                  )
+                ],
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 15),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    "Rating",
+                    style: TextStyle(
+                        color: CColors.missonPrimaryColor,
+                        fontSize: ScreenConfig.fontSizelarge,
+                        fontWeight: FontWeight.bold,
+                        fontFamily: "Product"),
+                  ),
+                  SizedBox(
+                    height: 15,
+                  ),
+                  Container(
+                    // width: double.maxFinite,
+                    // color: Colors.redAccent,
+                    child: Column(
+                      children: [
+                        SliderTheme(
+                          data: SliderTheme.of(context).copyWith(
+                            activeTrackColor: Colors.blue,
+                            inactiveTrackColor: CColors.missonLightGrey,
+                            trackShape: RoundedRectSliderTrackShape(),
+                            // trackShape: RectangularSliderTrackShape(),
+                            trackHeight: 15.0,
+                            thumbShape: RoundSliderThumbShape(
+                                enabledThumbRadius: 12.0, elevation: 10),
+                            thumbColor: Colors.white,
+                            overlayColor: Colors.blue,
+                            overlayShape:
+                                RoundSliderOverlayShape(overlayRadius: 24.0),
+                            tickMarkShape: RoundSliderTickMarkShape(),
+                            activeTickMarkColor: Colors.white,
+                            inactiveTickMarkColor: CColors.missonMediumGrey,
+                            valueIndicatorShape:
+                                PaddleSliderValueIndicatorShape(),
+                            valueIndicatorColor: Colors.blue,
+                            valueIndicatorTextStyle: TextStyle(
+                              color: Colors.black,
+                            ),
+                          ),
+                          child: Slider(
+                            value: _currentSliderValue,
+                            min: 3,
+                            max: 5,
+                            divisions: 4,
+                            label: _currentSliderValue.toString(),
+                            onChanged: (double value) {
+                              setState(() {
+                                _currentSliderValue = value;
+                                print("$value");
+                              });
+                            },
+                          ),
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 20.0),
+                          child: Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: children),
+                        ),
+                      ],
+                    ),
+                  ),
+                  SizedBox(
+                    height: 20,
+                  ),
+                  ListTile(
+                    horizontalTitleGap: 0,
+                    contentPadding: EdgeInsets.zero,
+                    title: Text(
+                      "Positive reviews",
+                      style: TextStyle(
+                          fontSize: ScreenConfig.fontSizeXlarge,
+                          color: CColors.missonPrimaryColor,
+                          fontFamily: "Product"),
+                    ),
+                    subtitle: Text(
+                      "Filter taskers according to positive reviews",
+                      style: TextStyle(
+                          fontSize: ScreenConfig.fontSizeMedium,
+                          color: CColors.missonMediumGrey,
+                          fontFamily: "Product",
+                          fontWeight: FontWeight.w100),
+                    ),
+                    leading: Radio<String>(
+                      value: "showPositiveReviews",
+                      groupValue: isShowPositive,
+                      onChanged: (value) {
+                        setState(() {
+                          isShowPositive == "$value"
+                              ? isShowPositive = ""
+                              : isShowPositive = "$value";
+                        });
+                      },
+                    ),
+                  )
+                ],
+              ),
+            ),
+            SizedBox(
+              height: 10,
+            ),
+            Container(
+              width: double.maxFinite,
+              height: 60,
+              child: ElevatedButton(
+                  style: ElevatedButton.styleFrom(
+                    primary: CColors.missonPrimaryColor,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.all(Radius.circular(10)),
+                      // side: BorderSide(color: Colors.)
+                    ),
+                  ),
+                  onPressed: () {},
+                  child: Text(
+                    "Apply",
+                    textAlign: TextAlign.left,
+                    style: TextStyle(fontWeight: FontWeight.w500),
+                  )),
+            ),
           ],
         ),
       ),

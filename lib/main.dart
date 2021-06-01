@@ -26,10 +26,6 @@ final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
 Future _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
   await Firebase.initializeApp();
   print('IN THE ON Background ===============>>>>>>>>>>> ${message.data}');
-  setString("target_id", message.data["target_id"]);
-  getString("target_id").then((value) {
-    print("======target_id==============> $value");
-  });
 }
 
 //check kri
@@ -68,8 +64,10 @@ class _MyAppState extends State<MyApp> {
   var initializationSettings;
 
   initializePlatformSpecifics() {
+    // var initializationSettingsAndroid =
+    //     AndroidInitializationSettings('app_notf_icon');
     var initializationSettingsAndroid =
-        AndroidInitializationSettings('app_notf_icon');
+    AndroidInitializationSettings('@mipmap/ic_launcher');
     var initializationSettingsIOS = IOSInitializationSettings(
       requestAlertPermission: true,
       requestBadgePermission: true,
@@ -86,14 +84,11 @@ class _MyAppState extends State<MyApp> {
     await flutterLocalNotificationsPlugin.initialize(initializationSettings,
         onSelectNotification: (String payload) async {
       print("======LOCAL NOTIFICATION======> $payload");
+      print("======TOKEN======> $token");
 
       Map myMap = jsonDecode(payload);
 
-      print("====myMap====>${json.encode(payload)}");
-      print("====myMap====>${json.decode(payload)["target_id"]}");
-      print("====myMap====>${myMap["target_id"]}");
-      print("====myMap====>$payload}");
-      if (myMap["data_type"] == "Job") {
+      if (myMap["data_type"] == "Job"&& token!=null) {
         print("${myMap}");
 
         Get.to(MissionRequest(id: myMap["target_id"]),
@@ -105,11 +100,19 @@ class _MyAppState extends State<MyApp> {
 
   @override
   void initState() {
-    getString("target_id").then((value) {
-      print("======target_id==============> $value");
+    getString(sharedPref.userToken).then((value) {
+      if(value!=null)
+        {
+          token=value;
+          print("======token==============> $value");
+        }else{
+        print("ELSE =============>$token");
+      }
+    }).whenComplete(() {
+      initializePlatformSpecifics();
+      getMe();
     });
-    initializePlatformSpecifics();
-    getMe();
+
 
     FirebaseMessaging.instance.requestPermission();
     print("CHECK $token");
@@ -152,12 +155,8 @@ class _MyAppState extends State<MyApp> {
 
         if (message.data["data_type"] == "Job") {
           print("${message.data}");
-          setString("target_id", message.data["target_id"]);
-          getString("target_id").then((value) {
-            print("======target_id==============> $value");
-
-            print("123 $value");
-          });
+          print("$token=================>");
+         if(token!=null)
           Get.to(MissionRequest(id: message.data["target_id"]),
               transition: Transition.leftToRightWithFade,
               duration: Duration(milliseconds: 400));
