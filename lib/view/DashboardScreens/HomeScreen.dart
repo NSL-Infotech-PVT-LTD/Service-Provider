@@ -11,10 +11,12 @@ import 'package:misson_tasker/utils/NavMe.dart';
 import 'package:misson_tasker/utils/ScreenConfig.dart';
 import 'package:misson_tasker/utils/StringsPath.dart';
 import 'package:misson_tasker/utils/local_data.dart';
+import 'package:misson_tasker/view/Chat/ChatScreen.dart';
 import 'package:misson_tasker/view/MissonRequestScreen/MissionRequest.dart';
 import 'package:misson_tasker/view/ProfileView/BusinessProfile.dart';
 import 'package:misson_tasker/view/startup_screens/Drawer.dart';
 import 'package:misson_tasker/view/startup_screens/SplashScreen.dart';
+import 'package:web_socket_channel/io.dart';
 
 class HomeScreen extends StatefulWidget {
   GetProfileDataModel getProfileDataModel;
@@ -40,10 +42,10 @@ class _HomeScreenState extends State<HomeScreen> {
   MissionRequestModel missionRequestModelConfirmed;
   MissionRequestModel missionRequest;
   String username;
-  RemoteMessage initialMessage ;
-  getMe()async{
+  RemoteMessage initialMessage;
 
-    initialMessage= await FirebaseMessaging.instance.getInitialMessage();
+  getMe() async {
+    initialMessage = await FirebaseMessaging.instance.getInitialMessage();
     if (initialMessage.data["data_type"] == "Job") {
       print("${initialMessage.data}");
       setString("target_id", initialMessage.data["target_id"]);
@@ -55,8 +57,25 @@ class _HomeScreenState extends State<HomeScreen> {
       Get.to(MissionRequest(id: initialMessage.data["target_id"]),
           transition: Transition.leftToRightWithFade,
           duration: Duration(milliseconds: 400));
+    } else if (initialMessage.data["data_type"] == "Message") {
+      Get.to(
+          ChatScreen(
+              reciverName: "${initialMessage.data["sender_name"]}",
+              image: "${initialMessage.data["profile_img"]}",
+              receiverId: "${initialMessage.data["target_id"]}",
+              channel: IOWebSocketChannel.connect("ws://23.20.179.178:8080/")),
+          transition: Transition.leftToRightWithFade,
+          duration: Duration(milliseconds: 400));
     }
+    else
+      {
+        // if (token != null)
+          Get.to(MissionRequest(id: initialMessage.data["target_id"]),
+              transition: Transition.leftToRightWithFade,
+              duration: Duration(milliseconds: 400));
+      }
   }
+
   @override
   void initState() {
     getString(sharedPref.userToken).then((value) {
@@ -107,8 +126,7 @@ class _HomeScreenState extends State<HomeScreen> {
           .then((value) {
         missionRequestModelOnGoing = value;
 
-        print("FFFFFFFFFFFFF ${  missionRequestModelOnGoing.toJson()}");
-
+        print("FFFFFFFFFFFFF ${missionRequestModelOnGoing.toJson()}");
       }).whenComplete(() {
         setState(() {
           isLoadingData = false;
@@ -228,96 +246,95 @@ class _HomeScreenState extends State<HomeScreen> {
     // print("YEH ====> ${widget.missionRequest.toJson()}");
 
     return Container(
-       color: CColors.missonNormalWhiteColor,
+      color: CColors.missonNormalWhiteColor,
       child: Scaffold(
-              key: _drawerKey,
-              onDrawerChanged: (isOpened) {
-                print(isOpened);
-                if (isOpened == false) {
-                  getSharedPref(widget);
-                }
-              },
-              drawer: Drawer(
-                  // Add a ListView to the drawer. This ensures the user can scroll
-                  // through the options in the drawer if there isn't enough vertical
-                  // space to fit everything.
-                  child: MyDrawer(
-                    auth: _auth,
-                username: widget.getProfileDataModel.data.user.name,
-                ImageUrl: widget.getProfileDataModel == null ||
-                        widget.getProfileDataModel.data == null ||
-                        widget.getProfileDataModel.data.user == null ||
-                        widget.getProfileDataModel.data.user.image == null
-                    ? null
-                    : widget.getProfileDataModel.data.user.image,
-              )),
-              appBar: AppBar(
-                elevation: 0,
-                backgroundColor: CColors.missonNormalWhiteColor,
-                titleSpacing: -1.0,
-                leading: InkWell(
-                  onTap: () {
-                    _drawerKey.currentState.openDrawer();
-                  },
-                  child: Padding(
-                    padding: const EdgeInsets.all(18.0),
-                    child: SvgPicture.asset(drawerIcon),
+        key: _drawerKey,
+        onDrawerChanged: (isOpened) {
+          print(isOpened);
+          if (isOpened == false) {
+            getSharedPref(widget);
+          }
+        },
+        drawer: Drawer(
+            // Add a ListView to the drawer. This ensures the user can scroll
+            // through the options in the drawer if there isn't enough vertical
+            // space to fit everything.
+            child: MyDrawer(
+          auth: _auth,
+          username: widget.getProfileDataModel.data.user.name,
+          ImageUrl: widget.getProfileDataModel == null ||
+                  widget.getProfileDataModel.data == null ||
+                  widget.getProfileDataModel.data.user == null ||
+                  widget.getProfileDataModel.data.user.image == null
+              ? null
+              : widget.getProfileDataModel.data.user.image,
+        )),
+        appBar: AppBar(
+          elevation: 0,
+          backgroundColor: CColors.missonNormalWhiteColor,
+          titleSpacing: -1.0,
+          leading: InkWell(
+            onTap: () {
+              _drawerKey.currentState.openDrawer();
+            },
+            child: Padding(
+              padding: const EdgeInsets.all(18.0),
+              child: SvgPicture.asset(drawerIcon),
+            ),
+          ),
+          title: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                "current location",
+                textAlign: TextAlign.left,
+                style: TextStyle(
+                    fontSize: ScreenConfig.fontSizeSmall,
+                    color: CColors.textColor),
+              ),
+              Text(
+                "${widget.getProfileDataModel.data.user.location}",
+                style: TextStyle(
+                    fontSize: ScreenConfig.fontSizeMedium,
+                    color: CColors.textColor),
+                textAlign: TextAlign.left,
+              ),
+            ],
+          ),
+          actions: [
+            Padding(
+              padding: EdgeInsets.only(right: 16.0),
+              child: InkWell(
+                onTap: () {
+                  // NavMe().NavPushLeftToRight(BusinessProfile());
+                  Get.to(BusinessProfile(),
+                          transition: Transition.leftToRightWithFade,
+                          duration: Duration(milliseconds: 400))
+                      .then((value) {
+                    getSharedPref(widget);
+                  }).whenComplete(() {
+                    setState(() {});
+                  });
+                },
+                child: CircleAvatar(
+                  backgroundColor: CColors.missonGrey,
+                  // radius: ,
+                  child: CircleAvatar(
+                    backgroundImage: widget.getProfileDataModel == null ||
+                            widget.getProfileDataModel.data == null ||
+                            widget.getProfileDataModel.data.user == null ||
+                            widget.getProfileDataModel.data.user.image == null
+                        ? AssetImage(avatar1)
+                        : NetworkImage(
+                            "${widget.getProfileDataModel.data.user.image}"),
                   ),
                 ),
-                title: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      "current location",
-                      textAlign: TextAlign.left,
-                      style: TextStyle(
-                          fontSize: ScreenConfig.fontSizeSmall,
-                          color: CColors.textColor),
-                    ),
-                    Text(
-                      "${widget.getProfileDataModel.data.user.location}",
-                      style: TextStyle(
-                          fontSize: ScreenConfig.fontSizeMedium,
-                          color: CColors.textColor),
-                      textAlign: TextAlign.left,
-                    ),
-                  ],
-                ),
-                actions: [
-                  Padding(
-                    padding: EdgeInsets.only(right: 16.0),
-                    child: InkWell(
-                      onTap: () {
-                        // NavMe().NavPushLeftToRight(BusinessProfile());
-                        Get.to(BusinessProfile(),
-                                transition: Transition.leftToRightWithFade,
-                                duration: Duration(milliseconds: 400))
-                            .then((value) {
-                          getSharedPref(widget);
-                        }).whenComplete(() {
-                          setState(() {});
-                        });
-                      },
-                      child: CircleAvatar(
-                        backgroundColor: CColors.missonGrey,
-                        // radius: ,
-                        child: CircleAvatar(
-                          backgroundImage: widget.getProfileDataModel == null ||
-                                  widget.getProfileDataModel.data == null ||
-                                  widget.getProfileDataModel.data.user == null ||
-                                  widget.getProfileDataModel.data.user.image ==
-                                      null
-                              ? AssetImage(avatar1)
-                              : NetworkImage(
-                                  "${widget.getProfileDataModel.data.user.image}"),
-                        ),
-                      ),
-                    ),
-                  )
-                ],
               ),
-              body: currentView(1),
-            ),
+            )
+          ],
+        ),
+        body: currentView(1),
+      ),
     );
   }
 
@@ -406,61 +423,64 @@ class _HomeScreenState extends State<HomeScreen> {
                       height: 170,
                       width: ScreenConfig.screenWidth,
                       color: CColors.backgroundRed,
-                      child:missionRequest==null ? Center(child:spinkit):missionRequest.data.data.isEmpty
-                          ? Center(
-                              child: Container(
-                                child: Text("No Mission Request to show "),
-                              ),
-                            )
-                          : listOfRequestsPending.isEmpty
-                          ? Center(child: Text("There is no data to show"))
-                          : ListView.builder(
-                              itemBuilder: (context, index) {
-                                return Padding(
-                                        padding: const EdgeInsets.symmetric(
-                                            vertical: 20.0, horizontal: 10),
-                                        child: InkWell(
-                                          onTap: () {
-                                            // NavMe().NavPushLeftToRight(MissionRequest(
-                                            //   id: widget.missionRequest.data.data
-                                            //       .elementAt(index)
-                                            //       .id
-                                            //       .toString(),
-                                            // ));
+                      child: missionRequest == null
+                          ? Center(child: spinkit)
+                          : missionRequest.data.data.isEmpty
+                              ? Center(
+                                  child: Container(
+                                    child: Text("No Mission Request to show "),
+                                  ),
+                                )
+                              : listOfRequestsPending.isEmpty
+                                  ? Center(
+                                      child: Text("There is no data to show"))
+                                  : ListView.builder(
+                                      itemBuilder: (context, index) {
+                                        return Padding(
+                                          padding: const EdgeInsets.symmetric(
+                                              vertical: 20.0, horizontal: 10),
+                                          child: InkWell(
+                                            onTap: () {
+                                              // NavMe().NavPushLeftToRight(MissionRequest(
+                                              //   id: widget.missionRequest.data.data
+                                              //       .elementAt(index)
+                                              //       .id
+                                              //       .toString(),
+                                              // ));
 
-                                            Get.to(
-                                                    MissionRequest(
-                                                      id: listOfRequestsPending
-                                                          .elementAt(index)
-                                                          .id
-                                                          .toString(),
-                                                    ),
-                                                    transition: Transition
-                                                        .leftToRightWithFade,
-                                                    duration: Duration(
-                                                        milliseconds: 400))
-                                                .then((value) => initState());
-                                          },
-                                          child: customTile(
-                                              heading:
-                                                  "${listOfRequestsPending.elementAt(index).title}",
-                                              // heading: "sdf",
-                                              subheading:
-                                                  "${listOfRequestsPending.elementAt(index).startTime.split(":").elementAt(0)}: ${listOfRequestsPending.elementAt(index).startTime.split(":").elementAt(1)}, ${getWeekDay(listOfRequestsPending.elementAt(index).startDate.weekday)}, ${listOfRequestsPending.elementAt(index).startDate.day} ${getMonth(listOfRequestsPending.elementAt(index).startDate.month)}",
-                                              lines: "Mission details",
-                                              bottomLineColor:
-                                                  CColors.missonRed,
-                                              tileColor: CColors
-                                                  .missonNormalWhiteColor),
-                                        ),
-                                      );
-                              },
-                              itemCount: listOfRequestsPending.isEmpty
-                                  ? 1
-                                  : listOfRequestsPending.length,
-                              // itemCount: 1,
-                              scrollDirection: Axis.horizontal,
-                            )),
+                                              Get.to(
+                                                      MissionRequest(
+                                                        id: listOfRequestsPending
+                                                            .elementAt(index)
+                                                            .id
+                                                            .toString(),
+                                                      ),
+                                                      transition: Transition
+                                                          .leftToRightWithFade,
+                                                      duration: Duration(
+                                                          milliseconds: 400))
+                                                  .then((value) => initState());
+                                            },
+                                            child: customTile(
+                                                heading:
+                                                    "${listOfRequestsPending.elementAt(index).title}",
+                                                // heading: "sdf",
+                                                subheading:
+                                                    "${listOfRequestsPending.elementAt(index).startTime.split(":").elementAt(0)}: ${listOfRequestsPending.elementAt(index).startTime.split(":").elementAt(1)}, ${getWeekDay(listOfRequestsPending.elementAt(index).startDate.weekday)}, ${listOfRequestsPending.elementAt(index).startDate.day} ${getMonth(listOfRequestsPending.elementAt(index).startDate.month)}",
+                                                lines: "Mission details",
+                                                bottomLineColor:
+                                                    CColors.missonRed,
+                                                tileColor: CColors
+                                                    .missonNormalWhiteColor),
+                                          ),
+                                        );
+                                      },
+                                      itemCount: listOfRequestsPending.isEmpty
+                                          ? 1
+                                          : listOfRequestsPending.length,
+                                      // itemCount: 1,
+                                      scrollDirection: Axis.horizontal,
+                                    )),
                   ListTile(
                     dense: true,
 
@@ -721,11 +741,14 @@ class _HomeScreenState extends State<HomeScreen> {
                                       ),
                                     );
                                   },
-                                  itemCount:missionRequestModelConfirmed==null? missionRequestModelConfirmed
-                                          .data.data.isEmpty
-                                      ? 0
-                                      : missionRequestModelConfirmed
-                                          .data.data.length:0,
+                                  itemCount:
+                                      missionRequestModelConfirmed == null
+                                          ? missionRequestModelConfirmed
+                                                  .data.data.isEmpty
+                                              ? 0
+                                              : missionRequestModelConfirmed
+                                                  .data.data.length
+                                          : 0,
                                   scrollDirection: Axis.horizontal,
                                 )),
                 ],

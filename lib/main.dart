@@ -7,11 +7,13 @@ import 'package:get/get.dart';
 import 'package:get/get_navigation/src/root/get_material_app.dart';
 import 'package:misson_tasker/utils/CColors.dart';
 import 'package:misson_tasker/utils/local_data.dart';
+import 'package:misson_tasker/view/Chat/ChatScreen.dart';
 import 'package:misson_tasker/view/MissonRequestScreen/MissionRequest.dart';
 import 'package:misson_tasker/view/startup_screens/SplashScreen.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
+import 'package:web_socket_channel/io.dart';
 
 const AndroidNotificationChannel channel = AndroidNotificationChannel(
     'high_importance_channel', // id
@@ -67,7 +69,7 @@ class _MyAppState extends State<MyApp> {
     // var initializationSettingsAndroid =
     //     AndroidInitializationSettings('app_notf_icon');
     var initializationSettingsAndroid =
-    AndroidInitializationSettings('@mipmap/ic_launcher');
+        AndroidInitializationSettings('@mipmap/ic_launcher');
     var initializationSettingsIOS = IOSInitializationSettings(
       requestAlertPermission: true,
       requestBadgePermission: true,
@@ -88,31 +90,47 @@ class _MyAppState extends State<MyApp> {
 
       Map myMap = jsonDecode(payload);
 
-      if (myMap["data_type"] == "Job"&& token!=null) {
+      if (myMap["data_type"] == "Job" && token != null) {
         print("$myMap");
 
         Get.to(MissionRequest(id: myMap["target_id"]),
             transition: Transition.leftToRightWithFade,
             duration: Duration(milliseconds: 400));
       }
+      else if (myMap["data_type"] == "Message") {
+        Get.to(
+            ChatScreen(
+                reciverName: "${myMap["sender_name"]}",
+                image: "${myMap["profile_img"]}",
+                receiverId: "${myMap["target_id"]}",
+                channel:
+                IOWebSocketChannel.connect("ws://23.20.179.178:8080/")),
+            transition: Transition.leftToRightWithFade,
+            duration: Duration(milliseconds: 400));
+      }
+      else
+        {
+          if (token != null)
+            Get.to(MissionRequest(id: myMap["target_id"]),
+                transition: Transition.leftToRightWithFade,
+                duration: Duration(milliseconds: 400));
+        }
     });
   }
 
   @override
   void initState() {
     getString(sharedPref.userToken).then((value) {
-      if(value!=null)
-        {
-          token=value;
-          print("======token==============> $value");
-        }else{
+      if (value != null) {
+        token = value;
+        print("======token==============> $value");
+      } else {
         print("ELSE =============>$token");
       }
     }).whenComplete(() {
       initializePlatformSpecifics();
       getMe();
     });
-
 
     FirebaseMessaging.instance.requestPermission();
     print("CHECK $token");
@@ -156,15 +174,26 @@ class _MyAppState extends State<MyApp> {
         if (message.data["data_type"] == "Job") {
           print("${message.data}");
           print("$token=================>");
-         if(token!=null)
-          Get.to(MissionRequest(id: message.data["target_id"]),
+          if (token != null)
+            Get.to(MissionRequest(id: message.data["target_id"]),
+                transition: Transition.leftToRightWithFade,
+                duration: Duration(milliseconds: 400));
+        } else if (message.data["data_type"] == "Message") {
+          Get.to(
+              ChatScreen(
+                  reciverName: "${message.data["sender_name"]}",
+                  image: "${message.data["profile_img"]}",
+                  receiverId: "${message.data["target_id"]}",
+                  channel:
+                      IOWebSocketChannel.connect("ws://23.20.179.178:8080/")),
               transition: Transition.leftToRightWithFade,
               duration: Duration(milliseconds: 400));
-        }else if( message.data["data_type"] == "Job"){
-
-          Get.to(MissionRequest(id: message.data["target_id"]),
-              transition: Transition.leftToRightWithFade,
-              duration: Duration(milliseconds: 400));
+        }
+        else{
+          if (token != null)
+            Get.to(MissionRequest(id: message.data["target_id"]),
+                transition: Transition.leftToRightWithFade,
+                duration: Duration(milliseconds: 400));
         }
       }
     });
