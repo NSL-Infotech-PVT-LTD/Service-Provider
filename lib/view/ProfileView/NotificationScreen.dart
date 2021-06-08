@@ -9,8 +9,10 @@ import 'package:misson_tasker/utils/CColors.dart';
 import 'package:misson_tasker/utils/ScreenConfig.dart';
 import 'package:misson_tasker/utils/StringsPath.dart';
 import 'package:misson_tasker/utils/local_data.dart';
+import 'package:misson_tasker/view/Chat/ChatScreen.dart';
 import 'package:misson_tasker/view/MissonRequestScreen/MissionRequest.dart';
 import 'package:misson_tasker/view/startup_screens/SplashScreen.dart';
+import 'package:web_socket_channel/io.dart';
 
 class NotificationScreen extends StatefulWidget {
   @override
@@ -136,30 +138,54 @@ class _NotificationScreenState extends State<NotificationScreen> {
                                 child: Text("There is no notification to show"))
                             : InkWell(
                                 onTap: () {
+                                  // print("=======>${notificationModel.data.data
+                                  //     .elementAt(index)
+                                  //     .bookingDetail
+                                  //     .jobId}");
                                   ApiCaller()
                                       .readNotification(
                                           auth: auth,
                                           Id: notificationModel.data.data
                                               .elementAt(index)
-                                              .
-                                              id
+                                              .id
                                               .toString())
                                       .then((value) =>
                                           print("IS READ${value.toJson()}"))
                                       .whenComplete(() {
-                                    Get.to(
-                                            MissionRequest(
-                                              id: notificationModel.data.data
-                                                  .elementAt(index)
-                                                  .bookingDetail
-                                                  .targetId
-                                                  .toString(),
-                                            ),
-                                            transition:
-                                                Transition.leftToRightWithFade,
-                                            duration:
-                                                Duration(milliseconds: 400))
-                                        .then((value) => initState());
+                                    notificationModel.data.data
+                                                .elementAt(index)
+                                                .bookingDetail ==
+                                            null
+                                        ? Get.to(
+                                                ChatScreen(
+                                                    reciverName:
+                                                        "${notificationModel.data.data.elementAt(index).customerDetail.name.toString()}",
+                                                    image:
+                                                        "${notificationModel.data.data.elementAt(index).customerDetail.image}",
+                                                    receiverId:
+                                                        "${notificationModel.data.data.elementAt(index).customerDetail.id}",
+                                                    channel: IOWebSocketChannel
+                                                        .connect(
+                                                            "ws://23.20.179.178:8080/")),
+                                                transition: Transition
+                                                    .leftToRightWithFade,
+                                                duration:
+                                                    Duration(milliseconds: 400))
+                                            .then((value) => initState())
+                                        : Get.to(
+                                                MissionRequest(
+                                                  id: notificationModel
+                                                      .data.data
+                                                      .elementAt(index)
+                                                      .bookingDetail
+                                                      .targetId
+                                                      .toString(),
+                                                ),
+                                                transition: Transition
+                                                    .leftToRightWithFade,
+                                                duration:
+                                                    Duration(milliseconds: 400))
+                                            .then((value) => initState());
                                   });
                                 },
                                 child: listCard(
@@ -169,7 +195,7 @@ class _NotificationScreenState extends State<NotificationScreen> {
                                     subtitle:
                                         "${notificationModel.data.data.elementAt(index).body}",
                                     time:
-                                        "${DateFormat.jm().format(DateTime.parse(notificationModel.data.data.elementAt(index).updatedAt.toString()+"Z"))} ",
+                                        "${DateFormat.jm().format(DateTime.parse(notificationModel.data.data.elementAt(index).updatedAt.toString() + "Z"))} ",
                                     showBadge: notificationModel.data.data
                                                 .elementAt(index)
                                                 .isRead !=
