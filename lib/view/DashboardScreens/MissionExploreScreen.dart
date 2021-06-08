@@ -100,7 +100,7 @@ class _MissionExploreScreenState extends State<MissionExploreScreen> {
             ),
           ),
           appBar: myCustomAppBar(
-            titleHeading: "MissionExplore",
+            titleHeading: "Mission Explore",
             titleSubHeading: "You can search for the mission you\nwant to do",
             tabBarList: [Text("Posted"), Text("Requested")],
             drawerKey: _drawerKey,
@@ -320,7 +320,7 @@ class _MissionExploreScreenState extends State<MissionExploreScreen> {
                       "Posted $type",
                       style: TextStyle(
                           fontWeight: FontWeight.w400,
-                          fontSize: ScreenConfig.fontSizeSmall,
+                           fontSize: ScreenConfig.fontSizeSmall,
                           color: CColors.missonMediumGrey),
                     ),
                   ],

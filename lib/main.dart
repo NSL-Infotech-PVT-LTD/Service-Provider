@@ -89,7 +89,7 @@ class _MyAppState extends State<MyApp> {
       Map myMap = jsonDecode(payload);
 
       if (myMap["data_type"] == "Job"&& token!=null) {
-        print("${myMap}");
+        print("$myMap");
 
         Get.to(MissionRequest(id: myMap["target_id"]),
             transition: Transition.leftToRightWithFade,
@@ -160,6 +160,11 @@ class _MyAppState extends State<MyApp> {
           Get.to(MissionRequest(id: message.data["target_id"]),
               transition: Transition.leftToRightWithFade,
               duration: Duration(milliseconds: 400));
+        }else if( message.data["data_type"] == "Job"){
+
+          Get.to(MissionRequest(id: message.data["target_id"]),
+              transition: Transition.leftToRightWithFade,
+              duration: Duration(milliseconds: 400));
         }
       }
     });
@@ -167,22 +172,22 @@ class _MyAppState extends State<MyApp> {
     super.initState();
   }
 
-  void _showNotification() {
-    flutterLocalNotificationsPlugin.show(
-        0,
-        "Testing",
-        "How you doin ?",
-        NotificationDetails(
-            android: AndroidNotificationDetails(
-          channel.id,
-          channel.name,
-          channel.description,
-          importance: Importance.high,
-          color: Colors.blue,
-          playSound: true,
-          icon: '@mipmap/ic_launcher',
-        )));
-  }
+  // void _showNotification() {
+  //   flutterLocalNotificationsPlugin.show(
+  //       0,
+  //       "Testing",
+  //       "How you doin ?",
+  //       NotificationDetails(
+  //           android: AndroidNotificationDetails(
+  //         channel.id,
+  //         channel.name,
+  //         channel.description,
+  //         importance: Importance.high,
+  //         color: Colors.blue,
+  //         playSound: true,
+  //         icon: '@mipmap/ic_launcher',
+  //       )));
+  // }
 
   @override
   Widget build(BuildContext context) {
