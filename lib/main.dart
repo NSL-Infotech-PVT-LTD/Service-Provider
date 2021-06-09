@@ -63,16 +63,16 @@ class MyApp extends StatefulWidget {
 
 class _MyAppState extends State<MyApp> {
   var token;
-  var initializationSettings;
+  var initializationSettings ;
 
   initializePlatformSpecifics() {
     // var initializationSettingsAndroid =
-    //     AndroidInitializationSettings('app_notf_icon');
+    //     AndroidInitializationSett  ings('app_notf_icon');
     var initializationSettingsAndroid =
         AndroidInitializationSettings('@mipmap/ic_launcher');
     var initializationSettingsIOS = IOSInitializationSettings(
       requestAlertPermission: true,
-      requestBadgePermission: true,
+       requestBadgePermission: true,
       requestSoundPermission: false,
       onDidReceiveLocalNotification: (id, title, body, payload) async {
         // your call back to the UI

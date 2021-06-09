@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:misson_tasker/model/ApiCaller.dart';
+import 'package:misson_tasker/utils/AnimatorUtil.dart';
 import 'package:misson_tasker/utils/CColors.dart';
 import 'package:misson_tasker/utils/NavMe.dart';
 import 'package:misson_tasker/utils/ScreenConfig.dart';
@@ -135,224 +136,238 @@ class _MyDrawerState extends State<MyDrawer> {
           Divider(
             color: CColors.missonDividerGrey,
           ),
-          Column(
-            children: [
-              SizedBox(
-                height: ScreenConfig.screenHeight * 0.07,
-              ),
-              ListTile(
-                title: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      'Dashboard',
-                      style: TextStyle(
-                          color: CColors.missonNormalWhiteColor,
-                          fontSize: ScreenConfig.fontSizeXlarge),
-                    ),
-                    Container(
-                      width: ScreenConfig.screenWidth * 0.4,
-                      child: Divider(
-                        color: Colors.white,
-                      ),
-                    )
-                  ],
+          TweenAnimationBuilder(
+            builder: (BuildContext context, double val, Widget child) {
+              return
+                Opacity(
+                  opacity: val,
+                  child: Padding(
+                    padding: EdgeInsets.only(top: val*30),
+                    child: child,
+                  ),
+                );
+            },
+            tween: Tween<double>(begin: 0, end: 1),
+            duration: AnimatorUtil.animationSpeedTimeFast,
+            child: Column(
+              children: [
+                SizedBox(
+                  height: ScreenConfig.screenHeight * 0.07,
                 ),
-                onTap: () {
-                  // Update the state of the app
-                  // ...
-                  // Then close the MyDrawer
-                  Navigator.pop(context);
-                },
-              ),
-              SizedBox(
-                height: ScreenConfig.widgetPaddingLarge,
-              ),
-              ListTile(
-                title: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      'Missions History',
-                      style: TextStyle(
-                          color: CColors.missonNormalWhiteColor,
-                          fontSize: ScreenConfig.fontSizeXlarge),
-                    ),
-                    Container(
-                      width: ScreenConfig.screenWidth * 0.4,
-                      child: Divider(
-                        color: Colors.white,
+                ListTile(
+                  title: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        'Dashboard',
+                        style: TextStyle(
+                            color: CColors.missonNormalWhiteColor,
+                            fontSize: ScreenConfig.fontSizeXlarge),
                       ),
-                    )
-                  ],
+                      Container(
+                        width: ScreenConfig.screenWidth * 0.4,
+                        child: Divider(
+                          color: Colors.white,
+                        ),
+                      )
+                    ],
+                  ),
+                  onTap: () {
+                    // Update the state of the app
+                    // ...
+                    // Then close the MyDrawer
+                    Navigator.pop(context);
+                  },
                 ),
-                onTap: () {
-                  // Update the state of the app
-                  // ...
-                  // Then close the MyDrawer
-                  // Navigator.pop(context);
-                  NavMe().NavPushLeftToRight(MissionHistoryScreen());
-                },
-              ),
-              SizedBox(
-                height: ScreenConfig.widgetPaddingLarge,
-              ),
-              ListTile(
-                title: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      'Missions Review',
-                      style: TextStyle(
-                          color: CColors.missonNormalWhiteColor,
-                          fontSize: ScreenConfig.fontSizeXlarge),
-                    ),
-                    Container(
-                      width: ScreenConfig.screenWidth * 0.4,
-                      child: Divider(
-                        color: Colors.white,
+                SizedBox(
+                  height: ScreenConfig.widgetPaddingLarge,
+                ),
+                ListTile(
+                  title: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        'Missions History',
+                        style: TextStyle(
+                            color: CColors.missonNormalWhiteColor,
+                            fontSize: ScreenConfig.fontSizeXlarge),
                       ),
-                    )
-                  ],
+                      Container(
+                        width: ScreenConfig.screenWidth * 0.4,
+                        child: Divider(
+                          color: Colors.white,
+                        ),
+                      )
+                    ],
+                  ),
+                  onTap: () {
+                    // Update the state of the app
+                    // ...
+                    // Then close the MyDrawer
+                    // Navigator.pop(context);
+                    NavMe().NavPushLeftToRight(MissionHistoryScreen());
+                  },
                 ),
-                onTap: () {
-                  NavMe().NavPushLeftToRight(MissionReviewScreen());
-                  // Update the state of the app
-                  // ...
-                  // Then close the MyDrawer
-                  // Navigator.pop(context);
-                },
-              ),
-              SizedBox(
-                height: ScreenConfig.widgetPaddingLarge,
-              ),
-              ListTile(
-                title: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      'Payment History',
-                      style: TextStyle(
-                          color: CColors.missonNormalWhiteColor,
-                          fontSize: ScreenConfig.fontSizeXlarge),
-                    ),
-                    Container(
-                      width: ScreenConfig.screenWidth * 0.4,
-                      child: Divider(
-                        color: Colors.white,
+                SizedBox(
+                  height: ScreenConfig.widgetPaddingLarge,
+                ),
+                ListTile(
+                  title: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        'Missions Review',
+                        style: TextStyle(
+                            color: CColors.missonNormalWhiteColor,
+                            fontSize: ScreenConfig.fontSizeXlarge),
                       ),
-                    )
-                  ],
+                      Container(
+                        width: ScreenConfig.screenWidth * 0.4,
+                        child: Divider(
+                          color: Colors.white,
+                        ),
+                      )
+                    ],
+                  ),
+                  onTap: () {
+                    NavMe().NavPushLeftToRight(MissionReviewScreen());
+                    // Update the state of the app
+                    // ...
+                    // Then close the MyDrawer
+                    // Navigator.pop(context);
+                  },
                 ),
-                onTap: () {
-                  // Update the state of the app
-                  // ...
-                  // Then close the MyDrawer
-               //   getFcmToken();
+                SizedBox(
+                  height: ScreenConfig.widgetPaddingLarge,
+                ),
+                ListTile(
+                  title: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        'Payment History',
+                        style: TextStyle(
+                            color: CColors.missonNormalWhiteColor,
+                            fontSize: ScreenConfig.fontSizeXlarge),
+                      ),
+                      Container(
+                        width: ScreenConfig.screenWidth * 0.4,
+                        child: Divider(
+                          color: Colors.white,
+                        ),
+                      )
+                    ],
+                  ),
+                  onTap: () {
+                    // Update the state of the app
+                    // ...
+                    // Then close the MyDrawer
+                 //   getFcmToken();
 
-                  // Navigator.pop(context);
-                },
-              ),
-              SizedBox(
-                height: ScreenConfig.widgetPaddingLarge,
-              ),
-              ListTile(
-                title: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      'Settings',
-                      style: TextStyle(
-                          color: CColors.missonNormalWhiteColor,
-                          fontSize: ScreenConfig.fontSizeXlarge),
-                    ),
-                    Container(
-                      width: ScreenConfig.screenWidth * 0.4,
-                      child: Divider(
-                        color: Colors.white,
-                      ),
-                    )
-                  ],
+                    // Navigator.pop(context);
+                  },
                 ),
-                onTap: () {
-                  // Update the state of the app
-                  // ...
-                  // Then close the MyDrawer
-                  NavMe().NavPushLeftToRight(SettingPage());
-                },
-              ),
-              SizedBox(
-                height: ScreenConfig.widgetPaddingLarge,
-              ),
-              ListTile(
-                title: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      'Logout',
-                      style: TextStyle(
-                          color: CColors.missonNormalWhiteColor,
-                          fontSize: ScreenConfig.fontSizeXlarge),
-                    ),
-                    Container(
-                      width: ScreenConfig.screenWidth * 0.4,
-                      child: Divider(
-                        color: Colors.white,
-                      ),
-                    )
-                  ],
+                SizedBox(
+                  height: ScreenConfig.widgetPaddingLarge,
                 ),
-                onTap: () {
-                  return showCupertinoDialog(
-                    context: context,
-                    builder: (BuildContext context) {
-                      return CupertinoAlertDialog(
-                        title: Text('Alert'),
-                        content: Text('Are you sure to logout?'),
-                        actions: [
-                          CupertinoDialogAction(
-                            child: Text('Yes'),
-                            onPressed: () {
+                ListTile(
+                  title: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        'Settings',
+                        style: TextStyle(
+                            color: CColors.missonNormalWhiteColor,
+                            fontSize: ScreenConfig.fontSizeXlarge),
+                      ),
+                      Container(
+                        width: ScreenConfig.screenWidth * 0.4,
+                        child: Divider(
+                          color: Colors.white,
+                        ),
+                      )
+                    ],
+                  ),
+                  onTap: () {
+                    // Update the state of the app
+                    // ...
+                    // Then close the MyDrawer
+                    NavMe().NavPushLeftToRight(SettingPage());
+                  },
+                ),
+                SizedBox(
+                  height: ScreenConfig.widgetPaddingLarge,
+                ),
+                ListTile(
+                  title: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        'Logout',
+                        style: TextStyle(
+                            color: CColors.missonNormalWhiteColor,
+                            fontSize: ScreenConfig.fontSizeXlarge),
+                      ),
+                      Container(
+                        width: ScreenConfig.screenWidth * 0.4,
+                        child: Divider(
+                          color: Colors.white,
+                        ),
+                      )
+                    ],
+                  ),
+                  onTap: () {
+                    return showCupertinoDialog(
+                      context: context,
+                      builder: (BuildContext context) {
+                        return CupertinoAlertDialog(
+                          title: Text('Alert'),
+                          content: Text('Are you sure to logout?'),
+                          actions: [
+                            CupertinoDialogAction(
+                              child: Text('Yes'),
+                              onPressed: () {
 
 
-                              ApiCaller()
-                                  .userLogout(
-                                  auth: widget.auth,
-                                  deviceType: ScreenConfig.deviceType,
-                                  fcmId: fcmToken)
-                                  .then((value) {
-                                print("LOGOUT =========> $value");
-                              }).whenComplete(() {
-                                clearedShared();
-                                Navigator.pushAndRemoveUntil(
-                                    context,
-                                    MaterialPageRoute(
-                                        builder: (_) => LoginPage()),
-                                        (route) => false);
-                              });
-                              // NavMe().NavPushReplaceFadeIn(LoginPage());
-                            },
-                          ),
-                          CupertinoDialogAction(
-                            child: Text('No'),
-                            onPressed: () {
-                              // clearedShared();
-                              Navigator.pop(context);
-                            },
-                          ),
-                        ],
-                      );
-                    },
-                  );
+                                ApiCaller()
+                                    .userLogout(
+                                    auth: widget.auth,
+                                    deviceType: ScreenConfig.deviceType,
+                                    fcmId: fcmToken)
+                                    .then((value) {
+                                  print("LOGOUT =========> $value");
+                                }).whenComplete(() {
+                                  clearedShared();
+                                  Navigator.pushAndRemoveUntil(
+                                      context,
+                                      MaterialPageRoute(
+                                          builder: (_) => LoginPage()),
+                                          (route) => false);
+                                });
+                                // NavMe().NavPushReplaceFadeIn(LoginPage());
+                              },
+                            ),
+                            CupertinoDialogAction(
+                              child: Text('No'),
+                              onPressed: () {
+                                // clearedShared();
+                                Navigator.pop(context);
+                              },
+                            ),
+                          ],
+                        );
+                      },
+                    );
 
-                  // Update the state of the app
-                  // ...
-                  // Then close the MyDrawer
-                  clearedShared();
-                  NavMe().NavPushReplaceFadeIn(LoginPage());
-                },
-              ),
-            ],
+                    // Update the state of the app
+                    // ...
+                    // Then close the MyDrawer
+                    clearedShared();
+                    NavMe().NavPushReplaceFadeIn(LoginPage());
+                  },
+                ),
+              ],
+            ),
           ),
 
         ],

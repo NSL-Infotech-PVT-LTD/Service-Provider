@@ -5,6 +5,7 @@ import 'package:intl/intl.dart';
 import 'package:misson_tasker/model/ApiCaller.dart';
 import 'package:misson_tasker/model/api_models/GetProfileDataModel.dart';
 import 'package:misson_tasker/model/api_models/MissionRequestModel.dart';
+import 'package:misson_tasker/utils/AnimatorUtil.dart';
 import 'package:misson_tasker/utils/CColors.dart';
 import 'package:misson_tasker/utils/CustomAppBar.dart';
 import 'package:misson_tasker/utils/ScreenConfig.dart';
@@ -187,13 +188,37 @@ class _MissionExploreScreenState extends State<MissionExploreScreen> {
                 // Icon(Icons.directions_car),
                 isRequested == true
                     ? Center(child: spinkit)
-                    : showList(
-                        obj: requested, heading: "Posted By Task Seekers"),
+                    : TweenAnimationBuilder(
+                  builder: (BuildContext context, double val, Widget child) {
+                    return
+                      Opacity(
+                        opacity: val,
+                        child: Padding(
+                          padding: EdgeInsets.only(top: val*30),
+                          child: child,
+                        ),
+                      );
+                  },
+                  tween: Tween<double>(begin: 0, end: 1),
+                  duration: AnimatorUtil.animationSpeedTimeFast,
+                      child: showList(
+                          obj: requested, heading: "Posted By Task Seekers"),
+                    ),
                 isPosted == true
                     ? Center(
                         child: spinkit,
                       )
-                    : showList(obj: posted, heading: "Assigned By Task Seekers")
+                    : TweenAnimationBuilder(builder: (BuildContext context, double val, Widget child) {
+                  return
+                    Opacity(
+                      opacity: val,
+                      child: Padding(
+                        padding: EdgeInsets.only(top: val*30),
+                        child: child,
+                      ),
+                    );
+                }, tween: Tween<double>(begin: 0, end: 1),
+                    duration: AnimatorUtil.animationSpeedTimeFast, child: showList(obj: posted, heading: "Assigned By Task Seekers"))
               ],
             ),
           ),
@@ -208,7 +233,7 @@ class _MissionExploreScreenState extends State<MissionExploreScreen> {
         Container(
           color: CColors.missonNormalWhiteColor,
           child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 20),
+            padding: const EdgeInsets.symmetric(horizontal: 8.0, ),
             child: Row(
               children: [
                 Text("$heading",

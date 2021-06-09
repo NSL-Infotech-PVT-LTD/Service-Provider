@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:misson_tasker/model/ApiCaller.dart';
 import 'package:misson_tasker/model/api_models/GetProfileDataModel.dart';
+import 'package:misson_tasker/utils/AnimatorUtil.dart';
 import 'package:misson_tasker/utils/CColors.dart';
 import 'package:misson_tasker/utils/NavMe.dart';
 import 'package:misson_tasker/utils/ScreenConfig.dart';
@@ -135,11 +136,22 @@ class _SubscriptionState extends State<Subscription> {
                     ],
                   ),
                 )),
-            Container(
-                color: CColors.missonNormalWhiteColor,
-                width: ScreenConfig.screenWidth,
-                child: Padding(
-                  padding: const EdgeInsets.symmetric(vertical: 30.0),
+            TweenAnimationBuilder(
+              tween: Tween<double>(begin: 0, end: 1),
+              duration: AnimatorUtil.animationSpeedTimeFast,
+              builder: (BuildContext context, double val, Widget child) {
+                return
+                  Opacity(
+                    opacity: val,
+                    child: Padding(
+                      padding: EdgeInsets.only(top: val*30),
+                      child: child,
+                    ),
+                  );
+              },
+              child: Container(
+                  color: CColors.missonNormalWhiteColor,
+                  width: ScreenConfig.screenWidth,
                   child: Column(
                     children: [
                       ListTile(
@@ -204,8 +216,8 @@ class _SubscriptionState extends State<Subscription> {
                             fontSize: ScreenConfig.fontSizeXlarge),
                       )
                     ],
-                  ),
-                )),
+                  )),
+            ),
           ],
         ),
       ),

@@ -7,6 +7,7 @@ import 'package:intl/intl.dart';
 import 'package:misson_tasker/model/ApiCaller.dart';
 import 'package:misson_tasker/model/api_models/GetProfileDataModel.dart';
 import 'package:misson_tasker/model/api_models/MissionRequestModel.dart';
+import 'package:misson_tasker/utils/AnimatorUtil.dart';
 import 'package:misson_tasker/utils/CColors.dart';
 import 'package:misson_tasker/utils/CustomAppBar.dart';
 import 'package:misson_tasker/utils/ScreenConfig.dart';
@@ -411,62 +412,60 @@ class _MissionStatusScreenState extends State<MissionStatusScreen> {
       Widget customWidget,
       miles,
       type}) {
-    return Column(
-      children: [
-        // Container(
-        //   color: CColors.missonNormalWhiteColor,
-        //   child: Padding(
-        //     padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 20),
-        //     child: Row(
-        //       children: [
-        //         Text("Posted By Task Seekers",
-        //             style: TextStyle(
-        //                 fontWeight: FontWeight.w500,
-        //                 color: CColors.missonMediumGrey,
-        //                 fontSize: ScreenConfig.fontSizeMedium))
-        //       ],
-        //     ),
-        //   ),
-        // ),
-        SizedBox(
-          height: 20,
-        ),
-        Expanded(
-          child: ListView.builder(
-            itemBuilder: (context, index) {
-              return obj.data.data.isEmpty
-                  ? Center(
-                      child: Text("There is no data to show"),
-                    )
-                  : Padding(
-                      padding: const EdgeInsets.symmetric(
-                          vertical: 2.0, horizontal: 8.0),
-                      child: containerBox(
-                          context,
-                          "${obj.data.data.elementAt(index).id}",
-                          "${obj.data.data.elementAt(index).title}",
-                          "${obj.data.data.elementAt(index).description}", () {
-                        switch (exploreType) {
-                          case "upcoming":
-                            {
-                              print("Hello Upcoming");
-                              print("sdfsddsfd $exploreType");
-                            }
-                            Get.to(
-                                    MissionRequest(
-                                      id: obj.data.data
-                                          .elementAt(index)
-                                          .id
-                                          .toString(),
-                                    ),
-                                    transition: Transition.leftToRightWithFade,
-                                    duration: Duration(milliseconds: 400))
-                                .then((value) => initState());
-                            break;
-
-                          case "inProgress":
-                            {
-                              print("Hello inProgress");
+    return TweenAnimationBuilder(
+      builder: (BuildContext context, double val, Widget child) {
+        return
+          Opacity(
+            opacity: val,
+            child: Padding(
+              padding: EdgeInsets.only(top: val*20),
+              child: child,
+            ),
+          );
+      },
+      tween: Tween<double>(begin: 0, end: 1),
+      duration: AnimatorUtil.animationSpeedTimeFast,
+      child: Column(
+        children: [
+          // Container(
+          //   color: CColors.missonNormalWhiteColor,
+          //   child: Padding(
+          //     padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 20),
+          //     child: Row(
+          //       children: [
+          //         Text("Posted By Task Seekers",
+          //             style: TextStyle(
+          //                 fontWeight: FontWeight.w500,
+          //                 color: CColors.missonMediumGrey,
+          //                 fontSize: ScreenConfig.fontSizeMedium))
+          //       ],
+          //     ),
+          //   ),
+          // ),
+          // SizedBox(
+          //   height: 20,
+          // ),
+          Expanded(
+            child: ListView.builder(
+              itemBuilder: (context, index) {
+                return obj.data.data.isEmpty
+                    ? Center(
+                        child: Text("There is no data to show"),
+                      )
+                    : Padding(
+                        padding: const EdgeInsets.symmetric(
+                            vertical: 2.0, horizontal: 8.0),
+                        child: containerBox(
+                            context,
+                            "${obj.data.data.elementAt(index).id}",
+                            "${obj.data.data.elementAt(index).title}",
+                            "${obj.data.data.elementAt(index).description}", () {
+                          switch (exploreType) {
+                            case "upcoming":
+                              {
+                                print("Hello Upcoming");
+                                print("sdfsddsfd $exploreType");
+                              }
                               Get.to(
                                       MissionRequest(
                                         id: obj.data.data
@@ -474,63 +473,79 @@ class _MissionStatusScreenState extends State<MissionStatusScreen> {
                                             .id
                                             .toString(),
                                       ),
-                                      transition:
-                                          Transition.leftToRightWithFade,
+                                      transition: Transition.leftToRightWithFade,
                                       duration: Duration(milliseconds: 400))
                                   .then((value) => initState());
-                            }
-                            break;
-                          case "completed":
-                            {
-                              print("Hello Completed");
-                              Get.to(
-                                      MissionRequest(
-                                        id: obj.data.data
-                                            .elementAt(index)
-                                            .id
-                                            .toString(),
-                                      ),
-                                      transition:
-                                          Transition.leftToRightWithFade,
-                                      duration: Duration(milliseconds: 400))
-                                  .then((value) => initState());
-                            }
-                            break;
-                          case "cancelled":
-                            {
-                              print("Hello Cancelled");
-                            }
-                            break;
+                              break;
 
-                          default:
-                            {
-                              //statements;
-                            }
-                            break;
-                        }
-                        print("Hello $index");
-                      },
-                          miles: obj.data.data.elementAt(index).distanceMiles,
-                          // type: obj.data.data
-                          //     .elementAt(index)
-                          //     .startDate
-                          //     .toString()
-                          //     .split(":")
-                          //     .elementAt(0)
-                          //     .split(" ")
-                          //     .elementAt(0),
-                          // type: "${DateFormat.jm().format(DateTime.parse(obj.data.data.elementAt(index).createdAt).toLocal())} ",
-                          type: "${DateFormat.MMMMd().add_jm().format(DateTime.parse(obj.data.data.elementAt(index).createdAt+"Z").toLocal())} ",
-                          customWidget: customWidget,
-                          visibleStatus: visibleStatus,
-                          status: obj.data.data.elementAt(index).jobStatus,
-                          jobType: obj.data.data.elementAt(index).jobType),
-                    );
-            },
-            itemCount: obj.data.data.isEmpty ? 1 : obj.data.data.length,
+                            case "inProgress":
+                              {
+                                print("Hello inProgress");
+                                Get.to(
+                                        MissionRequest(
+                                          id: obj.data.data
+                                              .elementAt(index)
+                                              .id
+                                              .toString(),
+                                        ),
+                                        transition:
+                                            Transition.leftToRightWithFade,
+                                        duration: Duration(milliseconds: 400))
+                                    .then((value) => initState());
+                              }
+                              break;
+                            case "completed":
+                              {
+                                print("Hello Completed");
+                                Get.to(
+                                        MissionRequest(
+                                          id: obj.data.data
+                                              .elementAt(index)
+                                              .id
+                                              .toString(),
+                                        ),
+                                        transition:
+                                            Transition.leftToRightWithFade,
+                                        duration: Duration(milliseconds: 400))
+                                    .then((value) => initState());
+                              }
+                              break;
+                            case "cancelled":
+                              {
+                                print("Hello Cancelled");
+                              }
+                              break;
+
+                            default:
+                              {
+                                //statements;
+                              }
+                              break;
+                          }
+                          print("Hello $index");
+                        },
+                            miles: obj.data.data.elementAt(index).distanceMiles,
+                            // type: obj.data.data
+                            //     .elementAt(index)
+                            //     .startDate
+                            //     .toString()
+                            //     .split(":")
+                            //     .elementAt(0)
+                            //     .split(" ")
+                            //     .elementAt(0),
+                            // type: "${DateFormat.jm().format(DateTime.parse(obj.data.data.elementAt(index).createdAt).toLocal())} ",
+                            type: "${DateFormat.MMMMd().add_jm().format(DateTime.parse(obj.data.data.elementAt(index).createdAt+"Z").toLocal())} ",
+                            customWidget: customWidget,
+                            visibleStatus: visibleStatus,
+                            status: obj.data.data.elementAt(index).jobStatus,
+                            jobType: obj.data.data.elementAt(index).jobType),
+                      );
+              },
+              itemCount: obj.data.data.isEmpty ? 1 : obj.data.data.length,
+            ),
           ),
-        ),
-      ],
+        ],
+      ),
     );
   }
 

@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:misson_tasker/model/ApiCaller.dart';
 import 'package:misson_tasker/model/api_models/GetProfileDataModel.dart';
+import 'package:misson_tasker/utils/AnimatorUtil.dart';
 import 'package:misson_tasker/utils/CColors.dart';
 import 'package:misson_tasker/utils/NavMe.dart';
 import 'package:misson_tasker/utils/ScreenConfig.dart';
@@ -95,198 +96,143 @@ class _SettingPageState extends State<SettingPage> {
         backgroundColor: Colors.white,
         elevation: 0,
       ),
-      body: SingleChildScrollView(
-        child: Container(
-            margin: EdgeInsets.only(top: ScreenConfig.screenHeight * 0.05),
-            color: Colors.white,
-            child: Column(
-              children: [
-                Padding(
-                  padding: const EdgeInsets.symmetric(
-                      vertical: 16.0, horizontal: 10),
-                  child: ListTile(
-                    title: InkWell(
-                      onTap: () {
-                        NavMe().NavPushLeftToRight(ChangePassword());
-                      },
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                            "Change Password",
-                            style: TextStyle(
-                                fontSize: ScreenConfig.fontSizelarge,
-                                color: CColors.missonPrimaryColor,
-                                fontFamily: "Product"),
-                          ),
-                          Text(
-                            "Change Password",
-                            style: TextStyle(
-                                fontSize: ScreenConfig.fontSizeSmall,
-                                color: CColors.missonMediumGrey,
-                                fontFamily: "Product"),
-                          ),
-                        ],
-                      ),
-                    ),
-                    trailing: SvgPicture.asset(
-                      rightArrowIcon,
-                      height: 15,
-                    ),
-                  ),
+      body: TweenAnimationBuilder(
+          tween: Tween<double>(begin: 0, end: 1),
+          duration: AnimatorUtil.animationSpeedTimeSlow,
+          // margin: EdgeInsets.only(top: ScreenConfig.screenHeight * 0.05),
+          builder: (BuildContext context, double val, Widget child) {
+            return
+              Opacity(
+                opacity: val,
+                child: Padding(
+                  padding: EdgeInsets.only(top: val*30),
+                  child: child,
                 ),
-                Padding(
-                  padding: const EdgeInsets.symmetric(
-                      vertical: 16.0, horizontal: 10),
-                  child: ListTile(
-                    title: InkWell(
-                      onTap: () {
-                        print("areewewe");
-                        NavMe().NavPushLeftToRight(ChangeNoticationScreen());
-                      },
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                            "Notifications",
-                            style: TextStyle(
-                                fontSize: ScreenConfig.fontSizelarge,
-                                color: CColors.missonPrimaryColor,
-                                fontFamily: "Product"),
-                          ),
-                          Text(
-                            "On/Off",
-                            style: TextStyle(
-                                fontSize: ScreenConfig.fontSizeSmall,
-                                color: CColors.missonMediumGrey,
-                                fontFamily: "Product"),
-                          ),
-                        ],
-                      ),
-                    ),
-                    trailing: SvgPicture.asset(
-                      rightArrowIcon,
-                      height: 15,
-                    ),
-                  ),
-                ),
-                // Padding(
-                //   padding: const EdgeInsets.symmetric(
-                //       vertical: 16.0, horizontal: 10),
-                //   child: ListTile(
-                //     title: Column(
-                //       crossAxisAlignment: CrossAxisAlignment.start,
-                //       children: [
-                //         Text(
-                //           "Help & Support",
-                //           style: TextStyle(
-                //               fontSize: ScreenConfig.fontSizelarge,
-                //               color: CColors.missonPrimaryColor,
-                //               fontFamily: "Product"),
-                //         ),
-                //         Text(
-                //           "Help center and legal terms ",
-                //           style: TextStyle(
-                //               fontSize: ScreenConfig.fontSizeSmall,
-                //               color: CColors.missonMediumGrey,
-                //               fontFamily: "Product"),
-                //         ),
-                //       ],
-                //     ),
-                //     trailing: SvgPicture.asset(
-                //       rightArrowIcon,
-                //       height: 15,
-                //     ),
-                //   ),
-                // ),
-                Padding(
-                  padding: const EdgeInsets.symmetric(
-                      vertical: 16.0, horizontal: 10),
-                  child: InkWell(
+              );
+          },
+          // color: Colors.white,
+          child: Column(
+            children: [
+              Padding(
+                padding: const EdgeInsets.symmetric(
+                    vertical: 16.0, horizontal: 10),
+                child: ListTile(
+                  title: InkWell(
                     onTap: () {
-                      NavMe().NavPushLeftToRight(ConfigurationScreen(
-                        apiName: "Privacy Policy",
-                      ));
+                      NavMe().NavPushLeftToRight(ChangePassword());
                     },
-                    child: ListTile(
-                      title: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                            "Privacy Policy",
-                            style: TextStyle(
-                                fontSize: ScreenConfig.fontSizelarge,
-                                color: CColors.missonPrimaryColor,
-                                fontFamily: "Product"),
-                          ),
-                          Text(
-                            "Help center and legal terms",
-                            style: TextStyle(
-                                fontSize: ScreenConfig.fontSizeSmall,
-                                color: CColors.missonMediumGrey,
-                                fontFamily: "Product"),
-                          ),
-                        ],
-                      ),
-                      trailing: SvgPicture.asset(
-                        rightArrowIcon,
-                        height: 15,
-                      ),
-                    ),
-                  ),
-                ),
-                Padding(
-                  padding: const EdgeInsets.symmetric(
-                      vertical: 16.0, horizontal: 10),
-                  child: InkWell(
-                    onTap: () {
-                      NavMe().NavPushLeftToRight(ConfigurationScreen(
-                        apiName: "Terms & Conditions",
-                      ));
-                    },
-                    child: ListTile(
-                      title: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                            "Terms & Conditions",
-                            style: TextStyle(
-                                fontSize: ScreenConfig.fontSizelarge,
-                                color: CColors.missonPrimaryColor,
-                                fontFamily: "Product"),
-                          ),
-                          Text(
-                            "Mission terms",
-                            style: TextStyle(
-                                fontSize: ScreenConfig.fontSizeSmall,
-                                color: CColors.missonMediumGrey,
-                                fontFamily: "Product"),
-                          ),
-                        ],
-                      ),
-                      trailing: SvgPicture.asset(
-                        rightArrowIcon,
-                        height: 15,
-                      ),
-                    ),
-                  ),
-                ),
-                Padding(
-                  padding: const EdgeInsets.symmetric(
-                      vertical: 16.0, horizontal: 10),
-                  child: ListTile(
-                    title: Column(
+                    child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(
-                          "Contact us",
+                          "Change Password",
                           style: TextStyle(
                               fontSize: ScreenConfig.fontSizelarge,
                               color: CColors.missonPrimaryColor,
                               fontFamily: "Product"),
                         ),
                         Text(
-                          "Question? Need help?",
+                          "Change Password",
+                          style: TextStyle(
+                              fontSize: ScreenConfig.fontSizeSmall,
+                              color: CColors.missonMediumGrey,
+                              fontFamily: "Product"),
+                        ),
+                      ],
+                    ),
+                  ),
+                  trailing: SvgPicture.asset(
+                    rightArrowIcon,
+                    height: 15,
+                  ),
+                ),
+              ),
+              Padding(
+                padding: const EdgeInsets.symmetric(
+                    vertical: 16.0, horizontal: 10),
+                child: ListTile(
+                  title: InkWell(
+                    onTap: () {
+                      print("areewewe");
+                      NavMe().NavPushLeftToRight(ChangeNoticationScreen());
+                    },
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          "Notifications",
+                          style: TextStyle(
+                              fontSize: ScreenConfig.fontSizelarge,
+                              color: CColors.missonPrimaryColor,
+                              fontFamily: "Product"),
+                        ),
+                        Text(
+                          "On/Off",
+                          style: TextStyle(
+                              fontSize: ScreenConfig.fontSizeSmall,
+                              color: CColors.missonMediumGrey,
+                              fontFamily: "Product"),
+                        ),
+                      ],
+                    ),
+                  ),
+                  trailing: SvgPicture.asset(
+                    rightArrowIcon,
+                    height: 15,
+                  ),
+                ),
+              ),
+              // Padding(
+              //   padding: const EdgeInsets.symmetric(
+              //       vertical: 16.0, horizontal: 10),
+              //   child: ListTile(
+              //     title: Column(
+              //       crossAxisAlignment: CrossAxisAlignment.start,
+              //       children: [
+              //         Text(
+              //           "Help & Support",
+              //           style: TextStyle(
+              //               fontSize: ScreenConfig.fontSizelarge,
+              //               color: CColors.missonPrimaryColor,
+              //               fontFamily: "Product"),
+              //         ),
+              //         Text(
+              //           "Help center and legal terms ",
+              //           style: TextStyle(
+              //               fontSize: ScreenConfig.fontSizeSmall,
+              //               color: CColors.missonMediumGrey,
+              //               fontFamily: "Product"),
+              //         ),
+              //       ],
+              //     ),
+              //     trailing: SvgPicture.asset(
+              //       rightArrowIcon,
+              //       height: 15,
+              //     ),
+              //   ),
+              // ),
+              Padding(
+                padding: const EdgeInsets.symmetric(
+                    vertical: 16.0, horizontal: 10),
+                child: InkWell(
+                  onTap: () {
+                    NavMe().NavPushLeftToRight(ConfigurationScreen(
+                      apiName: "Privacy Policy",
+                    ));
+                  },
+                  child: ListTile(
+                    title: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          "Privacy Policy",
+                          style: TextStyle(
+                              fontSize: ScreenConfig.fontSizelarge,
+                              color: CColors.missonPrimaryColor,
+                              fontFamily: "Product"),
+                        ),
+                        Text(
+                          "Help center and legal terms",
                           style: TextStyle(
                               fontSize: ScreenConfig.fontSizeSmall,
                               color: CColors.missonMediumGrey,
@@ -300,99 +246,164 @@ class _SettingPageState extends State<SettingPage> {
                     ),
                   ),
                 ),
-                // Padding(
-                //   padding: const EdgeInsets.symmetric(
-                //       vertical: 16.0, horizontal: 10),
-                //   child: ListTile(
-                //     title: Column(
-                //       crossAxisAlignment: CrossAxisAlignment.start,
-                //       children: [
-                //         Text(
-                //           "FAQ",
-                //           style: TextStyle(
-                //               fontSize: ScreenConfig.fontSizelarge,
-                //               color: CColors.missonPrimaryColor,
-                //               fontFamily: "Product"),
-                //         ),
-                //         Text(
-                //           "Frequently asked questions",
-                //           style: TextStyle(
-                //               fontSize: ScreenConfig.fontSizeSmall,
-                //               color: CColors.missonMediumGrey,
-                //               fontFamily: "Product"),
-                //         ),
-                //       ],
-                //     ),
-                //     trailing: SvgPicture.asset(
-                //       rightArrowIcon,
-                //       height: 15,
-                //     ),
-                //   ),
-                // ),
-                InkWell(
+              ),
+              Padding(
+                padding: const EdgeInsets.symmetric(
+                    vertical: 16.0, horizontal: 10),
+                child: InkWell(
                   onTap: () {
-                    return showCupertinoDialog(
-                      context: context,
-                      builder: (BuildContext context) {
-                        return CupertinoAlertDialog(
-                          title: Text('Alert'),
-                          content: Text('Are you sure to logout?'),
-                          actions: [
-                            CupertinoDialogAction(
-                              child: Text('Yes'),
-                              onPressed: () {
-                                ApiCaller()
-                                    .userLogout(
-                                    auth: auth,
-                                    deviceType: ScreenConfig.deviceType,
-                                    fcmId: fcmToken)
-                                    .then((value) {
-                                  print("LOGOUT =========> $value");
-                                }).whenComplete(() {
-                                  clearedShared();
-                                  Navigator.pushAndRemoveUntil(
-                                      context,
-                                      MaterialPageRoute(
-                                          builder: (_) => LoginPage()),
-                                          (route) => false);
-                                });
-
-                                // NavMe().NavPushReplaceFadeIn(LoginPage());
-                              },
-                            ),
-                            CupertinoDialogAction(
-                              child: Text('No'),
-                              onPressed: () {
-                                // clearedShared();
-                                Navigator.pop(context);
-                              },
-                            ),
-                          ],
-                        );
-                      },
-                    );
+                    NavMe().NavPushLeftToRight(ConfigurationScreen(
+                      apiName: "Terms & Conditions",
+                    ));
                   },
-                  child: Padding(
-                    padding: const EdgeInsets.symmetric(
-                        vertical: 16.0, horizontal: 10),
-                    child: ListTile(
-                      title: Text(
-                        "Logout",
+                  child: ListTile(
+                    title: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          "Terms & Conditions",
+                          style: TextStyle(
+                              fontSize: ScreenConfig.fontSizelarge,
+                              color: CColors.missonPrimaryColor,
+                              fontFamily: "Product"),
+                        ),
+                        Text(
+                          "Mission terms",
+                          style: TextStyle(
+                              fontSize: ScreenConfig.fontSizeSmall,
+                              color: CColors.missonMediumGrey,
+                              fontFamily: "Product"),
+                        ),
+                      ],
+                    ),
+                    trailing: SvgPicture.asset(
+                      rightArrowIcon,
+                      height: 15,
+                    ),
+                  ),
+                ),
+              ),
+              Padding(
+                padding: const EdgeInsets.symmetric(
+                    vertical: 16.0, horizontal: 10),
+                child: ListTile(
+                  title: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        "Contact us",
                         style: TextStyle(
                             fontSize: ScreenConfig.fontSizelarge,
                             color: CColors.missonPrimaryColor,
                             fontFamily: "Product"),
                       ),
-                      trailing: SvgPicture.asset(
-                        logoutLogo,
-                        height: 20,
+                      Text(
+                        "Question? Need help?",
+                        style: TextStyle(
+                            fontSize: ScreenConfig.fontSizeSmall,
+                            color: CColors.missonMediumGrey,
+                            fontFamily: "Product"),
                       ),
+                    ],
+                  ),
+                  trailing: SvgPicture.asset(
+                    rightArrowIcon,
+                    height: 15,
+                  ),
+                ),
+              ),
+              // Padding(
+              //   padding: const EdgeInsets.symmetric(
+              //       vertical: 16.0, horizontal: 10),
+              //   child: ListTile(
+              //     title: Column(
+              //       crossAxisAlignment: CrossAxisAlignment.start,
+              //       children: [
+              //         Text(
+              //           "FAQ",
+              //           style: TextStyle(
+              //               fontSize: ScreenConfig.fontSizelarge,
+              //               color: CColors.missonPrimaryColor,
+              //               fontFamily: "Product"),
+              //         ),
+              //         Text(
+              //           "Frequently asked questions",
+              //           style: TextStyle(
+              //               fontSize: ScreenConfig.fontSizeSmall,
+              //               color: CColors.missonMediumGrey,
+              //               fontFamily: "Product"),
+              //         ),
+              //       ],
+              //     ),
+              //     trailing: SvgPicture.asset(
+              //       rightArrowIcon,
+              //       height: 15,
+              //     ),
+              //   ),
+              // ),
+              InkWell(
+                onTap: () {
+                  return showCupertinoDialog(
+                    context: context,
+                    builder: (BuildContext context) {
+                      return CupertinoAlertDialog(
+                        title: Text('Alert'),
+                        content: Text('Are you sure to logout?'),
+                        actions: [
+                          CupertinoDialogAction(
+                            child: Text('Yes'),
+                            onPressed: () {
+                              ApiCaller()
+                                  .userLogout(
+                                  auth: auth,
+                                  deviceType: ScreenConfig.deviceType,
+                                  fcmId: fcmToken)
+                                  .then((value) {
+                                print("LOGOUT =========> $value");
+                              }).whenComplete(() {
+                                clearedShared();
+                                Navigator.pushAndRemoveUntil(
+                                    context,
+                                    MaterialPageRoute(
+                                        builder: (_) => LoginPage()),
+                                        (route) => false);
+                              });
+
+                              // NavMe().NavPushReplaceFadeIn(LoginPage());
+                            },
+                          ),
+                          CupertinoDialogAction(
+                            child: Text('No'),
+                            onPressed: () {
+                              // clearedShared();
+                              Navigator.pop(context);
+                            },
+                          ),
+                        ],
+                      );
+                    },
+                  );
+                },
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(
+                      vertical: 16.0, horizontal: 10),
+                  child: ListTile(
+                    title: Text(
+                      "Logout",
+                      style: TextStyle(
+                          fontSize: ScreenConfig.fontSizelarge,
+                          color: CColors.missonPrimaryColor,
+                          fontFamily: "Product"),
+                    ),
+                    trailing: SvgPicture.asset(
+                      logoutLogo,
+                      height: 20,
                     ),
                   ),
                 ),
-              ],
-            )),
-      ),
+              ),
+            ],
+          )),
     );
   }
 }

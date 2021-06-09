@@ -8,6 +8,7 @@ import 'package:get/get.dart';
 import 'package:get/get_navigation/src/routes/transitions_type.dart';
 import 'package:misson_tasker/model/ApiCaller.dart';
 import 'package:misson_tasker/model/api_models/GetProfileDataModel.dart';
+import 'package:misson_tasker/utils/AnimatorUtil.dart';
 import 'package:misson_tasker/utils/CColors.dart';
 import 'package:misson_tasker/utils/NavMe.dart';
 import 'package:misson_tasker/utils/ScreenConfig.dart';
@@ -183,7 +184,7 @@ class _ChatListScreenState extends State<ChatListScreen> {
           //   )
           // ],
         ),
-        body: listChatUserModel == null && listChatUserModel.isBlank
+        body: _loading
             ? Center(child: spinkit)
             : Container(
                 color: CColors.missonNormalWhiteColor,
@@ -204,9 +205,9 @@ class _ChatListScreenState extends State<ChatListScreen> {
                       ),
                     ),
                     SizedBox(
-                      height: 40,
+                      height: 10,
                     ),
-                    listChatUserModel == null || !listChatUserModel.status?
+                    listChatUserModel != null || listChatUserModel.data.list.isEmpty?
                         Container(
                             margin: EdgeInsets.all(8),
                             height: 75,
@@ -227,78 +228,92 @@ class _ChatListScreenState extends State<ChatListScreen> {
                             ),
                           )
                         : Expanded(
-                            child: Container(
-                              color: CColors.missonLightGrey,
-                              child: ListView.builder(
-                                itemBuilder: (context, index) {
-                                  return InkWell(
-                                    onTap: () {
-                                      // NavMe().NavPushLeftToRight(ChatScreen(
-                                      //     // title:
-                                      //     //     "${messageDemoDart.data.list.elementAt(index).senderName}",
-                                      //     // image: messageDemoDart.data.list
-                                      //     //             .elementAt(index)
-                                      //     //             .senderImage ==
-                                      //     //         null
-                                      //     //     ? " "
-                                      //     //     : "${messageDemoDart.data.list.elementAt(index).senderImage}",
-                                      //     // receiverId:
-                                      //     //     "${messageDemoDart.data.list.elementAt(index).senderId}",
-                                      //     // channel: IOWebSocketChannel.connect(
-                                      //     //     "ws://23.20.179.178:8080/")
-                                      //
-                                      // ));
-
-                                      Get.to(
-                                              ChatScreen(
-                                                  reciverName:
-                                                      "${authId != listChatUserModel.data.list.elementAt(index).senderId.toString() ? listChatUserModel.data.list.elementAt(index).senderName : listChatUserModel.data.list.elementAt(index).receiverName}",
-                                                  image:
-                                                      "${(authId != listChatUserModel.data.list.elementAt(index).senderId.toString() ? (listChatUserModel.data.list.elementAt(index).senderImage) : (listChatUserModel.data.list.elementAt(index).receiverImage)) == null ? " " : authId != listChatUserModel.data.list.elementAt(index).senderId.toString() ? (listChatUserModel.data.list.elementAt(index).senderImage) : (listChatUserModel.data.list.elementAt(index).receiverImage)}",
-                                                  receiverId:
-                                                      "${authId != listChatUserModel.data.list.elementAt(index).senderId.toString() ? listChatUserModel.data.list.elementAt(index).senderId : listChatUserModel.data.list.elementAt(index).receiverId}",
-                                                  channel: IOWebSocketChannel
-                                                      .connect(
-                                                          "ws://23.20.179.178:8080/")),
-                                              transition: Transition
-                                                  .leftToRightWithFade,
-                                              duration:
-                                                  Duration(milliseconds: 400))
-                                          .then((value) => initState());
-                                      // NavMe().NavPushLeftToRight(ChatScreen(
-                                      //     reciverName:
-                                      //         "${authId != listChatUserModel.data.list.elementAt(index).senderId.toString() ? listChatUserModel.data.list.elementAt(index).senderName : listChatUserModel.data.list.elementAt(index).receiverName}",
-                                      //     image:                                     "${(authId != listChatUserModel.data.list.elementAt(index).senderId.toString() ? (listChatUserModel.data.list.elementAt(index).senderImage) : (listChatUserModel.data.list.elementAt(index).receiverImage)) == null ? " " : authId != listChatUserModel.data.list.elementAt(index).senderId.toString() ? (listChatUserModel.data.list.elementAt(index).senderImage) : (listChatUserModel.data.list.elementAt(index).receiverImage)}",
-                                      //
-                                      //     receiverId:
-                                      //         "${authId != listChatUserModel.data.list.elementAt(index).senderId.toString() ? listChatUserModel.data.list.elementAt(index).senderId : listChatUserModel.data.list.elementAt(index).receiverId}",
-                                      //     channel: IOWebSocketChannel.connect(
-                                      //         "ws://23.20.179.178:8080/")));
-                                    },
+                            child: TweenAnimationBuilder(
+                              builder: (BuildContext context, double val, Widget child) {
+                                return
+                                  Opacity(
+                                    opacity: val,
                                     child: Padding(
-                                      padding: const EdgeInsets.only(
-                                          left: 8.0, right: 8.0),
-                                      child: MyChatListView(
-                                          imageUrl:
-                                              "${(authId != listChatUserModel.data.list.elementAt(index).senderId.toString() ? (listChatUserModel.data.list.elementAt(index).senderImage) : (listChatUserModel.data.list.elementAt(index).receiverImage)) == null ? " " : authId != listChatUserModel.data.list.elementAt(index).senderId.toString() ? (listChatUserModel.data.list.elementAt(index).senderImage) : (listChatUserModel.data.list.elementAt(index).receiverImage)}",
-                                          name:
-                                              "${authId != listChatUserModel.data.list.elementAt(index).senderId.toString() ? listChatUserModel.data.list.elementAt(index).senderName : listChatUserModel.data.list.elementAt(index).receiverName}",
-                                          subtitle:
-                                              "${listChatUserModel.data.list.elementAt(index).message}",
-                                          numberOfMessages: listChatUserModel
-                                              .data.list
-                                              .elementAt(index)
-                                              .isReadCount,
-                                          showBadge: listChatUserModel.data.list
-                                                      .elementAt(index)
-                                                      .isReadProvider ==
-                                                  0
-                                              ? true
-                                              : false),
+                                      padding: EdgeInsets.only(top: val*30),
+                                      child: child,
                                     ),
                                   );
-                                },
-                                itemCount: listChatUserModel.data.list.length,
+                              },
+                              tween: Tween<double>(begin: 0, end: 1),
+                              duration: AnimatorUtil.animationSpeedTimeFast,
+                              child: Container(
+                                color: CColors.missonLightGrey,
+                                child: ListView.builder(
+                                  itemBuilder: (context, index) {
+                                    return InkWell(
+                                      onTap: () {
+                                        // NavMe().NavPushLeftToRight(ChatScreen(
+                                        //     // title:
+                                        //     //     "${messageDemoDart.data.list.elementAt(index).senderName}",
+                                        //     // image: messageDemoDart.data.list
+                                        //     //             .elementAt(index)
+                                        //     //             .senderImage ==
+                                        //     //         null
+                                        //     //     ? " "
+                                        //     //     : "${messageDemoDart.data.list.elementAt(index).senderImage}",
+                                        //     // receiverId:
+                                        //     //     "${messageDemoDart.data.list.elementAt(index).senderId}",
+                                        //     // channel: IOWebSocketChannel.connect(
+                                        //     //     "ws://23.20.179.178:8080/")
+                                        //
+                                        // ));
+
+                                        Get.to(
+                                                ChatScreen(
+                                                    reciverName:
+                                                        "${authId != listChatUserModel.data.list.elementAt(index).senderId.toString() ? listChatUserModel.data.list.elementAt(index).senderName : listChatUserModel.data.list.elementAt(index).receiverName}",
+                                                    image:
+                                                        "${(authId != listChatUserModel.data.list.elementAt(index).senderId.toString() ? (listChatUserModel.data.list.elementAt(index).senderImage) : (listChatUserModel.data.list.elementAt(index).receiverImage)) == null ? " " : authId != listChatUserModel.data.list.elementAt(index).senderId.toString() ? (listChatUserModel.data.list.elementAt(index).senderImage) : (listChatUserModel.data.list.elementAt(index).receiverImage)}",
+                                                    receiverId:
+                                                        "${authId != listChatUserModel.data.list.elementAt(index).senderId.toString() ? listChatUserModel.data.list.elementAt(index).senderId : listChatUserModel.data.list.elementAt(index).receiverId}",
+                                                    channel: IOWebSocketChannel
+                                                        .connect(
+                                                            "ws://23.20.179.178:8080/")),
+                                                transition: Transition
+                                                    .leftToRightWithFade,
+                                                duration:
+                                                    Duration(milliseconds: 400))
+                                            .then((value) => initState());
+                                        // NavMe().NavPushLeftToRight(ChatScreen(
+                                        //     reciverName:
+                                        //         "${authId != listChatUserModel.data.list.elementAt(index).senderId.toString() ? listChatUserModel.data.list.elementAt(index).senderName : listChatUserModel.data.list.elementAt(index).receiverName}",
+                                        //     image:                                     "${(authId != listChatUserModel.data.list.elementAt(index).senderId.toString() ? (listChatUserModel.data.list.elementAt(index).senderImage) : (listChatUserModel.data.list.elementAt(index).receiverImage)) == null ? " " : authId != listChatUserModel.data.list.elementAt(index).senderId.toString() ? (listChatUserModel.data.list.elementAt(index).senderImage) : (listChatUserModel.data.list.elementAt(index).receiverImage)}",
+                                        //
+                                        //     receiverId:
+                                        //         "${authId != listChatUserModel.data.list.elementAt(index).senderId.toString() ? listChatUserModel.data.list.elementAt(index).senderId : listChatUserModel.data.list.elementAt(index).receiverId}",
+                                        //     channel: IOWebSocketChannel.connect(
+                                        //         "ws://23.20.179.178:8080/")));
+                                      },
+                                      child: Padding(
+                                        padding: const EdgeInsets.only(
+                                            left: 8.0, right: 8.0),
+                                        child: MyChatListView(
+                                            imageUrl:
+                                                "${(authId != listChatUserModel.data.list.elementAt(index).senderId.toString() ? (listChatUserModel.data.list.elementAt(index).senderImage) : (listChatUserModel.data.list.elementAt(index).receiverImage)) == null ? " " : authId != listChatUserModel.data.list.elementAt(index).senderId.toString() ? (listChatUserModel.data.list.elementAt(index).senderImage) : (listChatUserModel.data.list.elementAt(index).receiverImage)}",
+                                            name:
+                                                "${authId != listChatUserModel.data.list.elementAt(index).senderId.toString() ? listChatUserModel.data.list.elementAt(index).senderName : listChatUserModel.data.list.elementAt(index).receiverName}",
+                                            subtitle:
+                                                "${listChatUserModel.data.list.elementAt(index).message}",
+                                            numberOfMessages: listChatUserModel
+                                                .data.list
+                                                .elementAt(index)
+                                                .isReadCount,
+                                            showBadge: listChatUserModel.data.list
+                                                        .elementAt(index)
+                                                        .isReadProvider ==
+                                                    0
+                                                ? true
+                                                : false),
+                                      ),
+                                    );
+                                  },
+                                  itemCount: listChatUserModel.data.list.length,
+                                ),
                               ),
                             ),
                           )

@@ -4,6 +4,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:misson_tasker/model/ApiCaller.dart';
 import 'package:misson_tasker/model/api_models/ConfigurationModel.dart';
 import 'package:misson_tasker/model/api_models/GetProfileDataModel.dart';
+import 'package:misson_tasker/utils/AnimatorUtil.dart';
 import 'package:misson_tasker/utils/CColors.dart';
 import 'package:misson_tasker/utils/NavMe.dart';
 import 'package:misson_tasker/utils/ScreenConfig.dart';
@@ -130,17 +131,33 @@ void ApiCall(String apiType)
       ),
       body: SingleChildScrollView(
         child: Container(
-          margin: EdgeInsets.symmetric(vertical: ScreenConfig.screenHeight * 0.05, horizontal: 30),
+          margin: EdgeInsets.symmetric(
+              // vertical: ScreenConfig.screenHeight * 0.05,
+              horizontal: 30),
           color: Colors.white,
           child: configurationModel == null
-              ? spinkit
-              : Text(
-                  "${configurationModel.data.config}",
-                  style: TextStyle(
-                      color: Colors.black,
-                      fontSize: ScreenConfig.fontSizelarge,
-                      fontFamily: "Product"),
-                ),
+              ? Padding(padding: EdgeInsets.only(top: 20), child: spinkit)
+              : TweenAnimationBuilder(
+            tween: Tween<double>(begin: 0, end: 1),
+            duration: AnimatorUtil.animationSpeedTimeFast,
+            builder: (BuildContext context, double val, Widget child) {
+              return
+                Opacity(
+                  opacity: val,
+                  child: Padding(
+                    padding: EdgeInsets.only(top: val*30),
+                    child: child,
+                  ),
+                );
+            },
+                child: Text(
+                    "${configurationModel.data.config}",
+                    style: TextStyle(
+                        color: Colors.black,
+                        fontSize: ScreenConfig.fontSizelarge,
+                        fontFamily: "Product"),
+                  ),
+              ),
         ),
       ),
     );

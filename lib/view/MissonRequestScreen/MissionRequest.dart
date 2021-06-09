@@ -3347,7 +3347,6 @@ class _MissionRequestState extends State<MissionRequest> {
     });
     super.initState();
   }
-
   final _formKey = GlobalKey<FormState>();
   String stateOfSheet = "isClose";
   String timeOfSheet = "isActive";

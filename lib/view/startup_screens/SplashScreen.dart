@@ -6,6 +6,7 @@ import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:get/get.dart';
+import 'package:misson_tasker/utils/AnimatorUtil.dart';
 import 'package:misson_tasker/utils/CColors.dart';
 import 'package:misson_tasker/utils/NavMe.dart';
 import 'package:misson_tasker/utils/ScreenConfig.dart';
@@ -90,6 +91,7 @@ class _SplashScreenState extends State<SplashScreen> {
   Widget build(BuildContext context) {
     // print("111111 $token");
     ScreenConfig().init(context);
+    AnimatorUtil().init(context);
     return SafeArea(
       child: Scaffold(
           body: Stack(
