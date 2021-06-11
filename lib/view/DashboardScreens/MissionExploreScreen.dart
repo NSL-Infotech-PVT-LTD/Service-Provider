@@ -26,21 +26,28 @@ class MissionExploreScreen extends StatefulWidget {
   _MissionExploreScreenState createState() => _MissionExploreScreenState();
 }
 
-class _MissionExploreScreenState extends State<MissionExploreScreen> {
+class _MissionExploreScreenState extends State<MissionExploreScreen>
+    with SingleTickerProviderStateMixin {
   GlobalKey<ScaffoldState> _drawerKey = GlobalKey();
+  TabController _tabController;
   String _auth = "";
 
   bool isPosted = true;
   bool isRequested = true;
   bool isProfileData = true;
-
+  bool isSearchPressed = false;
   MissionRequestModel posted;
   MissionRequestModel requested;
-
+  int _selectedIndex = 0;
+  List<Datum> postedJobList = [];
+  List<Datum> requestedJobList = [];
+  final _formKey = GlobalKey<FormState>();
   String auth;
+  TextEditingController _searchController = TextEditingController();
 
   @override
   void initState() {
+    _tabController = new TabController(vsync: this, length: 2);
     getString(sharedPref.userToken).then((value) {
       _auth = value;
 
@@ -58,6 +65,7 @@ class _MissionExploreScreenState extends State<MissionExploreScreen> {
           .then((value) {
         // posted = value;
         requested = value;
+        requestedJobList = value.data.data;
       }).whenComplete(() {
         setState(() {
           // isPosted = false;
@@ -74,6 +82,7 @@ class _MissionExploreScreenState extends State<MissionExploreScreen> {
           .then((value) {
         // requested = value;
         posted = value;
+        postedJobList = value.data.data;
       }).whenComplete(() {
         setState(() {
           // isRequested = false;
@@ -81,6 +90,12 @@ class _MissionExploreScreenState extends State<MissionExploreScreen> {
         });
       });
       // TODO: implement initState
+      _tabController.addListener(() {
+        setState(() {
+          _selectedIndex = _tabController.index;
+        });
+        print("Selected Index: " + _tabController.index.toString());
+      });
       super.initState();
     });
   }
@@ -88,158 +103,235 @@ class _MissionExploreScreenState extends State<MissionExploreScreen> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      child: DefaultTabController(
-        length: 2,
-        child: Scaffold(
-          key: _drawerKey,
-          drawer: Drawer(
-            child: MyDrawer(
-              auth: _auth,
-              username: widget.getProfileDataModel.data.user.name,
-              ImageUrl: widget.getProfileDataModel == null ||
-                      widget.getProfileDataModel.data == null ||
-                      widget.getProfileDataModel.data.user == null ||
-                      widget.getProfileDataModel.data.user.image == null
-                  ? null
-                  : widget.getProfileDataModel.data.user.image,
+      child: Stack(
+        children: [
+          Scaffold(
+            key: _drawerKey,
+            drawer: Drawer(
+              child: MyDrawer(
+                auth: _auth,
+                username: widget.getProfileDataModel.data.user.name,
+                ImageUrl: widget.getProfileDataModel == null ||
+                        widget.getProfileDataModel.data == null ||
+                        widget.getProfileDataModel.data.user == null ||
+                        widget.getProfileDataModel.data.user.image == null
+                    ? null
+                    : widget.getProfileDataModel.data.user.image,
+              ),
+            ),
+            appBar: myCustomAppBar(
+              titleHeading: "Mission Explore",
+              titleSubHeading: "You can search for the mission you\nwant to do",
+              tabBarList: [Text("Posted"), Text("Requested")],
+              tabController: _tabController,
+              drawerKey: _drawerKey,
+              leftSideIconSvg: SvgPicture.asset(drawerIcon),
+              rightHandSideOnTap: () {
+                setState(() {
+                  isSearchPressed = true;
+                });
+              },
+              rightSideIconSvg: SvgPicture.asset(searchIcon),
+            ),
+            // AppBar(
+            //   bottom: TabBar(
+            //     labelColor: CColors.textColor,
+            //     indicatorColor: CColors.missonPrimaryColor,
+            //     unselectedLabelColor: CColors.missonMediumGrey,
+            //     unselectedLabelStyle: TextStyle(
+            //         fontSize: ScreenConfig.fontSizeXlarge,
+            //         color: CColors.backgroundRed,
+            //         fontWeight: FontWeight.w100,
+            //         fontFamily: "Product"),
+            //     labelStyle: TextStyle(
+            //         fontSize: ScreenConfig.fontSizeXlarge,
+            //         color: CColors.textColor,
+            //         fontWeight: FontWeight.w100,
+            //         fontFamily: "Product"),
+            //     tabs: [
+            //       Text(
+            //         "Posted",
+            //       ),
+            //       Text(
+            //         "Requested",
+            //       ),
+            //     ],
+            //   ),
+            //   elevation: 0,
+            //   toolbarHeight: 140,
+            //   backgroundColor: CColors.missonNormalWhiteColor,
+            //   leadingWidth: 0,
+            //   centerTitle: true,
+            //   title: Column(
+            //     crossAxisAlignment: CrossAxisAlignment.center,
+            //     mainAxisAlignment: MainAxisAlignment.start,
+            //     children: [
+            //       Row(
+            //         mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            //         children: [
+            //           InkWell(
+            //             onTap: () {
+            //               _drawerKey.currentState.openDrawer();
+            //             },
+            //             child: SvgPicture.asset(drawerIcon),
+            //           ),
+            //           Text(
+            //             "Mission Explore",
+            //             textAlign: TextAlign.left,
+            //             style: TextStyle(
+            //                 fontSize: ScreenConfig.fontSizeXhlarge,
+            //                 color: CColors.textColor,
+            //                 fontWeight: FontWeight.w100,
+            //                 fontFamily: "Product"),
+            //           ),
+            //           InkWell(
+            //             onTap: () {},
+            //             child: SvgPicture.asset(searchIcon),
+            //           )
+            //         ],
+            //       ),
+            //       SizedBox(
+            //         height: 10,
+            //       ),
+            //       Text(
+            //         "You can send message or chat with your \n mission speakers",
+            //         textAlign: TextAlign.center,
+            //         style: TextStyle(
+            //             fontSize: ScreenConfig.fontSizeMedium,
+            //             color: CColors.textColor,
+            //             fontWeight: FontWeight.w100,
+            //             fontFamily: "Product"),
+            //       ),
+            //     ],
+            //   ),
+            // ),
+            body: Container(
+              color: CColors.missonNormalWhiteColor,
+              child: TabBarView(
+                controller: _tabController,
+                children: [
+                  // Icon(Icons.directions_car),
+                  // isRequested == true  //posted aega
+                  isPosted == true //posted aega
+                      ? Center(child: spinkit)
+                      : TweenAnimationBuilder(
+                          builder:
+                              (BuildContext context, double val, Widget child) {
+                            return Opacity(
+                              opacity: val,
+                              child: Padding(
+                                padding: EdgeInsets.only(top: val * 30),
+                                child: child,
+                              ),
+                            );
+                          },
+                          tween: Tween<double>(begin: 0, end: 1),
+                          duration: AnimatorUtil.animationSpeedTimeFast,
+                          child:
+                              // showList(
+                              //     obj: requested, heading: "Posted By Task Seekers"),
+                              showList(
+                                  obj: posted,
+                                  heading: "Posted By Task Seekers"),
+                        ),
+                  // isPosted == true  //requested aega
+                  isRequested == true //requested aega
+                      ? Center(
+                          child: spinkit,
+                        )
+                      : TweenAnimationBuilder(
+                          builder:
+                              (BuildContext context, double val, Widget child) {
+                            return Opacity(
+                              opacity: val,
+                              child: Padding(
+                                padding: EdgeInsets.only(top: val * 30),
+                                child: child,
+                              ),
+                            );
+                          },
+                          tween: Tween<double>(begin: 0, end: 1),
+                          duration: AnimatorUtil.animationSpeedTimeFast,
+                          child:
+                              // showList(
+                              //     obj: posted, heading: "Assigned By Task Seekers"),
+                              showList(
+                                  obj: requested,
+                                  heading: "Assigned By Task Seekers"),
+                        )
+                ],
+              ),
             ),
           ),
-          appBar: myCustomAppBar(
-            titleHeading: "Mission Explore",
-            titleSubHeading: "You can search for the mission you\nwant to do",
-            tabBarList: [Text("Posted"), Text("Requested")],
-            drawerKey: _drawerKey,
-            leftSideIconSvg: SvgPicture.asset(drawerIcon),
-            rightHandSideOnTap: () {},
-            rightSideIconSvg: SvgPicture.asset(searchIcon),
-          ),
-          // AppBar(
-          //   bottom: TabBar(
-          //     labelColor: CColors.textColor,
-          //     indicatorColor: CColors.missonPrimaryColor,
-          //     unselectedLabelColor: CColors.missonMediumGrey,
-          //     unselectedLabelStyle: TextStyle(
-          //         fontSize: ScreenConfig.fontSizeXlarge,
-          //         color: CColors.backgroundRed,
-          //         fontWeight: FontWeight.w100,
-          //         fontFamily: "Product"),
-          //     labelStyle: TextStyle(
-          //         fontSize: ScreenConfig.fontSizeXlarge,
-          //         color: CColors.textColor,
-          //         fontWeight: FontWeight.w100,
-          //         fontFamily: "Product"),
-          //     tabs: [
-          //       Text(
-          //         "Posted",
-          //       ),
-          //       Text(
-          //         "Requested",
-          //       ),
-          //     ],
-          //   ),
-          //   elevation: 0,
-          //   toolbarHeight: 140,
-          //   backgroundColor: CColors.missonNormalWhiteColor,
-          //   leadingWidth: 0,
-          //   centerTitle: true,
-          //   title: Column(
-          //     crossAxisAlignment: CrossAxisAlignment.center,
-          //     mainAxisAlignment: MainAxisAlignment.start,
-          //     children: [
-          //       Row(
-          //         mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          //         children: [
-          //           InkWell(
-          //             onTap: () {
-          //               _drawerKey.currentState.openDrawer();
-          //             },
-          //             child: SvgPicture.asset(drawerIcon),
-          //           ),
-          //           Text(
-          //             "Mission Explore",
-          //             textAlign: TextAlign.left,
-          //             style: TextStyle(
-          //                 fontSize: ScreenConfig.fontSizeXhlarge,
-          //                 color: CColors.textColor,
-          //                 fontWeight: FontWeight.w100,
-          //                 fontFamily: "Product"),
-          //           ),
-          //           InkWell(
-          //             onTap: () {},
-          //             child: SvgPicture.asset(searchIcon),
-          //           )
-          //         ],
-          //       ),
-          //       SizedBox(
-          //         height: 10,
-          //       ),
-          //       Text(
-          //         "You can send message or chat with your \n mission speakers",
-          //         textAlign: TextAlign.center,
-          //         style: TextStyle(
-          //             fontSize: ScreenConfig.fontSizeMedium,
-          //             color: CColors.textColor,
-          //             fontWeight: FontWeight.w100,
-          //             fontFamily: "Product"),
-          //       ),
-          //     ],
-          //   ),
-          // ),
-          body: Container(
-            color: CColors.missonNormalWhiteColor,
-            child: TabBarView(
-              children: [
-                // Icon(Icons.directions_car),
-                // isRequested == true  //posted aega
-                isPosted == true //posted aega
-                    ? Center(child: spinkit)
-                    : TweenAnimationBuilder(
-                        builder:
-                            (BuildContext context, double val, Widget child) {
-                          return Opacity(
-                            opacity: val,
-                            child: Padding(
-                              padding: EdgeInsets.only(top: val * 30),
-                              child: child,
-                            ),
-                          );
+          isSearchPressed == true
+              ? Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Container(
+                    child: Form(
+                      key: _formKey,
+                      child: TextFormField(
+                        controller: _searchController,
+                        onChanged: (value) {
+                          if (_selectedIndex == 0) {
+
+                            // posted.data.data.clear();
+                            // postedJobList.forEach((element) {
+                            //   if(element.title.toLowerCase().contains(v))
+                            // })
+                          }
+                          if (_selectedIndex == 1) {}
                         },
-                        tween: Tween<double>(begin: 0, end: 1),
-                        duration: AnimatorUtil.animationSpeedTimeFast,
-                        child:
-                            // showList(
-                            //     obj: requested, heading: "Posted By Task Seekers"),
-                            showList(
-                                obj: posted, heading: "Posted By Task Seekers"),
+                        decoration: InputDecoration(
+                          suffixIcon: InkWell(
+                            onTap: () {
+                              setState(() {
+                                isSearchPressed = false;
+                              });
+                            },
+                            child: Icon(
+                              Icons.cancel_outlined,
+                              color: CColors.missonPrimaryColor,
+                            ),
+                          ),
+                          fillColor: CColors.missonNormalWhiteColor,
+                          filled: true,
+                          enabledBorder: OutlineInputBorder(
+                            borderRadius: const BorderRadius.all(
+                              const Radius.circular(10.0),
+                            ),
+                          ),
+                          disabledBorder: OutlineInputBorder(
+                            borderRadius: const BorderRadius.all(
+                              const Radius.circular(10.0),
+                            ),
+                          ),
+                          errorBorder: OutlineInputBorder(
+                            borderRadius: const BorderRadius.all(
+                              const Radius.circular(10.0),
+                            ),
+                          ),
+                          focusedBorder: OutlineInputBorder(
+                            borderRadius: const BorderRadius.all(
+                              const Radius.circular(10.0),
+                            ),
+                          ),
+                          focusedErrorBorder: OutlineInputBorder(
+                            borderRadius: const BorderRadius.all(
+                              const Radius.circular(10.0),
+                            ),
+                          ),
+                          border: OutlineInputBorder(
+                            borderRadius: const BorderRadius.all(
+                              const Radius.circular(10.0),
+                            ),
+                          ),
+                        ),
                       ),
-                // isPosted == true  //requested aega
-                isRequested == true //requested aega
-                    ? Center(
-                        child: spinkit,
-                      )
-                    : TweenAnimationBuilder(
-                        builder:
-                            (BuildContext context, double val, Widget child) {
-                          return Opacity(
-                            opacity: val,
-                            child: Padding(
-                              padding: EdgeInsets.only(top: val * 30),
-                              child: child,
-                            ),
-                          );
-                        },
-                        tween: Tween<double>(begin: 0, end: 1),
-                        duration: AnimatorUtil.animationSpeedTimeFast,
-                        child:
-                        // showList(
-                        //     obj: posted, heading: "Assigned By Task Seekers"),
-                        showList(
-                            obj: requested, heading: "Assigned By Task Seekers"),
-                      )
-              ],
-            ),
-          ),
-        ),
+                    ),
+                  ),
+                )
+              : Container(),
+        ],
       ),
     );
   }

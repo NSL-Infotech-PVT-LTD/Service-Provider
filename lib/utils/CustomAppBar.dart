@@ -41,13 +41,17 @@ Widget myCustomAppBar(
     String titleSubHeading,
     Widget leftSideIconSvg,
     Widget rightSideIconSvg,
+    TabController tabController,
     List<Widget> tabBarList,
     // Function leftHandSideOnTap,
     Function rightHandSideOnTap,
     GlobalKey<ScaffoldState> drawerKey}) {
   return AppBar(
     bottom: TabBar(
-      labelPadding: EdgeInsets.symmetric(vertical: 2),
+        enableFeedback: true,
+        automaticIndicatorColorAdjustment: true,
+        controller: tabController,
+        labelPadding: EdgeInsets.symmetric(vertical: 2),
         labelColor: CColors.textColor,
         indicatorColor: CColors.missonPrimaryColor,
         unselectedLabelColor: CColors.missonMediumGrey,
@@ -71,7 +75,9 @@ Widget myCustomAppBar(
       crossAxisAlignment: CrossAxisAlignment.center,
       mainAxisAlignment: MainAxisAlignment.start,
       children: [
-        SizedBox(height: 10,),
+        SizedBox(
+          height: 10,
+        ),
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
@@ -80,7 +86,6 @@ Widget myCustomAppBar(
                   drawerKey.currentState.openDrawer();
                 },
                 child: leftSideIconSvg),
-
             Text(
               "$titleHeading",
               textAlign: TextAlign.left,
