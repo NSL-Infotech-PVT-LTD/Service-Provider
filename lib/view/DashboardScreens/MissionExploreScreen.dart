@@ -272,7 +272,7 @@ class _MissionExploreScreenState extends State<MissionExploreScreen>
                       child: TextFormField(
                         controller: _searchController,
                         onChanged: (value) {
-                          if (_selectedIndex == 0) {
+                          if (_selectedIndex  == 0) {
 
                             // posted.data.data.clear();
                             // postedJobList.forEach((element) {
