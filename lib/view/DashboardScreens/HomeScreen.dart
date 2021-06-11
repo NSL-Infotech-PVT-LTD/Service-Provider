@@ -52,7 +52,6 @@ int screenValue=1;
       setString("target_id", initialMessage.data["target_id"]);
       getString("target_id").then((value) {
         print("======target_id==============> $value");
-
         print("123 $value");
       });
       Get.to(MissionRequest(id: initialMessage.data["target_id"]),
@@ -85,7 +84,10 @@ int screenValue=1;
       print("123 $value");
     }).whenComplete(() {
       // isRequestList = false;
-      getMe();
+    if(_auth!=null)
+      {
+        getMe();
+      }
       ApiCaller()
           .missionRequest(
               auth: _auth,

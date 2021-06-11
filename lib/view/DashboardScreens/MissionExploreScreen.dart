@@ -56,10 +56,12 @@ class _MissionExploreScreenState extends State<MissionExploreScreen> {
               longitude: widget.getProfileDataModel.data.user.longitude,
               jobStatus: "upcoming")
           .then((value) {
-        posted = value;
+        // posted = value;
+        requested = value;
       }).whenComplete(() {
         setState(() {
-          isPosted = false;
+          // isPosted = false;
+          isRequested = false;
         });
       });
       ApiCaller()
@@ -70,10 +72,12 @@ class _MissionExploreScreenState extends State<MissionExploreScreen> {
               longitude: widget.getProfileDataModel.data.user.longitude,
               jobStatus: "upcoming")
           .then((value) {
-        requested = value;
+        // requested = value;
+        posted = value;
       }).whenComplete(() {
         setState(() {
-          isRequested = false;
+          // isRequested = false;
+          isPosted = false;
         });
       });
       // TODO: implement initState
@@ -186,39 +190,52 @@ class _MissionExploreScreenState extends State<MissionExploreScreen> {
             child: TabBarView(
               children: [
                 // Icon(Icons.directions_car),
-                isRequested == true
+                // isRequested == true  //posted aega
+                isPosted == true //posted aega
                     ? Center(child: spinkit)
                     : TweenAnimationBuilder(
-                  builder: (BuildContext context, double val, Widget child) {
-                    return
-                      Opacity(
-                        opacity: val,
-                        child: Padding(
-                          padding: EdgeInsets.only(top: val*30),
-                          child: child,
-                        ),
-                      );
-                  },
-                  tween: Tween<double>(begin: 0, end: 1),
-                  duration: AnimatorUtil.animationSpeedTimeFast,
-                      child: showList(
-                          obj: requested, heading: "Posted By Task Seekers"),
-                    ),
-                isPosted == true
+                        builder:
+                            (BuildContext context, double val, Widget child) {
+                          return Opacity(
+                            opacity: val,
+                            child: Padding(
+                              padding: EdgeInsets.only(top: val * 30),
+                              child: child,
+                            ),
+                          );
+                        },
+                        tween: Tween<double>(begin: 0, end: 1),
+                        duration: AnimatorUtil.animationSpeedTimeFast,
+                        child:
+                            // showList(
+                            //     obj: requested, heading: "Posted By Task Seekers"),
+                            showList(
+                                obj: posted, heading: "Posted By Task Seekers"),
+                      ),
+                // isPosted == true  //requested aega
+                isRequested == true //requested aega
                     ? Center(
                         child: spinkit,
                       )
-                    : TweenAnimationBuilder(builder: (BuildContext context, double val, Widget child) {
-                  return
-                    Opacity(
-                      opacity: val,
-                      child: Padding(
-                        padding: EdgeInsets.only(top: val*30),
-                        child: child,
-                      ),
-                    );
-                }, tween: Tween<double>(begin: 0, end: 1),
-                    duration: AnimatorUtil.animationSpeedTimeFast, child: showList(obj: posted, heading: "Assigned By Task Seekers"))
+                    : TweenAnimationBuilder(
+                        builder:
+                            (BuildContext context, double val, Widget child) {
+                          return Opacity(
+                            opacity: val,
+                            child: Padding(
+                              padding: EdgeInsets.only(top: val * 30),
+                              child: child,
+                            ),
+                          );
+                        },
+                        tween: Tween<double>(begin: 0, end: 1),
+                        duration: AnimatorUtil.animationSpeedTimeFast,
+                        child:
+                        // showList(
+                        //     obj: posted, heading: "Assigned By Task Seekers"),
+                        showList(
+                            obj: requested, heading: "Assigned By Task Seekers"),
+                      )
               ],
             ),
           ),
@@ -233,7 +250,9 @@ class _MissionExploreScreenState extends State<MissionExploreScreen> {
         Container(
           color: CColors.missonNormalWhiteColor,
           child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 8.0, ),
+            padding: const EdgeInsets.symmetric(
+              horizontal: 8.0,
+            ),
             child: Row(
               children: [
                 Text("$heading",
@@ -270,19 +289,20 @@ class _MissionExploreScreenState extends State<MissionExploreScreen> {
                                     duration: Duration(milliseconds: 400))
                                 .then((value) => initState())
                             : Get.to(
-                            MissionRequest(
-                              id: obj.data.data
-                                  .elementAt(index)
-                                  .id
-                                  .toString(),
-                            ),
-                            transition: Transition.leftToRightWithFade,
-                            duration: Duration(milliseconds: 400))
-                            .then((value) => initState());
+                                    MissionRequest(
+                                      id: obj.data.data
+                                          .elementAt(index)
+                                          .id
+                                          .toString(),
+                                    ),
+                                    transition: Transition.leftToRightWithFade,
+                                    duration: Duration(milliseconds: 400))
+                                .then((value) => initState());
                       },
                         obj: obj,
                         miles: obj.data.data.elementAt(index).distanceMiles,
-                 type:  "${DateFormat.MMMMd().add_jm().format(DateTime.parse(obj.data.data.elementAt(index).createdAt+"Z").toLocal())} ",
+                        type:
+                            "${DateFormat.MMMMd().add_jm().format(DateTime.parse(obj.data.data.elementAt(index).createdAt + "Z").toLocal())} ",
                         statusData: "123",
                         jobStatus: obj.data.data.elementAt(index).jobStatus),
               );
@@ -345,7 +365,7 @@ class _MissionExploreScreenState extends State<MissionExploreScreen> {
                       "Posted $type",
                       style: TextStyle(
                           fontWeight: FontWeight.w400,
-                           fontSize: ScreenConfig.fontSizeSmall,
+                          fontSize: ScreenConfig.fontSizeSmall,
                           color: CColors.missonMediumGrey),
                     ),
                   ],
