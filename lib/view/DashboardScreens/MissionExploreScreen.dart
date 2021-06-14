@@ -65,7 +65,9 @@ class _MissionExploreScreenState extends State<MissionExploreScreen>
           .then((value) {
         // posted = value;
         requested = value;
-        requestedJobList = value.data.data;
+        requestedJobList = value.data.data.toList();
+        print("===Requested Length==>${postedJobList.length}");
+        print("===Requested Length==>${postedJobList.toList()}");
       }).whenComplete(() {
         setState(() {
           // isPosted = false;
@@ -82,7 +84,9 @@ class _MissionExploreScreenState extends State<MissionExploreScreen>
           .then((value) {
         // requested = value;
         posted = value;
-        postedJobList = value.data.data;
+        postedJobList = value.data.data.toList();
+        print("===Length==>${postedJobList.length}");
+        print("===Length==>${postedJobList.toList()}");
       }).whenComplete(() {
         setState(() {
           // isRequested = false;
@@ -272,14 +276,45 @@ class _MissionExploreScreenState extends State<MissionExploreScreen>
                       child: TextFormField(
                         controller: _searchController,
                         onChanged: (value) {
-                          if (_selectedIndex  == 0) {
+                          setState(() {
+                            if (_selectedIndex == 0) {
+                              posted.data.data.clear();
+                              postedJobList.forEach((element) {
+                                // print("${element.title}");
+                                // if (element.title
+                                //     .toLowerCase()
+                                //     .contains(value.toLowerCase())) {
+                                //   print("postive ${element.title}");
+                                // }
+                                if (element.title
+                                    .toLowerCase()
+                                    .contains(value.toLowerCase())) {
+                                  posted.data.data.add(element);
+                                  setState(() {
+                                    print("HHHHH $element");
+                                  });
+                                }
+                              });
+                            }
+                           else if (_selectedIndex == 1) {
+                               requested.data.data.clear();
+                              requestedJobList.forEach((element) {
+                                print("request list===>${element.title}");
+                                print("request===>$value");
 
-                            // posted.data.data.clear();
-                            // postedJobList.forEach((element) {
-                            //   if(element.title.toLowerCase().contains(v))
-                            // })
-                          }
-                          if (_selectedIndex == 1) {}
+                                if (element.title
+                                    .toLowerCase()
+                                    .contains(value.toLowerCase())) {
+                                  print("Posted Requested====> ${element.title}");
+                                  requested.data.data.add(element);
+                                  setState(() {
+                                    print("HHHHH ${element.title}");
+                                  });
+                                }
+                              });
+                            }
+                          });
+
                         },
                         decoration: InputDecoration(
                           suffixIcon: InkWell(
@@ -357,18 +392,18 @@ class _MissionExploreScreenState extends State<MissionExploreScreen>
           ),
         ),
         Expanded(
-          child: ListView.builder(
-            itemBuilder: (context, index) {
-              return Padding(
-                padding:
-                    const EdgeInsets.symmetric(vertical: 2.0, horizontal: 8.0),
-                child: obj.data.data.isEmpty
-                    ? Center(child: Text("There is no data to show"))
-                    : containerBox(
-                        context,
-                        "${obj.data.data.elementAt(index).id}",
-                        "${obj.data.data.elementAt(index).title}",
-                        "${obj.data.data.elementAt(index).description}", () {
+          child: obj.data.data.isEmpty
+              ? Center(child: Text("There is no data to show"))
+              : ListView.builder(
+                  itemBuilder: (context, index) {
+                    return Padding(
+                      padding: const EdgeInsets.symmetric(
+                          vertical: 2.0, horizontal: 8.0),
+                      child: containerBox(
+                          context,
+                          "${obj.data.data.elementAt(index).id}",
+                          "${obj.data.data.elementAt(index).title}",
+                          "${obj.data.data.elementAt(index).description}", () {
                         obj.data.data.elementAt(index).jobType == "direct"
                             ? Get.to(
                                     MissionRequest(
@@ -391,16 +426,16 @@ class _MissionExploreScreenState extends State<MissionExploreScreen>
                                     duration: Duration(milliseconds: 400))
                                 .then((value) => initState());
                       },
-                        obj: obj,
-                        miles: obj.data.data.elementAt(index).distanceMiles,
-                        type:
-                            "${DateFormat.MMMMd().add_jm().format(DateTime.parse(obj.data.data.elementAt(index).createdAt + "Z").toLocal())} ",
-                        statusData: "123",
-                        jobStatus: obj.data.data.elementAt(index).jobStatus),
-              );
-            },
-            itemCount: obj.data.data.isEmpty ? 1 : obj.data.data.length,
-          ),
+                          obj: obj,
+                          miles: obj.data.data.elementAt(index).distanceMiles,
+                          type:
+                              "${DateFormat.MMMMd().add_jm().format(DateTime.parse(obj.data.data.elementAt(index).createdAt + "Z").toLocal())} ",
+                          statusData: "123",
+                          jobStatus: obj.data.data.elementAt(index).jobStatus),
+                    );
+                  },
+                  itemCount: obj.data.data.isEmpty ? 1 : obj.data.data.length,
+                ),
         ),
       ],
     );
