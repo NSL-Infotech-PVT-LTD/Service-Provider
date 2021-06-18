@@ -57,6 +57,7 @@ dependencies:
   flutter_local_notifications: ^5.0.0+4
   intl: 0.16.1
   flutter_rating_bar: ^4.0.0
+  flutter_typeahead: ^3.1.3
 
 
 

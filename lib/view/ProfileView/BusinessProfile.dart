@@ -308,7 +308,7 @@ class _BusinessProfileState extends State<BusinessProfile> {
                 return Opacity(
                   opacity: val,
                   child: Padding(
-                    padding: EdgeInsets.only(top: val*30),
+                    padding: EdgeInsets.only(top: val * 30),
                     child: child,
                   ),
                 );

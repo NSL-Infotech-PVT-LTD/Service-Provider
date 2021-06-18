@@ -142,7 +142,7 @@ class _MyDrawerState extends State<MyDrawer> {
                 Opacity(
                   opacity: val,
                   child: Padding(
-                    padding: EdgeInsets.only(top: val*30),
+                    padding: EdgeInsets.only(left: val*30),
                     child: child,
                   ),
                 );

@@ -230,20 +230,20 @@ class _EditProfileState extends State<EditProfile> {
               _location.text = _profileDataModel.data.user.location;
               _postal.text = _profileDataModel.data.user.postalCode;
 
-              setString(sharedPref.userEmail, _profileDataModel.data.user.email);
+              setString(
+                  sharedPref.userEmail, _profileDataModel.data.user.email);
 
               // setString(sharedPref.userToken, _profileDataModel.data.token);
               setString(sharedPref.userName, _profileDataModel.data.user.name);
-              setString(sharedPref.userLocation, _profileDataModel.data.user.location);
-              setString(
-                  sharedPref.userPhoneNumber, _profileDataModel.data.user.mobile);
+              setString(sharedPref.userLocation,
+                  _profileDataModel.data.user.location);
+              setString(sharedPref.userPhoneNumber,
+                  _profileDataModel.data.user.mobile);
               setString(sharedPref.userDefaultImage, avatar1);
-              setString(
-                  sharedPref.userNetworkImage, _profileDataModel.data.user.image);
+              setString(sharedPref.userNetworkImage,
+                  _profileDataModel.data.user.image);
               setString(
                   sharedPref.userId, _profileDataModel.data.user.id.toString());
-
-
             });
           })
           .whenComplete(() {
@@ -257,6 +257,7 @@ class _EditProfileState extends State<EditProfile> {
                     CupertinoDialogAction(
                       child: Text('OK'),
                       onPressed: () {
+                        Navigator.pop(context);
                         Navigator.pop(context);
                         // NavMe().NavPushReplaceFadeIn(LoginPage());
                         // Navigator.pushReplacement(context, MaterialPageRoute(builder: (_)=> LoginPage()));
@@ -278,8 +279,6 @@ class _EditProfileState extends State<EditProfile> {
 
   @override
   void initState() {
-
-
     // registerUser();
 
     getString(sharedPref.userToken).then((value) {
@@ -461,192 +460,266 @@ class _EditProfileState extends State<EditProfile> {
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            Text(
-                              "Full name",
-                              style: TextStyle(
-                                  fontSize: 12, color: CColors.textColor),
-                            ),
-                            TextFormField(
-                              controller: _fullName,
-                              validator: (value) {
-                                if (value == null || value.isEmpty) {
-                                  return 'Please enter some text';
-                                }
-                                return null;
-                              },
-                              decoration: InputDecoration(
-                                  hintStyle: _textStyle,
-                                  isDense: true,
-                                  hintText: "Full name",
-                                  prefixIconConstraints: BoxConstraints(
-                                      minHeight:
-                                          ScreenConfig.screenHeight * 0.05,
-                                      minWidth:
-                                          ScreenConfig.screenWidth * 0.04),
-                                  prefixIcon: Padding(
-                                    padding: EdgeInsets.fromLTRB(
-                                      8.0,
-                                      8.0,
-                                      8.0,
-                                      15,
-                                    ),
-                                    child: SvgPicture.asset(userIcon),
-                                  )),
-                            ),
-                            SizedBox(height: ScreenConfig.screenHeight * 0.02),
-                            Text(
-                              "Email",
-                              style: TextStyle(
-                                  fontSize: 12, color: CColors.textColor),
-                            ),
-                            TextFormField(
-                              readOnly: true,
-                              controller: _email,
-                              validator: (value) {
-                                if (value == null || value.isEmpty) {
-                                  return 'Please enter some text';
-                                }
-                                return null;
-                              },
-                              decoration: InputDecoration(
-                                  hintStyle: _textStyle,
-                                  isDense: true,
-                                  hintText: "Message",
-                                  prefixIconConstraints: BoxConstraints(
-                                      minHeight:
-                                          ScreenConfig.screenHeight * 0.05,
-                                      minWidth:
-                                          ScreenConfig.screenWidth * 0.04),
-                                  prefixIcon: Padding(
-                                    padding: EdgeInsets.fromLTRB(
-                                      8.0,
-                                      8.0,
-                                      8.0,
-                                      15,
-                                    ),
-                                    child: SvgPicture.asset(messageIcon),
-                                  )),
-                            ),
-                            SizedBox(height: ScreenConfig.screenHeight * 0.02),
-                            Text(
-                              "Contact Number",
-                              style: TextStyle(
-                                  fontSize: 12, color: CColors.textColor),
-                            ),
-                            TextFormField(
-
-                              controller: _number,
-                              validator: (value) {
-                                if (value == null || value.isEmpty) {
-                                  return 'Please enter some text';
-                                }
-                                return null;
-                              },
-                              decoration: InputDecoration(
-                                  hintStyle: _textStyle,
-                                  isDense: true,
-                                  hintText: "Contact Number",
-                                  prefixIconConstraints: BoxConstraints(
-                                      minHeight:
-                                          ScreenConfig.screenHeight * 0.05,
-                                      minWidth:
-                                          ScreenConfig.screenWidth * 0.04),
-                                  prefixIcon: Padding(
-                                    padding: EdgeInsets.fromLTRB(
-                                      8.0,
-                                      8.0,
-                                      8.0,
-                                      15,
-                                    ),
-                                    child: SvgPicture.asset(PhoneIcon),
-                                  )),
-                            ),
-                            SizedBox(height: ScreenConfig.screenHeight * 0.02),
-                            Text(
-                              "Location",
-                              style: TextStyle(
-                                  fontSize: 12, color: CColors.textColor),
-                            ),
-                            TextFormField(
-                              readOnly: true,
-                              controller: _location,
-                              validator: (value) {
-                                if (value == null || value.isEmpty) {
-                                  return 'Please enter some text';
-                                }
-                                return null;
-                              },
-                              decoration: InputDecoration(
-                                  suffixIcon: InkWell(
-                                    onTap: () {
-                                      setState(() {
-                                        _location.text = "Loading......";
-                                        _postal.text = "Loading......";
-                                      });
-                                      callMe();
-                                    },
-                                    child: Padding(
-                                      padding: EdgeInsets.fromLTRB(
-                                        16.0,
-                                        8.0,
-                                        16.0,
-                                        15,
-                                      ),
-                                      child: SvgPicture.asset(myLocationIcon),
-                                    ),
+                            Row(
+                              children: [
+                                Padding(
+                                  padding:
+                                      EdgeInsets.fromLTRB(8.0, 8.0, 16.0, 8.0),
+                                  child: SvgPicture.asset(
+                                    userIcon,
+                                    height: 18,
                                   ),
-                                  hintStyle: _textStyle,
-                                  isDense: true,
-                                  hintText: "Location",
-                                  prefixIconConstraints: BoxConstraints(
-                                      minHeight:
-                                          ScreenConfig.screenHeight * 0.05,
-                                      minWidth:
-                                          ScreenConfig.screenWidth * 0.04),
-                                  prefixIcon: Padding(
-                                    padding: EdgeInsets.fromLTRB(
-                                      8.0,
-                                      8.0,
-                                      8.0,
-                                      15,
-                                    ),
-                                    child: SvgPicture.asset(compassIcon),
-                                  )),
+                                ),
+                                Expanded(
+                                  child: Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      Text(
+                                        "Full name",
+                                        style: TextStyle(
+                                            fontSize: 12,
+                                            color: CColors.textColor),
+                                      ),
+                                      TextFormField(
+                                        controller: _fullName,
+                                        validator: (value) {
+                                          if (value == null || value.isEmpty) {
+                                            return 'Please enter some text';
+                                          }
+                                          return null;
+                                        },
+                                        decoration: InputDecoration(
+                                          hintStyle: _textStyle,
+                                          isDense: true,
+                                          hintText: "Full name",
+                                          prefixIconConstraints: BoxConstraints(
+                                              minHeight:
+                                                  ScreenConfig.screenHeight *
+                                                      0.05,
+                                              minWidth:
+                                                  ScreenConfig.screenWidth *
+                                                      0.04),
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                )
+                              ],
+                              mainAxisAlignment: MainAxisAlignment.start,
+                              crossAxisAlignment: CrossAxisAlignment.end,
                             ),
                             SizedBox(height: ScreenConfig.screenHeight * 0.02),
-                            Text(
-                              "postal code",
-                              style: TextStyle(
-                                  fontSize: 12, color: CColors.textColor),
+                            Row(
+                              crossAxisAlignment: CrossAxisAlignment.end,
+                              children: [
+                                Padding(
+                                  padding: EdgeInsets.fromLTRB(
+                                    8.0,
+                                    8.0,
+                                    16.0,
+                                    8.0,
+                                  ),
+                                  child: SvgPicture.asset(
+                                    messageIcon,
+                                    height: 15,
+                                  ),
+                                ),
+                                Expanded(
+                                  child: Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      Text(
+                                        "Email",
+                                        style: TextStyle(
+                                            fontSize: 12,
+                                            color: CColors.textColor),
+                                      ),
+                                      TextFormField(
+                                          readOnly: true,
+                                          controller: _email,
+                                          validator: (value) {
+                                            if (value == null ||
+                                                value.isEmpty) {
+                                              return 'Please enter some text';
+                                            }
+                                            return null;
+                                          },
+                                          decoration: InputDecoration(
+                                            hintStyle: _textStyle,
+                                            isDense: true,
+                                            hintText: "Message",
+                                            prefixIconConstraints:
+                                                BoxConstraints(
+                                                    minHeight: ScreenConfig
+                                                            .screenHeight *
+                                                        0.05,
+                                                    minWidth: ScreenConfig
+                                                            .screenWidth *
+                                                        0.04),
+                                          )),
+                                    ],
+                                  ),
+                                )
+                              ],
                             ),
-                            TextFormField(
-                              readOnly: true,
-                              controller: _postal,
-                              validator: (value) {
-                                if (value == null || value.isEmpty) {
-                                  return 'Please enter some text';
-                                }
-                                return null;
-                              },
-                              decoration: InputDecoration(
-                                  hintStyle: _textStyle,
-                                  isDense: true,
-                                  hintText: "postal code",
-                                  prefixIconConstraints: BoxConstraints(
-                                      minHeight:
-                                          ScreenConfig.screenHeight * 0.05,
-                                      minWidth:
-                                          ScreenConfig.screenWidth * 0.04),
-                                  prefixIcon: Padding(
-                                    padding: EdgeInsets.fromLTRB(
-                                      8.0,
-                                      8.0,
-                                      8.0,
-                                      15,
+                            SizedBox(height: ScreenConfig.screenHeight * 0.02),
+                            Row(
+                              crossAxisAlignment: CrossAxisAlignment.end,
+                              children: [
+                                Padding(
+                                  padding: EdgeInsets.fromLTRB(
+                                    8.0,
+                                    8.0,
+                                    16.0,
+                                    8.0,
+                                  ),
+                                  child: SvgPicture.asset(
+                                    PhoneIcon,
+                                    height: 18,
+                                  ),
+                                ),
+                                Expanded(
+                                  child: Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      Text(
+                                        "Contact Number",
+                                        style: TextStyle(
+                                            fontSize: 12,
+                                            color: CColors.textColor),
+                                      ),
+                                      TextFormField(
+                                        controller: _number,
+                                        validator: (value) {
+                                          if (value == null || value.isEmpty) {
+                                            return 'Please enter some text';
+                                          }
+                                          return null;
+                                        },
+                                        decoration: InputDecoration(
+                                          hintStyle: _textStyle,
+                                          isDense: true,
+                                          hintText: "Contact Number",
+                                          prefixIconConstraints: BoxConstraints(
+                                              minHeight:
+                                                  ScreenConfig.screenHeight *
+                                                      0.05,
+                                              minWidth:
+                                                  ScreenConfig.screenWidth *
+                                                      0.04),
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                )
+                              ],
+                            ),
+                            SizedBox(height: ScreenConfig.screenHeight * 0.02),
+                            Row(
+                              crossAxisAlignment: CrossAxisAlignment.center,
+                              children: [
+                                Padding(
+                                  padding: EdgeInsets.fromLTRB(
+                                    8.0,
+                                    8.0,
+                                    16.0,
+                                    8.0,
+                                  ),
+                                  child:
+                                  SvgPicture.asset(compassIcon,height: 18,),
+                                ),
+                                Expanded(
+                                    child: Column(
+                                  children: [
+                                    Text(
+                                      "Location",
+                                      style: TextStyle(
+                                          fontSize: 12,
+                                          color: CColors.textColor),
                                     ),
-                                    child: SvgPicture.asset(postboxIcon),
-                                  )),
+                                    TextFormField(
+                                      readOnly: true,
+                                      controller: _location,
+                                      validator: (value) {
+                                        if (value == null || value.isEmpty) {
+                                          return 'Please enter some text';
+                                        }
+                                        return null;
+                                      },
+                                      decoration: InputDecoration(
+                                          suffixIcon: InkWell(
+                                            onTap: () {
+                                              setState(() {
+                                                _location.text =
+                                                    "Loading......";
+                                                _postal.text = "Loading......";
+                                              });
+                                              callMe();
+                                            },
+                                            child: Padding(
+                                              padding: EdgeInsets.fromLTRB(
+                                                16.0,
+                                                8.0,
+                                                16.0,
+                                                15,
+                                              ),
+                                              child: SvgPicture.asset(
+                                                  myLocationIcon),
+                                            ),
+                                          ),
+                                          hintStyle: _textStyle,
+                                          isDense: true,
+                                          hintText: "Location",
+                                          prefixIconConstraints: BoxConstraints(
+                                              minHeight:
+                                                  ScreenConfig.screenHeight *
+                                                      0.05,
+                                              minWidth:
+                                                  ScreenConfig.screenWidth *
+                                                      0.04),
+                                          ),
+                                    ),
+                                  ],
+                               crossAxisAlignment: CrossAxisAlignment.start, ), )
+                              ],
                             ),
+                            SizedBox(height: ScreenConfig.screenHeight * 0.02),
+                   Row(children: [Padding(
+                     padding: EdgeInsets.fromLTRB(
+                       8.0,
+                       8.0,
+                       16.0,
+                       8.0,
+                     ),
+                     child: SvgPicture.asset(postboxIcon, height: 19,),
+                   ),Expanded(child: Column( children: [         Text(
+                     "postal code",
+                     style: TextStyle(
+                         fontSize: 12, color: CColors.textColor),
+                   ),
+                     TextFormField(
+                       readOnly: true,
+                       controller: _postal,
+                       validator: (value) {
+                         if (value == null || value.isEmpty) {
+                           return 'Please enter some text';
+                         }
+                         return null;
+                       },
+                       decoration: InputDecoration(
+                           hintStyle: _textStyle,
+                           isDense: true,
+                           hintText: "postal code",
+                           prefixIconConstraints: BoxConstraints(
+                               minHeight:
+                               ScreenConfig.screenHeight * 0.05,
+                               minWidth:
+                               ScreenConfig.screenWidth * 0.04),
+                           ),
+                     )],crossAxisAlignment: CrossAxisAlignment.start,))],),
                           ],
                         ),
                       ),
@@ -670,8 +743,6 @@ class _EditProfileState extends State<EditProfile> {
 
                           // compressAndGetFile(file: file,targetPath: file.path).then((value) => )
 
-
-
                           updateUser();
                         });
                         // updateUser();
@@ -687,12 +758,12 @@ class _EditProfileState extends State<EditProfile> {
                             style:
                                 TextStyle(color: Colors.white, fontSize: 18)),
                     style: ElevatedButton.styleFrom(
-                      primary: CColors.missonButtonColor, // background
-                      onPrimary: CColors.missonButtonColor, // fo
+                      primary: CColors.missonButtonColor2, // background
+                      onPrimary: CColors.missonButtonColor2, // fo
                       shape: new RoundedRectangleBorder(
                           borderRadius: new BorderRadius.circular(06.0),
                           side: BorderSide(
-                              color: CColors.missonButtonColor) // reground,
+                              color: CColors.missonButtonColor2) // reground,
                           ),
                     ),
                   ),
@@ -706,9 +777,11 @@ class _EditProfileState extends State<EditProfile> {
   }
 
   Position position;
+
   Future<File> compressAndGetFile({File file, String targetPath}) async {
     var result = await FlutterImageCompress.compressAndGetFile(
-      file.absolute.path, targetPath,
+      file.absolute.path,
+      targetPath,
       quality: 88,
       rotate: 180,
     );
@@ -718,6 +791,7 @@ class _EditProfileState extends State<EditProfile> {
 
     return result;
   }
+
   void callMe() {
     _determinePosition().then((value) {
       position = value;

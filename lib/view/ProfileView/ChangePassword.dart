@@ -478,12 +478,12 @@ class _ChangePasswordState extends State<ChangePassword> {
                         : Text("Save",
                             style: TextStyle(color: Colors.white, fontSize: 18)),
                     style: ElevatedButton.styleFrom(
-                      primary: CColors.missonButtonColor, // background
-                      onPrimary: CColors.missonButtonColor, // fo
+                      primary: CColors.missonButtonColor2, // background
+                      onPrimary: CColors.missonButtonColor2, // fo
                       shape: new RoundedRectangleBorder(
                           borderRadius: new BorderRadius.circular(06.0),
                           side: BorderSide(
-                              color: CColors.missonButtonColor) // reground,
+                              color: CColors.missonButtonColor2) // reground,
                           ),
                     ),
                   ),

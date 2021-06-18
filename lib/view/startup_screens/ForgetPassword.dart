@@ -298,8 +298,8 @@ else
                               style:
                                   TextStyle(color: Colors.white, fontSize: 18)),
                           style: ElevatedButton.styleFrom(
-                            primary: CColors.missonButtonColor, // background
-                            onPrimary: CColors.missonButtonColor, // fo
+                            primary: CColors.missonButtonColor2, // background
+                            onPrimary: CColors.missonButtonColor2, // fo
                             shape: new RoundedRectangleBorder(
                                 borderRadius: new BorderRadius.circular(10.0),
                                 side: BorderSide(

@@ -12,6 +12,7 @@ class CColors{
   static final missonNormalWhiteColor=Color(0xFFFFFFFF);
   static final missonGreyBorderColor=Color(0xFF1A1A1A);
   static final missonButtonColor=Color(0xFF1D1919);
+  static final missonButtonColor2=Color(0xFF1A2E37);
   static final missonSignUpButtonColor=Color(0xFF707070);
   static final textColor=Color(0xFF1B2021);
   static final backgroundRed=Color(0xFFF9EFEF);
