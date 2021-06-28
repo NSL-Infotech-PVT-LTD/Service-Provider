@@ -207,7 +207,7 @@ class _ChatListScreenState extends State<ChatListScreen> {
                     SizedBox(
                       height: 10,
                     ),
-                    listChatUserModel != null && listChatUserModel.data.list.isEmpty?
+                    listChatUserModel != null && listChatUserModel.data==null?
                         Container(
                             margin: EdgeInsets.all(8),
                             height: 75,

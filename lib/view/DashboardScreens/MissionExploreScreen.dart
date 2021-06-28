@@ -304,7 +304,7 @@ class _MissionExploreScreenState extends State<MissionExploreScreen>
                 //
                 TextFormField(
 
-                  enableSuggestions: true,
+                  // enableSugtagestions: true,
                   controller: _searchController,
                   onChanged: (value) {
                     setState(() {
